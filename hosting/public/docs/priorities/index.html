@@ -12,6 +12,9 @@
 <p>Open items</p>
 <ol>
 <li>[Med] Standardize technical documentation (API reference, generation, docs site integration)</li>
+<li>[Med] Add tests and testing framework</li>
+<li>[Med] Add authentication</li>
+<li>[Med] Add analytics</li>
 </ol>
 <p>Completed items</p>
 <ul>
@@ -26,5 +29,14 @@
 <li><strong>Delivery standard (improve):</strong> Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.</li>
 <li>Document the standard in learnings or architecture; apply to <code>documentation.html</code> / card app; propose template change for the canonical app template.</li>
 </ul>
+<h3 id="2-med-add-tests-and-testing-framework">2. [Med] Add tests and testing framework</h3>
+<p><strong>Purpose:</strong> Introduce a testing framework and tests for the card app so behavior is validated automatically and regressions are caught in CI.</p>
+<p><strong>Approach:</strong> Choose and add a testing framework (e.g. unit/component tests and optionally e2e). Wire tests into the existing CI workflow; document test layout and how to run tests in README/architecture.</p>
+<h3 id="3-med-add-authentication">3. [Med] Add authentication</h3>
+<p><strong>Purpose:</strong> Enable authenticated access to the card app (and optionally docs) so only authorized users can use the app.</p>
+<p><strong>Approach:</strong> Decide auth mechanism (e.g. Firebase Auth, IAP, platform SSO). Implement sign-in/sign-out, gate app entry and/or docs as needed, document auth flow and any secrets/env in architecture or deploy notes.</p>
+<h3 id="4-med-add-analytics">4. [Med] Add analytics</h3>
+<p><strong>Purpose:</strong> Capture usage analytics (e.g. page views, feature usage) to inform product and prioritization decisions.</p>
+<p><strong>Approach:</strong> Choose an analytics solution (e.g. Firebase Analytics, GA, or platform-provided). Integrate with the app and any docs routes; document what is collected and how to configure/disable in docs or privacy notes.</p>
 </body>
 </html>
