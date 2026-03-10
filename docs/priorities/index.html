@@ -8,56 +8,17 @@
 </head>
 <body>
   <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_site/card/todo/todo.md. DO NOT EDIT. -->
-  <p>Todo: app template baseline</p>
+  <p>Todo: card</p>
 <p>Open items</p>
-<ol>
-<li>[High] Define first app requirements baseline</li>
-<li>[Med] Wire real app CI and artifact publish pipeline</li>
-<li>[Low] Replace template branding and docs base path</li>
-</ol>
-<p>Completed items</p>
 <p><em>(none)</em></p>
-<h2 id="details">Details</h2>
-<p><strong>1. Define first app requirements baseline</strong></p>
-<p>Purpose: Establish a concrete requirements record before implementation starts so app scope, acceptance checks, and constraints are explicit.</p>
-<p>Approach: Copy <code>docs/requirements/projects/requirements-project.template.html</code> to a project-specific file, fill in required fields and requirement IDs, add catalog entry in <code>docs/requirements/catalog.json</code>, and verify list/detail rendering in the docs shell.</p>
-<p><strong>2. Wire real app CI and artifact publish pipeline</strong></p>
-<p>Purpose: Replace placeholder automation with production-ready checks that guard merges and publish immutable artifacts for platform promotion.</p>
-<p>Approach: Update <code>.github/workflows/ci.yml</code> to run actual lint/test/build commands on pull requests and <code>.github/workflows/publish-artifact.yml</code> to publish runtime/docs artifacts plus manifest on pushes to <code>main</code>.</p>
-<p><strong>3. Replace template branding and docs base path</strong></p>
-<p>Purpose: Ensure this repository reflects the target app identity and route contract instead of template labels.</p>
-<p>Approach: Update app name and wording in <code>README.md</code>, <code>docs/architecture.md</code>, and <code>docs/index.html</code>; set <code>baseDocsPath</code> to the app's integrated docs route; regenerate docs and sync to hosting output.</p>
-<h2 id="build-first-then-canonicalize-checklist">Build-first then canonicalize checklist</h2>
-<p>Use this checklist while building the first real app from this template.</p>
-<h3 id="phase-1-build-first-app">Phase 1 - Build first app</h3>
+<p>Completed items</p>
 <ul>
-<li>[ ] Keep a running "template drift" log with every app-specific change you make.</li>
-<li>[ ] Wire real CI commands in <code>.github/workflows/ci.yml</code> (lint, tests, build, docs checks).</li>
-<li>[ ] Wire real artifact packaging and publish in <code>.github/workflows/publish-artifact.yml</code>.</li>
-<li>[ ] Confirm manifest payload matches <code>docs/artifact-manifest.example.json</code>.</li>
-<li>[ ] Validate docs shell tabs and deep links work for real app routes.</li>
-</ul>
-<h3 id="phase-2-stabilize-app-handoff">Phase 2 - Stabilize app handoff</h3>
-<ul>
-<li>[ ] Verify canonical flow end-to-end through app step 4 (feature branch -&gt; PR CI -&gt; merge -&gt; publish).</li>
-<li>[ ] Confirm platform can consume published manifest/artifacts without app-source access.</li>
-<li>[ ] Verify noindex defaults remain correct in both page meta and hosting headers.</li>
-<li>[ ] Document required secrets/env vars and required IAM roles for publish.</li>
-</ul>
-<h3 id="phase-3-re-template-into-canonical-app-repo">Phase 3 - Re-template into canonical app repo</h3>
-<ul>
-<li>[ ] Remove app-specific names, IDs, paths, and secrets from docs/workflow examples.</li>
-<li>[ ] Keep only reusable defaults; move app-specific decisions to examples or placeholders.</li>
-<li>[ ] Update <code>README.md</code> and <code>docs/architecture.md</code> with final canonical contracts.</li>
-<li>[ ] Regenerate/sync docs and verify <code>docs/</code> equals <code>hosting/public/docs/</code> for served content.</li>
-<li>[ ] Smoke-test bootstrap experience by cloning into a second "new app" repo.</li>
-</ul>
-<h3 id="exit-criteria-for-canonical-template">Exit criteria for canonical template</h3>
-<ul>
-<li>[ ] A new app can be bootstrapped with only identity/path/secret replacements.</li>
-<li>[ ] CI and publish scaffolds run cleanly after minimal app-specific command wiring.</li>
-<li>[ ] Artifact manifest contract is stable and accepted by platform promotion flow.</li>
-<li>[ ] Docs shell behavior is consistent and requires no structural rewrites per app.</li>
+<li>[2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (no PR)</li>
+<li>[2026-03-03] Launch auth-gated <code>/card</code> route with reserved <code>/card/docs</code> placeholder (PR #5)</li>
+<li>[2026-03-03] Redirect after authentication returns to the login page (no PR)</li>
+<li>[2026-03-03] Add noindex meta to card app entry (no PR)</li>
+<li>[2025-03-01] Creating the CI JSON secret (no PR)</li>
+<li>[2025-03-01] Point card app Vite build output to monorepo hosting (<code>../../hosting/public/card</code>) (no PR)</li>
 </ul>
 </body>
 </html>

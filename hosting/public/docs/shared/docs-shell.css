@@ -148,7 +148,7 @@ button:disabled {
   padding: 12px 20px 0;
 }
 
-#authorized-view {
+#docs-view {
   height: 100%;
   display: flex;
   flex-direction: column;

@@ -1,6 +1,15 @@
 {
   "entries": [
     {
+      "slug": "canonical-app-directory-structure",
+      "title": "Canonical App Directory Structure",
+      "summary": "Single-app repositories should include top-level src and design-tokens directories as standard app-owned structure.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/canonical-app-directory-structure.html"
+    },
+    {
       "slug": "init-app-token-replacement-gaps",
       "title": "Init App Token Replacement Gaps",
       "summary": "The app bootstrap script can leave template-name tokens in key files after initialization, requiring manual cleanup.",

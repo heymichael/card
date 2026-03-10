@@ -1,0 +1,3 @@
+# SPA rewrite: /card/** serves the app so deep links and refresh don't 404.
+# Static files at /card/index.html and /card/assets/* are served first; only missing paths get rewritten.
+/card/*  /card/index.html  200

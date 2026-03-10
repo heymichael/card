@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Editor — Full API Documentation</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    color: #1a1a2e;
+    line-height: 1.6;
+    background: #fafbfc;
+  }
+  h1 { font-size: 28px; border-bottom: 3px solid #2196F3; padding-bottom: 12px; margin-bottom: 32px; }
+  h2 { font-size: 22px; margin-top: 48px; margin-bottom: 16px; color: #1565c0; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+  h3 { font-size: 17px; margin-top: 28px; margin-bottom: 8px; color: #333; }
+  h4 { font-size: 15px; margin-top: 20px; margin-bottom: 6px; color: #555; }
+  p { margin: 8px 0; }
+  code {
+    background: #eef2f7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 14px;
+  }
+  pre {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 14px;
+  }
+  th {
+    background: #e3f2fd;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    border: 1px solid #ccc;
+  }
+  td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f8f9fa; }
+  .file-path {
+    display: inline-block;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .tag {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .sig {
+    background: #f3e5f5;
+    border-left: 4px solid #9c27b0;
+    padding: 8px 16px;
+    margin: 12px 0;
+    font-family: monospace;
+    font-size: 14px;
+  }
+  hr { border: none; border-top: 1px solid #e0e0e0; margin: 40px 0; }
+</style>
+</head>
+<body>
+
+<h1>Card Editor &mdash; Full API Documentation</h1>
+<p>Complete reference for all interfaces, types, constants, functions, components, callbacks, and CSS classes used in the Greeting Card Designer application.</p>
+
+<hr>
+
+<h2>src/types.ts &mdash; Type Definitions</h2>
+<span class="file-path">src/types.ts</span>
+
+<h3><code>TextBlock</code> <span class="tag">interface</span></h3>
+<p>Represents a single text element on the card.</p>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>id</code></td><td><code>'blockA' | 'blockB'</code></td><td>Unique identifier for the text block</td></tr>
+  <tr><td><code>label</code></td><td><code>string</code></td><td>Display name shown in the UI (e.g. "Headline")</td></tr>
+  <tr><td><code>text</code></td><td><code>string</code></td><td>The actual text content to render</td></tr>
+  <tr><td><code>x</code></td><td><code>number</code></td><td>Horizontal position on the canvas (px)</td></tr>
+  <tr><td><code>y</code></td><td><code>number</code></td><td>Vertical position on the canvas (px)</td></tr>
+  <tr><td><code>fontSize</code></td><td><code>number</code></td><td>Font size in pixels</td></tr>
+  <tr><td><code>fontFamily</code></td><td><code>string</code></td><td>CSS font family name</td></tr>
+  <tr><td><code>fill</code></td><td><code>string</code></td><td>Text color as a hex string (e.g. <code>"#1a1a2e"</code>)</td></tr>
+  <tr><td><code>align</code></td><td><code>'left' | 'center' | 'right'</code></td><td>Text alignment within its width</td></tr>
+  <tr><td><code>width</code></td><td><code>number</code></td><td>Bounding width of the text block (px)</td></tr>
+  <tr><td><code>curved</code></td><td><code>boolean</code></td><td>Whether the text follows a curve path</td></tr>
+  <tr><td><code>curveType</code></td><td><code>'arc' | 'bezier' | 'wavy-bezier'</code></td><td>Which SVG path algorithm to use</td></tr>
+  <tr><td><code>arcRadius</code></td><td><code>number</code></td><td>Controls curve depth &mdash; arc radius for <code>'arc'</code>, wave amplitude for <code>'wavy-bezier'</code></td></tr>
+</table>
+
+<h3><code>PhotoState</code> <span class="tag">interface</span></h3>
+<p>Represents an uploaded photo placed on the card.</p>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>src</code></td><td><code>string</code></td><td>Browser object URL pointing to the image blob</td></tr>
+  <tr><td><code>naturalWidth</code></td><td><code>number</code></td><td>Original image width in pixels</td></tr>
+  <tr><td><code>naturalHeight</code></td><td><code>number</code></td><td>Original image height in pixels</td></tr>
+  <tr><td><code>x</code></td><td><code>number</code></td><td>Canvas x position</td></tr>
+  <tr><td><code>y</code></td><td><code>number</code></td><td>Canvas y position</td></tr>
+  <tr><td><code>scaleX</code></td><td><code>number</code></td><td>Horizontal scale factor</td></tr>
+  <tr><td><code>scaleY</code></td><td><code>number</code></td><td>Vertical scale factor</td></tr>
+</table>
+
+<h3><code>ActiveBlock</code> <span class="tag">type alias</span></h3>
+<pre>type ActiveBlock = 'blockA' | 'blockB'</pre>
+<p>Identifies which text block is selected for editing in the controls panel.</p>
+
+<h3><code>ActiveElement</code> <span class="tag">type alias</span></h3>
+<pre>type ActiveElement = ActiveBlock | 'photo'</pre>
+<p>Identifies which element (text block or photo) is selected on the canvas.</p>
+
+<hr>
+
+<h2>src/constants.ts &mdash; Configuration Constants</h2>
+<span class="file-path">src/constants.ts</span>
+
+<table>
+  <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+  <tr><td><code>CARD_WIDTH</code></td><td><code>1500</code></td><td>Card width in px (5 in &times; 300 DPI)</td></tr>
+  <tr><td><code>CARD_HEIGHT</code></td><td><code>2100</code></td><td>Card height in px (7 in &times; 300 DPI)</td></tr>
+  <tr><td><code>SAFE_MARGIN</code></td><td><code>75</code></td><td>Print-safe margin in px (0.25 in &times; 300 DPI)</td></tr>
+  <tr><td><code>FONT_FAMILIES</code></td><td><code>string[]</code></td><td>Array of 11 system font names available in the font picker</td></tr>
+  <tr><td><code>DEFAULT_ARC_RADIUS</code></td><td><code>500</code></td><td>Default arc radius for curved text</td></tr>
+  <tr><td><code>MIN_ARC_RADIUS</code></td><td><code>200</code></td><td>Minimum allowed arc radius</td></tr>
+  <tr><td><code>MAX_ARC_RADIUS</code></td><td><code>2000</code></td><td>Maximum allowed arc radius</td></tr>
+</table>
+
+<hr>
+
+<h2>src/main.tsx &mdash; Entry Point</h2>
+<span class="file-path">src/main.tsx</span>
+<p>Mounts the React app into <code>#root</code> wrapped in <code>&lt;StrictMode&gt;</code>. No exported functions.</p>
+
+<hr>
+
+<h2>src/App.tsx &mdash; Main Application Component</h2>
+<span class="file-path">src/App.tsx</span>
+
+<h3><code>DEFAULT_BLOCKS</code> <span class="tag">module constant</span></h3>
+<p><code>Record&lt;string, TextBlock&gt;</code> &mdash; Default state for the two text blocks:</p>
+<ul>
+  <li><strong>blockA</strong>: "Happy Birthday!" headline, Georgia 120px, dark navy, arc curve, radius 600</li>
+  <li><strong>blockB</strong>: "You Are The Greatest" message, Arial 60px, dark gray, wavy-bezier curve, amplitude 40</li>
+</ul>
+
+<h3><code>App()</code> <span class="tag">function component</span></h3>
+<p>Root component. Manages all application state, wires callbacks, and renders <code>ControlsPanel</code> + <code>CardCanvas</code>.</p>
+
+<h4>State</h4>
+<table>
+  <tr><th>State Variable</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  <tr><td><code>blocks</code></td><td><code>Record&lt;string, TextBlock&gt;</code></td><td><code>DEFAULT_BLOCKS</code></td><td>All text block data</td></tr>
+  <tr><td><code>activeBlock</code></td><td><code>ActiveBlock</code></td><td><code>'blockA'</code></td><td>Which block the controls panel edits</td></tr>
+  <tr><td><code>activeElement</code></td><td><code>ActiveElement</code></td><td><code>'blockA'</code></td><td>Which element has selection on canvas</td></tr>
+  <tr><td><code>showGuides</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Whether safe-margin guide lines are visible</td></tr>
+  <tr><td><code>photo</code></td><td><code>PhotoState | null</code></td><td><code>null</code></td><td>Uploaded photo data (null = no photo)</td></tr>
+  <tr><td><code>bgColor</code></td><td><code>string</code></td><td><code>'#fff0f3'</code></td><td>Card background color (light pink)</td></tr>
+  <tr><td><code>photoImage</code></td><td><code>HTMLImageElement | null</code></td><td><code>null</code></td><td>Loaded &lt;img&gt; element for Konva rendering</td></tr>
+</table>
+
+<h4>Refs</h4>
+<table>
+  <tr><th>Ref</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>canvasRef</code></td><td><code>CardCanvasHandle</code></td><td>Imperative handle to call <code>exportJPEG()</code> on the canvas</td></tr>
+  <tr><td><code>objectUrlRef</code></td><td><code>string | null</code></td><td>Tracks the current object URL for cleanup on replace/unmount</td></tr>
+</table>
+
+<h4>Callbacks</h4>
+
+<div class="sig">updateBlock(id: ActiveBlock, updates: Partial&lt;TextBlock&gt;): void</div>
+<p>Merges partial updates into the specified text block's state. Used by every control (text, font size, font family, color, alignment).</p>
+
+<div class="sig">moveBlock(id: ActiveBlock, x: number, y: number): void</div>
+<p>Sets the x/y position of a text block. Called after drag-end on the canvas.</p>
+
+<div class="sig">movePhoto(x: number, y: number): void</div>
+<p>Updates the photo's x/y position after a drag.</p>
+
+<div class="sig">resetPositions(): void</div>
+<p>Resets both text blocks to their <code>DEFAULT_BLOCKS</code> positions. If a photo exists, re-centers it scaled to card width.</p>
+
+<div class="sig">handleSetActiveElement(id: ActiveElement): void</div>
+<p>Sets the active canvas element. If the new element is a text block, also syncs <code>activeBlock</code> so the controls panel updates.</p>
+
+<div class="sig">handleSetActiveBlock(id: ActiveBlock): void</div>
+<p>Sets the active text block and syncs <code>activeElement</code> to match.</p>
+
+<div class="sig">handleAddPhoto(file: File): void</div>
+<p>Creates an object URL from a <code>File</code>, loads it as an <code>HTMLImageElement</code>, computes initial scale/position to fit card width, and sets both <code>photo</code> and <code>photoImage</code> state. Revokes any previous object URL. Sets active element to <code>'photo'</code>.</p>
+
+<div class="sig">handleRemovePhoto(): void</div>
+<p>Revokes the object URL, clears <code>photo</code> and <code>photoImage</code>, and resets active element to <code>'blockA'</code> if the photo was selected.</p>
+
+<div class="sig">resizePhoto(x: number, y: number, scaleX: number, scaleY: number): void</div>
+<p>Updates photo position and scale after a Konva Transformer interaction.</p>
+
+<div class="sig">handleExport(): void</div>
+<p>Calls <code>canvasRef.current.exportJPEG()</code>, generates a timestamped filename (<code>greeting-card-YYYYMMDD-HHmmss.jpg</code>), creates a temporary <code>&lt;a&gt;</code> element, and triggers a download.</p>
+
+<h4>Effects</h4>
+
+<p><strong>Keyboard nudge effect</strong> (lines 190&ndash;251)<br>
+Listens for <code>keydown</code> on <code>window</code>. Ignores events when focused on form inputs. Handles:</p>
+<ul>
+  <li><code>Delete</code>/<code>Backspace</code> on photo: calls <code>handleRemovePhoto()</code></li>
+  <li>Arrow keys: nudges the active element by 1px (or 10px with Shift)</li>
+  <li>Text blocks are clamped within card bounds; photos are not</li>
+</ul>
+
+<p><strong>Object URL cleanup effect</strong> (lines 160&ndash;167)<br>
+On unmount, revokes any lingering object URL to prevent memory leaks.</p>
+
+<hr>
+
+<h2>src/ControlsPanel.tsx &mdash; Sidebar Controls</h2>
+<span class="file-path">src/ControlsPanel.tsx</span>
+
+<h3><code>ControlsPanelProps</code> <span class="tag">interface</span></h3>
+<table>
+  <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>blocks</code></td><td><code>Record&lt;string, TextBlock&gt;</code></td><td>All text block data</td></tr>
+  <tr><td><code>activeBlock</code></td><td><code>ActiveBlock</code></td><td>Currently selected text block</td></tr>
+  <tr><td><code>activeElement</code></td><td><code>ActiveElement</code></td><td>Currently selected canvas element</td></tr>
+  <tr><td><code>showGuides</code></td><td><code>boolean</code></td><td>Whether safe margins are on</td></tr>
+  <tr><td><code>photo</code></td><td><code>PhotoState | null</code></td><td>Photo state (determines "Add" vs "Replace" label)</td></tr>
+  <tr><td><code>onSetActiveBlock</code></td><td><code>(id: ActiveBlock) =&gt; void</code></td><td>Switch active text block</td></tr>
+  <tr><td><code>onSetActiveElement</code></td><td><code>(id: ActiveElement) =&gt; void</code></td><td>Switch active canvas element</td></tr>
+  <tr><td><code>onUpdateBlock</code></td><td><code>(id: ActiveBlock, updates: Partial&lt;TextBlock&gt;) =&gt; void</code></td><td>Update text block properties</td></tr>
+  <tr><td><code>onResetPositions</code></td><td><code>() =&gt; void</code></td><td>Reset all positions</td></tr>
+  <tr><td><code>onToggleGuides</code></td><td><code>() =&gt; void</code></td><td>Toggle safe margin guides</td></tr>
+  <tr><td><code>onExport</code></td><td><code>() =&gt; void</code></td><td>Trigger JPEG export</td></tr>
+  <tr><td><code>onAddPhoto</code></td><td><code>(file: File) =&gt; void</code></td><td>Handle file upload</td></tr>
+  <tr><td><code>bgColor</code></td><td><code>string</code></td><td>Current card background color</td></tr>
+  <tr><td><code>onChangeBgColor</code></td><td><code>(color: string) =&gt; void</code></td><td>Update card background color</td></tr>
+</table>
+
+<h3><code>ControlsPanel()</code> <span class="tag">function component</span></h3>
+
+<h4>Internal Refs</h4>
+<p><code>fileInputRef</code> &mdash; Hidden <code>&lt;input type="file"&gt;</code> element, triggered by the "Add Photo" button.</p>
+
+<h4>Internal Functions</h4>
+<div class="sig">handleFileChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;): void</div>
+<p>Validates that the selected file is an image, calls <code>onAddPhoto</code>, and resets the input value so the same file can be re-selected.</p>
+
+<h4>UI Sections (top to bottom)</h4>
+<ol>
+  <li><strong>Photo</strong> &mdash; "Add Photo" / "Replace Photo" button with hidden file input</li>
+  <li><strong>Card Background</strong> &mdash; Color picker + hex value + preview swatch for <code>bgColor</code></li>
+  <li><strong>Active Text Block</strong> &mdash; Tab buttons to switch between blockA (Headline) and blockB (Message)</li>
+  <li><strong>Text</strong> &mdash; Textarea for block content</li>
+  <li><strong>Font Size</strong> &mdash; Range slider (20&ndash;200) + number input (10&ndash;400)</li>
+  <li><strong>Font Family</strong> &mdash; Select dropdown from <code>FONT_FAMILIES</code></li>
+  <li><strong>Color</strong> &mdash; Color picker + hex value for text fill</li>
+  <li><strong>Alignment</strong> &mdash; Left / Center / Right buttons</li>
+  <li><strong>Show Safe Margins</strong> &mdash; Checkbox toggle</li>
+  <li><strong>Reset Positions</strong> &mdash; Secondary button</li>
+  <li><strong>Finish (Export JPEG)</strong> &mdash; Primary export button</li>
+  <li><strong>Hint</strong> &mdash; Usage tips for drag and arrow keys</li>
+</ol>
+
+<hr>
+
+<h2>src/CardCanvas.tsx &mdash; Konva Canvas Renderer</h2>
+<span class="file-path">src/CardCanvas.tsx</span>
+
+<h3><code>CardCanvasHandle</code> <span class="tag">exported interface</span></h3>
+<pre>{ exportJPEG: () =&gt; string | null }</pre>
+<p>Imperative handle exposed via <code>forwardRef</code> + <code>useImperativeHandle</code>.</p>
+
+<h3><code>CardCanvasProps</code> <span class="tag">interface</span></h3>
+<table>
+  <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>blocks</code></td><td><code>Record&lt;string, TextBlock&gt;</code></td><td>Text block data</td></tr>
+  <tr><td><code>activeElement</code></td><td><code>ActiveElement</code></td><td>Currently selected element</td></tr>
+  <tr><td><code>showGuides</code></td><td><code>boolean</code></td><td>Show safe margin guides</td></tr>
+  <tr><td><code>photo</code></td><td><code>PhotoState | null</code></td><td>Photo positioning data</td></tr>
+  <tr><td><code>photoImage</code></td><td><code>HTMLImageElement | null</code></td><td>Loaded image for Konva</td></tr>
+  <tr><td><code>onSelectElement</code></td><td><code>(id: ActiveElement) =&gt; void</code></td><td>Element click/tap handler</td></tr>
+  <tr><td><code>onMoveBlock</code></td><td><code>(id: ActiveBlock, x: number, y: number) =&gt; void</code></td><td>Block drag-end handler</td></tr>
+  <tr><td><code>onMovePhoto</code></td><td><code>(x: number, y: number) =&gt; void</code></td><td>Photo drag-end handler</td></tr>
+  <tr><td><code>onResizePhoto</code></td><td><code>(x: number, y: number, scaleX: number, scaleY: number) =&gt; void</code></td><td>Photo transform-end handler</td></tr>
+  <tr><td><code>bgColor</code></td><td><code>string</code></td><td>Card background fill color</td></tr>
+</table>
+
+<h3>Module-level Functions</h3>
+
+<div class="sig">generateArcPath(x: number, y: number, width: number, arcRadius: number): string</div>
+<p>Generates an SVG <code>M ... A ...</code> path for a circular arc. The text block's width becomes the chord length. The arc sweeps clockwise (upward bow). Used when <code>curveType === 'arc'</code>.</p>
+<table>
+  <tr><th>Param</th><th>Description</th></tr>
+  <tr><td><code>x</code></td><td>Block's x position (arc starts here)</td></tr>
+  <tr><td><code>y</code></td><td>Block's y position (vertical baseline)</td></tr>
+  <tr><td><code>width</code></td><td>Chord length (block width)</td></tr>
+  <tr><td><code>arcRadius</code></td><td>Circle radius; smaller = tighter curve</td></tr>
+</table>
+
+<div class="sig">generateWavyBezierPath(x: number, y: number, width: number, amplitude: number): string</div>
+<p>Generates an SVG path with 4 chained cubic bezier segments (<code>C</code> commands) that alternate direction, producing a sine-wave-like path with 3 direction changes. Used when <code>curveType === 'wavy-bezier'</code>.</p>
+<table>
+  <tr><th>Param</th><th>Description</th></tr>
+  <tr><td><code>x</code></td><td>Start x</td></tr>
+  <tr><td><code>y</code></td><td>Baseline y</td></tr>
+  <tr><td><code>width</code></td><td>Total path width, divided into 4 equal segments</td></tr>
+  <tr><td><code>amplitude</code></td><td>Vertical displacement of control points (wave height)</td></tr>
+</table>
+
+<h3><code>CardCanvas</code> <span class="tag">forwardRef component</span></h3>
+
+<h4>Refs</h4>
+<table>
+  <tr><th>Ref</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>containerRef</code></td><td><code>HTMLDivElement</code></td><td>Wrapper div for responsive sizing</td></tr>
+  <tr><td><code>stageRef</code></td><td><code>Konva.Stage</code></td><td>The Konva stage for export</td></tr>
+  <tr><td><code>overlayRef</code></td><td><code>Konva.Group</code></td><td>UI overlay group hidden during export</td></tr>
+  <tr><td><code>textRefA</code></td><td><code>Konva.Text | Konva.TextPath</code></td><td>Reference to block A's Konva node</td></tr>
+  <tr><td><code>textRefB</code></td><td><code>Konva.Text | Konva.TextPath</code></td><td>Reference to block B's Konva node</td></tr>
+  <tr><td><code>photoRef</code></td><td><code>Konva.Image</code></td><td>Reference to the photo Konva node</td></tr>
+  <tr><td><code>transformerRef</code></td><td><code>Konva.Transformer</code></td><td>Konva Transformer for photo resize handles</td></tr>
+</table>
+
+<h4>State</h4>
+<table>
+  <tr><th>Variable</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>scale</code></td><td><code>number</code></td><td>Responsive scale factor computed from container size</td></tr>
+  <tr><td><code>tick</code></td><td><code>number</code> (anonymous)</td><td>Forces re-render when <code>blocks</code> or <code>photo</code> change, so selection boxes recalculate</td></tr>
+</table>
+
+<h4>Imperative Handle</h4>
+<div class="sig">exportJPEG(): string | null</div>
+<p>Hides the overlay group, calls <code>stage.toDataURL()</code> at JPEG quality 0.95 with a pixel ratio that compensates for the responsive scale (so output is always full 1500&times;2100), restores the overlay, and returns the data URL.</p>
+
+<h4>Internal Callbacks</h4>
+
+<div class="sig">updateScale(): void</div>
+<p>Measures the container element, computes the scale factor that fits <code>CARD_WIDTH &times; CARD_HEIGHT</code> within available space (minus 40px padding), capped at 1.0.</p>
+
+<div class="sig">clampTextPosition(node: Konva.Text, block: TextBlock): { x, y }</div>
+<p>Constrains a text node's position so it stays within the card bounds (0 to <code>CARD_WIDTH - block.width</code> horizontally, 0 to <code>CARD_HEIGHT - textHeight</code> vertically).</p>
+
+<div class="sig">handleTextDragEnd(id: ActiveBlock, e: KonvaEventObject&lt;DragEvent&gt;): void</div>
+<p>Called on text block drag-end. Clamps the position and commits it to state via <code>onMoveBlock</code>.</p>
+
+<div class="sig">handleTextDragMove(id: ActiveBlock, e: KonvaEventObject&lt;DragEvent&gt;): void</div>
+<p>Called on every drag-move frame. Clamps position in real-time so the block can't be dragged out of bounds.</p>
+
+<div class="sig">handlePhotoDragEnd(e: KonvaEventObject&lt;DragEvent&gt;): void</div>
+<p>Called on photo drag-end. No clamping &mdash; the photo is allowed to extend beyond card bounds (clipped by the parent Group). Commits position via <code>onMovePhoto</code>.</p>
+
+<div class="sig">handlePhotoTransformEnd(): void</div>
+<p>Called after the Konva Transformer finishes a resize. Reads the node's new position and scale, commits via <code>onResizePhoto</code>.</p>
+
+<h4>Render Helpers</h4>
+
+<div class="sig">renderSelectionBox(x: number, y: number, w: number, h: number): JSX.Element</div>
+<p>Returns a dashed blue <code>&lt;Rect&gt;</code> with 8px padding around the given bounding box. Used for the active text block's selection indicator. <code>listening={false}</code> so it doesn't intercept clicks.</p>
+
+<div class="sig">renderTextBlock(block: TextBlock, nodeRef: React.RefObject): JSX.Element</div>
+<p>Renders either a Konva <code>&lt;TextPath&gt;</code> (if <code>block.curved</code> is true) or a standard <code>&lt;Text&gt;</code>. Wires up <code>onClick</code>, <code>onTap</code>, <code>onDragStart</code>, <code>onDragEnd</code>, and <code>onDragMove</code> handlers. For curved text, generates the appropriate SVG path via <code>generateArcPath</code> or <code>generateWavyBezierPath</code> based on <code>curveType</code>.</p>
+
+<div class="sig">renderPhoto(): JSX.Element | null</div>
+<p>Returns a Konva <code>&lt;KonvaImage&gt;</code> if <code>photo</code> and <code>photoImage</code> exist, otherwise <code>null</code>. The image is draggable and wired to selection/drag/transform handlers.</p>
+
+<div class="sig">renderTextSelectionBox(): JSX.Element | null</div>
+<p>Checks which text block is active, gets its bounding box via <code>getClientRect({ skipTransform: false })</code>, and calls <code>renderSelectionBox</code>. Returns <code>null</code> if a photo is selected.</p>
+
+<h4>Effects</h4>
+
+<p><strong>ResizeObserver effect</strong> (lines 147&ndash;152)<br>
+Calls <code>updateScale()</code> on mount and whenever the container resizes. Disconnects on cleanup.</p>
+
+<p><strong>Tick effect</strong> (lines 201&ndash;204)<br>
+Increments a counter whenever <code>blocks</code> or <code>photo</code> change, forcing the selection box to recalculate.</p>
+
+<p><strong>Transformer attachment effect</strong> (lines 206&ndash;216)<br>
+Attaches the Konva <code>Transformer</code> to the photo node when <code>activeElement === 'photo'</code>, or detaches it otherwise. Triggers a layer redraw.</p>
+
+<h4>Canvas Layer Structure</h4>
+<pre>&lt;div.canvas-container&gt;
+  &lt;Stage&gt;                              &mdash; scaled to fit container
+    &lt;Layer&gt;
+      &lt;Rect&gt;                           &mdash; card background (fill={bgColor})
+      &lt;Group clip={card bounds}&gt;       &mdash; clips content to card edges
+        &lt;Group key="photo"&gt;            &mdash; photo layer (behind text)
+          &lt;KonvaImage&gt;                 &mdash; the uploaded photo
+        &lt;Group key="text"&gt;             &mdash; text layer (in front of photo)
+          &lt;TextPath|Text&gt;              &mdash; blockA
+          &lt;TextPath|Text&gt;              &mdash; blockB
+      &lt;Group ref={overlayRef}&gt;         &mdash; UI overlay (hidden during export)
+        &lt;Rect&gt;                         &mdash; card border stroke
+        &lt;Line&gt; &times; 4                     &mdash; safe margin guide lines (if enabled)
+        &lt;Rect&gt;                         &mdash; selection box around active text
+        &lt;Transformer&gt;                  &mdash; resize handles for photo</pre>
+
+<hr>
+
+<h2>src/App.css &mdash; Component Styles</h2>
+<span class="file-path">src/App.css</span>
+
+<h3>Layout Classes</h3>
+<table>
+  <tr><th>Class</th><th>Description</th></tr>
+  <tr><td><code>.app</code></td><td>Root flex container, full viewport height, horizontal layout</td></tr>
+  <tr><td><code>.controls-panel</code></td><td>Fixed 300px sidebar, white background, scrollable, vertical flex</td></tr>
+  <tr><td><code>.canvas-container</code></td><td>Flexible canvas area, centered content, gray background</td></tr>
+</table>
+
+<h3>Control Classes</h3>
+<table>
+  <tr><th>Class</th><th>Description</th></tr>
+  <tr><td><code>.control-group</code></td><td>Wrapper for each control row (12px bottom margin)</td></tr>
+  <tr><td><code>.control-group &gt; label</code></td><td>Uppercase 12px label above each control</td></tr>
+  <tr><td><code>.block-selector</code></td><td>Flex row of tab buttons for text block selection</td></tr>
+  <tr><td><code>.block-selector button</code></td><td>Tab button with border highlight on hover/active</td></tr>
+  <tr><td><code>.color-row</code></td><td>Flex row containing color picker + hex value</td></tr>
+  <tr><td><code>.color-row input[type="color"]</code></td><td>40&times;32px color swatch input</td></tr>
+  <tr><td><code>.color-value</code></td><td>Monospace hex color display</td></tr>
+  <tr><td><code>.bg-color-preview</code></td><td>48&times;24px background color preview swatch (pushed right with <code>margin-left: auto</code>)</td></tr>
+  <tr><td><code>.alignment-buttons</code></td><td>Flex row for left/center/right alignment buttons</td></tr>
+  <tr><td><code>.number-input</code></td><td>70px numeric input for font size</td></tr>
+  <tr><td><code>.checkbox-label</code></td><td>Flex label for the "Show Safe Margins" checkbox</td></tr>
+  <tr><td><code>.section-divider</code></td><td>1px horizontal rule between control sections</td></tr>
+</table>
+
+<h3>Button Classes</h3>
+<table>
+  <tr><th>Class</th><th>Description</th></tr>
+  <tr><td><code>.secondary-btn</code></td><td>Full-width outlined button (Reset, Add Photo)</td></tr>
+  <tr><td><code>.photo-add-btn</code></td><td>Adds 8px bottom margin to photo button</td></tr>
+  <tr><td><code>.export-btn</code></td><td>Full-width blue primary button for export</td></tr>
+</table>
+
+<h3>Other</h3>
+<table>
+  <tr><th>Class</th><th>Description</th></tr>
+  <tr><td><code>.hint</code></td><td>Bottom-pinned help text (<code>margin-top: auto</code>)</td></tr>
+  <tr><td><code>.canvas-container .konvajs-content</code></td><td>Applies drop shadow around the Konva stage</td></tr>
+</table>
+
+<hr>
+
+<h2>src/index.css &mdash; Global Reset</h2>
+<span class="file-path">src/index.css</span>
+<p>Resets margin/padding/box-sizing on <code>*</code>, sets <code>html/body/#root</code> to full height with hidden overflow, and applies the system font stack (<code>-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif</code>).</p>
+
+<hr>
+<p style="text-align:center; color:#999; font-size:12px; margin-top:48px;">Generated for the Card Editor project &mdash; February 2026</p>
+
+</body>
+</html>

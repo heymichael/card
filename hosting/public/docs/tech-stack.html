@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card app – Tech stack</title>
+</head>
+<body>
+  <h1>Card app – Tech stack</h1>
+
+  <p>First-pass overview of the tech stack for the card app. For site-wide infrastructure, directory structure, and deployment, see the haderach tech stack (<code>docs/haderach/tech-stack.html</code> in the repo).</p>
+
+  <h2>Overview</h2>
+  <p>The card app is a single-page application (SPA) for the card editor experience. It is one of the haderach apps and is served at <strong>haderach.ai/card/</strong>. It is built as a static bundle and deployed via Firebase Hosting; there is no card-specific backend.</p>
+
+  <h2>Tech stack (card-specific)</h2>
+  <ul>
+    <li><strong>Frontend:</strong> React, TypeScript.</li>
+    <li><strong>Build:</strong> Vite. Config: <code>base: '/card/'</code>, <code>outDir: 'dist/card'</code>. Output is copied to <code>hosting/public/card/</code> by <code>scripts/build_card.sh</code> or by CI.</li>
+  </ul>
+
+  <h2>App structure</h2>
+  <p>Under the repository root:</p>
+  <ul>
+    <li><code>index.html</code> – Vite entry; root for the SPA.</li>
+    <li><code>src/main.tsx</code> – React entry.</li>
+    <li><code>src/App.tsx</code>, <code>src/CardCanvas.tsx</code>, <code>src/ControlsPanel.tsx</code> – Main UI.</li>
+    <li><code>src/constants.ts</code>, <code>src/types.ts</code> – Shared types and config.</li>
+    <li><code>public/</code> – Static assets (e.g. <code>_redirects</code> for some hosts).</li>
+    <li><code>vite.config.ts</code>, <code>tsconfig.json</code> – Build configuration.</li>
+  </ul>
+
+  <h2>Build and run</h2>
+  <ul>
+    <li><strong>Build:</strong> From repo root, <code>npm run build</code> produces <code>dist/card/</code>. For deployment, run <code>./scripts/build_card.sh</code> so output is copied to <code>hosting/public/card/</code>.</li>
+    <li><strong>Dev:</strong> <code>npm run dev</code> from repo root; dev server uses <code>base: '/card/'</code> so routes match production.</li>
+  </ul>
+
+  <h2>Documentation</h2>
+  <p>Card docs are served at <strong>haderach.ai/card/docs/</strong>. Source lives in <code>docs/</code>; <code>scripts/sync_docs.sh</code> mirrors docs into <code>hosting/public/docs/</code> for hosting output.</p>
+
+  <h2>Dependencies on haderach</h2>
+  <p>Hosting, rewrites, and deployment are described in the haderach tech stack doc. The card app only supplies the built files under <code>hosting/public/card/</code>; it does not define Firebase or CI config.</p>
+</body>
+</html>
