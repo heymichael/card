@@ -32,6 +32,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
+│   ├── artifact-manifest.schema.json
 │   ├── priorities/
 │   │   └── index.html
 │   ├── learnings/
@@ -110,7 +111,8 @@ Platform consumes this metadata to promote a specific version by environment.</p
 <li>Docs artifact: static docs directory (or tarball) suitable for hosting at the app docs route.</li>
 </ul>
 <h3 id="required-metadata-example-shape">Required metadata (example shape)</h3>
-<p>See <code>docs/artifact-manifest.example.json</code>.</p>
+<p>See <code>docs/artifact-manifest.example.json</code>.
+See <code>docs/artifact-manifest.schema.json</code> for the canonical machine-readable schema.</p>
 <h2 id="docs-and-routing-model-app-scope">Docs and Routing Model (App Scope)</h2>
 <p>This template assumes app-local docs are served at one base path (for example <code>/docs</code> in local hosting, or <code>/&lt;app&gt;/docs</code> in integrated platform hosting).
 For local route-parity convenience, hosting may add optional redirects so <code>/&lt;app&gt;/docs</code> resolves to <code>/docs</code> during emulator runs.</p>

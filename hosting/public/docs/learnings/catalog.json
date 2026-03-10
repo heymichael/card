@@ -1,6 +1,15 @@
 {
   "entries": [
     {
+      "slug": "artifact-manifest-contract-alignment",
+      "title": "Artifact Manifest Contract Alignment",
+      "summary": "Use a canonical JSON Schema plus aligned manifest examples to keep platform and app artifact contracts in sync.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/artifact-manifest-contract-alignment.html"
+    },
+    {
       "slug": "canonical-app-directory-structure",
       "title": "Canonical App Directory Structure",
       "summary": "Single-app repositories should include top-level src and design-tokens directories as standard app-owned structure.",

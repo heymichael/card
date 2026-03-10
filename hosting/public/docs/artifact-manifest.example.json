@@ -1,5 +1,4 @@
 {
-  "contract_version": "v1",
   "app_id": "card",
   "version": "0.1.0+build.1",
   "commit_sha": "REPLACE_COMMIT_SHA",

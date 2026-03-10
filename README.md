@@ -25,6 +25,7 @@ This repository is intentionally app-scoped. It owns app code, app CI, app docs,
 - `.github/workflows/publish-artifact.yml` - starter main-branch artifact publish placeholder workflow.
 - `docs/architecture.md` - app boundaries, handoff contract, and template invariants.
 - `docs/artifact-manifest.example.json` - app artifact metadata shape consumed by platform.
+- `docs/artifact-manifest.schema.json` - canonical machine-readable schema for artifact manifest validation.
 - `docs/index.html` + `docs/shared/` - canonical docs shell and reusable template.
 - `scripts/` - docs generation and source-to-served sync helpers.
 
@@ -47,6 +48,7 @@ card/
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
+│   ├── artifact-manifest.schema.json
 │   ├── priorities/
 │   │   └── index.html
 │   ├── learnings/
