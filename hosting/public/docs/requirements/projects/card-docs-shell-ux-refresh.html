@@ -130,31 +130,36 @@ Improve the user experience of card documentation surfaces by keeping navigation
 
 <h2>5. Acceptance Criteria</h2>
 <table>
-  <tr><th>ID</th><th>Scenario</th><th>Expected Outcome</th></tr>
+  <tr><th>ID</th><th>Scenario</th><th>Playwright</th><th>Manual</th></tr>
   <tr>
     <td>AC-UX-01</td>
     <td>User scrolls within any docs tab list/detail.</td>
-    <td>Header and tabs remain fixed; only content pane scrolls.</td>
+    <td>Scroll content pane and assert header/tab controls remain fixed while only pane content moves.</td>
+    <td>N/A</td>
   </tr>
   <tr>
     <td>AC-UX-02</td>
     <td>User opens a Requirements project then clicks Back.</td>
-    <td>Requirements list is restored without residual project content below it.</td>
+    <td>Navigate to project detail, click Back, assert requirements list is restored and detail content is absent.</td>
+    <td>N/A</td>
   </tr>
   <tr>
     <td>AC-UX-03</td>
     <td>User opens Priorities tab.</td>
-    <td>Content is inline-rendered with heading "To Do List" and shell-consistent typography.</td>
+    <td>Assert content is inline rendered (no iframe) and heading text is exactly "To Do List".</td>
+    <td>Visually confirm typography consistency with shell styles.</td>
   </tr>
   <tr>
     <td>AC-UX-04</td>
     <td>User opens Testing -&gt; Test Lineup.</td>
-    <td>Content is inline-rendered; heading reads "Test Lineup"; metadata lines are tightly spaced.</td>
+    <td>Assert content is inline rendered (no iframe) and heading text is exactly "Test Lineup".</td>
+    <td>Visually confirm metadata lines (Selection/Trigger/Environment/Platforms) use tighter spacing than body copy.</td>
   </tr>
   <tr>
     <td>AC-UX-05</td>
     <td>User rapidly switches between tabs during doc loads.</td>
-    <td>Current tab view remains correct; stale content from previous tab does not appear.</td>
+    <td>Rapidly switch tabs and assert final active tab content remains correct with no stale cross-tab render.</td>
+    <td>N/A</td>
   </tr>
 </table>
 </body>

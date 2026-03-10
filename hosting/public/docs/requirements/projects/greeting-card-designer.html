@@ -626,81 +626,96 @@
 <h2><span class="section-number">9.</span> Acceptance Criteria</h2>
 
 <table>
-  <tr><th>ID</th><th>Scenario</th><th>Expected Outcome</th></tr>
+  <tr><th>ID</th><th>Scenario</th><th>Playwright</th><th>Manual</th></tr>
   <tr>
     <td class="req-id">AC-01</td>
     <td>User opens the application for the first time.</td>
-    <td>A card is displayed with default headline and message text, light pink background, no photo, and no guide lines visible.</td>
+    <td>Verify default control state: headline/message input values, background input value <code>#fff0f3</code>, photo button text "Add Photo", safe margins toggle off.</td>
+    <td>Visually confirm canvas shows default headline/message, light pink background, no photo, and no guide lines.</td>
   </tr>
   <tr>
     <td class="req-id">AC-02</td>
     <td>User types new text in the text field.</td>
-    <td>The corresponding text block on the canvas updates in real-time as the user types.</td>
+    <td>Type into text input and verify input value updates with each keystroke.</td>
+    <td>Visually confirm corresponding canvas text updates in real time.</td>
   </tr>
   <tr>
     <td class="req-id">AC-03</td>
     <td>User changes the font size slider.</td>
-    <td>The text on the canvas resizes immediately. The numeric input stays in sync.</td>
+    <td>Change slider value and verify numeric input stays in sync (and reverse direction if supported).</td>
+    <td>Visually confirm canvas text resizes immediately.</td>
   </tr>
   <tr>
     <td class="req-id">AC-04</td>
     <td>User selects a different font family.</td>
-    <td>The text on the canvas re-renders in the selected font.</td>
+    <td>Select a different font family and verify control value updates.</td>
+    <td>Visually confirm selected text re-renders in the new font on canvas.</td>
   </tr>
   <tr>
     <td class="req-id">AC-05</td>
     <td>User changes the text color.</td>
-    <td>The text on the canvas changes color. The hex value label updates.</td>
+    <td>Change text color input and verify hex value label/control state updates.</td>
+    <td>Visually confirm canvas text color changes accordingly.</td>
   </tr>
   <tr>
     <td class="req-id">AC-06</td>
     <td>User changes the background color.</td>
-    <td>The card background updates immediately. The hex value and preview swatch update in the controls panel.</td>
+    <td>Change background color input and verify hex value and preview swatch update in controls.</td>
+    <td>Visually confirm canvas background updates immediately.</td>
   </tr>
   <tr>
     <td class="req-id">AC-07</td>
     <td>User uploads a photo.</td>
-    <td>The photo appears on the canvas, scaled to card width, centered vertically. The "Add Photo" button changes to "Replace Photo". The photo is selected with resize handles visible.</td>
+    <td>Upload a test image via file input and verify button label changes from "Add Photo" to "Replace Photo".</td>
+    <td>Visually confirm photo appears, is scaled to card width, vertically centered, and selected with resize handles.</td>
   </tr>
   <tr>
     <td class="req-id">AC-08</td>
     <td>User drags a text block toward the edge of the card.</td>
-    <td>The text block stops at the card boundary and cannot be dragged further out.</td>
+    <td>Simulate drag interaction on selected text block.</td>
+    <td>Visually confirm text block stops at card boundary and cannot move beyond edge.</td>
   </tr>
   <tr>
     <td class="req-id">AC-09</td>
     <td>User drags a photo partially off the card.</td>
-    <td>The photo moves freely. The portion outside the card boundary is clipped (not visible).</td>
+    <td>Simulate drag interaction on selected photo element.</td>
+    <td>Visually confirm off-card photo region is clipped and not visible.</td>
   </tr>
   <tr>
     <td class="req-id">AC-10</td>
     <td>User presses Arrow Right, then Shift+Arrow Down.</td>
-    <td>The selected element moves 1px right, then 10px down.</td>
+    <td>Send keyboard events for Arrow Right then Shift+Arrow Down while element is selected.</td>
+    <td>Visually confirm element moves by 1px then 10px.</td>
   </tr>
   <tr>
     <td class="req-id">AC-11</td>
     <td>User resizes the photo using the corner handle.</td>
-    <td>The photo scales proportionally. It cannot be made smaller than 20&times;20px.</td>
+    <td>Simulate drag on photo resize handle.</td>
+    <td>Visually confirm proportional scaling and minimum size floor of 20&times;20px.</td>
   </tr>
   <tr>
     <td class="req-id">AC-12</td>
     <td>User clicks "Finish (Export JPEG)".</td>
-    <td>A JPEG file downloads. The image is 1500&times;2100 pixels and contains no UI overlays (no selection boxes, no guides, no resize handles).</td>
+    <td>Click export button, assert JPEG download occurs, and validate filename format <code>greeting-card-YYYYMMDD-HHmmss.jpg</code> plus non-empty file.</td>
+    <td>Confirm exported image is 1500&times;2100 and has no UI overlays (selection, guides, resize handles, border stroke).</td>
   </tr>
   <tr>
     <td class="req-id">AC-13</td>
     <td>User selects the photo and presses Delete.</td>
-    <td>The photo is removed. Selection returns to Block A. The button returns to "Add Photo".</td>
+    <td>With photo selected, press Delete and verify button text returns to "Add Photo".</td>
+    <td>Visually confirm photo is removed and selection returns to Block A.</td>
   </tr>
   <tr>
     <td class="req-id">AC-14</td>
     <td>User clicks "Reset Positions".</td>
-    <td>Both text blocks return to their default positions. If a photo is present, it returns to its initial centered/scaled position.</td>
+    <td>Click Reset Positions control.</td>
+    <td>Visually confirm both text blocks reset to defaults and photo returns to initial centered/scaled position when present.</td>
   </tr>
   <tr>
     <td class="req-id">AC-15</td>
     <td>User toggles "Show Safe Margins" on.</td>
-    <td>Dashed red lines appear 75px inset from each card edge. They are not included in the exported image.</td>
+    <td>Toggle safe margin control on and assert control state changes.</td>
+    <td>Visually confirm dashed red guides appear at 75px inset and are not included in exported image.</td>
   </tr>
 </table>
 

@@ -209,28 +209,32 @@
       </tr>
     </table>
 
-    <h2>7. Acceptance Tests</h2>
+    <h2>7. Acceptance Criteria</h2>
     <table>
-      <tr><th>ID</th><th>Test Scenario</th><th>Expected Result</th></tr>
+      <tr><th>ID</th><th>Scenario</th><th>Playwright</th><th>Manual</th></tr>
       <tr>
-        <td class="req-id">AT-01</td>
+        <td class="req-id">AC-01</td>
         <td>[Happy path scenario on target route/workflow]</td>
-        <td>[Expected successful behavior]</td>
+        <td>[Automated DOM/navigation/state assertions that Playwright can verify]</td>
+        <td>[Visual/content behavior requiring human verification or design judgment]</td>
       </tr>
       <tr>
-        <td class="req-id">AT-02</td>
+        <td class="req-id">AC-02</td>
         <td>[Invalid parameter/error scenario]</td>
-        <td>[Graceful fallback behavior]</td>
+        <td>[Automated fallback/error-state assertion(s)]</td>
+        <td>[Any manual edge-case verification not safely automated]</td>
       </tr>
       <tr>
-        <td class="req-id">AT-03</td>
-        <td>[Regeneration + sync workflow scenario]</td>
-        <td>[Hosted artifacts updated and viewable]</td>
+        <td class="req-id">AC-03</td>
+        <td>[Interaction or workflow scenario with mixed verifiability]</td>
+        <td>[Automation scope and exact checks]</td>
+        <td>[Manual-only checks, or <code>N/A</code> if fully automatable]</td>
       </tr>
       <tr>
-        <td class="req-id">AT-04</td>
+        <td class="req-id">AC-04</td>
         <td>[Security/indexing/auth scenario]</td>
-        <td>[Expected noindex/auth protection behavior]</td>
+        <td>[Automated auth/indexing assertions where feasible]</td>
+        <td>[Manual verification for anything environment- or UX-dependent]</td>
       </tr>
     </table>
 
