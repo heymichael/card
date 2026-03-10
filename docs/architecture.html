@@ -150,7 +150,8 @@ Platform consumes this metadata to promote a specific version by environment.</p
 <h2 id="template-customization-checklist">Template Customization Checklist</h2>
 <p>When creating a real app repo from this template:</p>
 <ol>
-<li>Replace app identity labels in README/docs/shell pages.</li>
+<li>Run bootstrap initialization:
+   <code>bash scripts/init_app.sh --app-id &lt;app-id&gt; --app-name "&lt;App Name&gt;" --firebase-project &lt;project-id&gt;</code></li>
 <li>Set the docs base path in <code>docs/index.html</code>.</li>
 <li>Replace placeholder workflow logic in <code>.github/workflows/ci.yml</code> and <code>.github/workflows/publish-artifact.yml</code>.</li>
 <li>Publish artifacts using <code>docs/artifact-manifest.example.json</code> as contract baseline.</li>

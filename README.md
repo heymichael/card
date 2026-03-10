@@ -105,6 +105,21 @@ bash scripts/sync_docs.sh
 firebase emulators:start --only hosting --project REPLACE_WITH_FIREBASE_PROJECT_ID --config firebase.json
 ```
 
+## Initialize a new app copy
+
+Use the bootstrap script right after copying this repository:
+
+```bash
+bash scripts/init_app.sh --app-id card --app-name "Card" --firebase-project your-firebase-project-id
+```
+
+Useful options:
+
+- `--docs-base-path /card/docs` (defaults to `/<app-id>/docs`)
+- `--repo-name card-app` (defaults to `<app-id>-app`)
+- `--bucket your-artifact-bucket` (fills manifest URI examples)
+- `--skip-docs` (skip regenerate/sync if you only want token replacement)
+
 ## App-to-platform handoff model
 
 This template aligns to the canonical release flow:

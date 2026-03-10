@@ -160,7 +160,8 @@ For local hosting parity around docs:
 
 When creating a real app repo from this template:
 
-1. Replace app identity labels in README/docs/shell pages.
+1. Run bootstrap initialization:
+   `bash scripts/init_app.sh --app-id <app-id> --app-name "<App Name>" --firebase-project <project-id>`
 2. Set the docs base path in `docs/index.html`.
 3. Replace placeholder workflow logic in `.github/workflows/ci.yml` and `.github/workflows/publish-artifact.yml`.
 4. Publish artifacts using `docs/artifact-manifest.example.json` as contract baseline.
