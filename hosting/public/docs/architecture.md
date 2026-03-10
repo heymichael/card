@@ -116,10 +116,17 @@ Platform consumes this metadata to promote a specific version by environment.
 See `docs/artifact-manifest.example.json`.
 See `docs/artifact-manifest.schema.json` for the canonical machine-readable schema.
 
+### Platform app registry reference
+
+App registration and route mapping are owned by the platform repository.
+Use the platform `docs/app-registry.example.json` contract to coordinate `app_id`,
+`route_prefix`, artifact discovery source, and docs route mapping.
+
 ## Docs and Routing Model (App Scope)
 
 This template assumes app-local docs are served at one base path (for example `/docs` in local hosting, or `/<app>/docs` in integrated platform hosting).
 For local route-parity convenience, hosting may add optional redirects so `/<app>/docs` resolves to `/docs` during emulator runs.
+This local redirect pattern is a developer convenience for URL parity and is not identical to integrated platform routing behavior in production.
 
 - `docs/index.html` is the docs shell entrypoint.
 - `docs/shared/` contains canonical shell assets and page template.

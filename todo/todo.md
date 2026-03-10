@@ -7,6 +7,7 @@ Open items
 3. [Med] Add authentication
 4. [Med] Add analytics
 5. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)
+6. [Med] Enforce docs source-to-served sync in CI
 
 Completed items
 
@@ -47,3 +48,9 @@ Completed items
 **Purpose:** Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond `platform_contract_version: "v1"`, while deferring implementation details until after the first successful deploy.
 
 **Approach:** After first deploy, update platform `docs/architecture.md` with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's `docs/architecture.md`/`README.md` to that platform-owned protocol as the source of truth.
+
+### 6. [Med] Enforce docs source-to-served sync in CI
+
+**Purpose:** Prevent drift between `docs/` and `hosting/public/docs/` by making the existing generate-and-sync workflow a required CI gate.
+
+**Approach:** Add CI steps that run `python3 scripts/generate_docs_pages.py` and `bash scripts/sync_docs.sh`, then fail if `git diff --exit-code` is non-empty so PRs cannot merge with stale served docs output.

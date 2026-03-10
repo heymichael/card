@@ -16,6 +16,7 @@
 <li>[Med] Add authentication</li>
 <li>[Med] Add analytics</li>
 <li>[Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)</li>
+<li>[Med] Enforce docs source-to-served sync in CI</li>
 </ol>
 <p>Completed items</p>
 <ul>
@@ -42,5 +43,8 @@
 <h3 id="5-med-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">5. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
 <p><strong>Purpose:</strong> Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond <code>platform_contract_version: "v1"</code>, while deferring implementation details until after the first successful deploy.</p>
 <p><strong>Approach:</strong> After first deploy, update platform <code>docs/architecture.md</code> with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's <code>docs/architecture.md</code>/<code>README.md</code> to that platform-owned protocol as the source of truth.</p>
+<h3 id="6-med-enforce-docs-source-to-served-sync-in-ci">6. [Med] Enforce docs source-to-served sync in CI</h3>
+<p><strong>Purpose:</strong> Prevent drift between <code>docs/</code> and <code>hosting/public/docs/</code> by making the existing generate-and-sync workflow a required CI gate.</p>
+<p><strong>Approach:</strong> Add CI steps that run <code>python3 scripts/generate_docs_pages.py</code> and <code>bash scripts/sync_docs.sh</code>, then fail if <code>git diff --exit-code</code> is non-empty so PRs cannot merge with stale served docs output.</p>
 </body>
 </html>

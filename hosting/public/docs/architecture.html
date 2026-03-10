@@ -113,9 +113,14 @@ Platform consumes this metadata to promote a specific version by environment.</p
 <h3 id="required-metadata-example-shape">Required metadata (example shape)</h3>
 <p>See <code>docs/artifact-manifest.example.json</code>.
 See <code>docs/artifact-manifest.schema.json</code> for the canonical machine-readable schema.</p>
+<h3 id="platform-app-registry-reference">Platform app registry reference</h3>
+<p>App registration and route mapping are owned by the platform repository.
+Use the platform <code>docs/app-registry.example.json</code> contract to coordinate <code>app_id</code>,
+<code>route_prefix</code>, artifact discovery source, and docs route mapping.</p>
 <h2 id="docs-and-routing-model-app-scope">Docs and Routing Model (App Scope)</h2>
 <p>This template assumes app-local docs are served at one base path (for example <code>/docs</code> in local hosting, or <code>/&lt;app&gt;/docs</code> in integrated platform hosting).
-For local route-parity convenience, hosting may add optional redirects so <code>/&lt;app&gt;/docs</code> resolves to <code>/docs</code> during emulator runs.</p>
+For local route-parity convenience, hosting may add optional redirects so <code>/&lt;app&gt;/docs</code> resolves to <code>/docs</code> during emulator runs.
+This local redirect pattern is a developer convenience for URL parity and is not identical to integrated platform routing behavior in production.</p>
 <ul>
 <li><code>docs/index.html</code> is the docs shell entrypoint.</li>
 <li><code>docs/shared/</code> contains canonical shell assets and page template.</li>
