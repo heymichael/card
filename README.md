@@ -120,6 +120,21 @@ Useful options:
 - `--bucket your-artifact-bucket` (fills manifest URI examples)
 - `--skip-docs` (skip regenerate/sync if you only want token replacement)
 
+## New app bootstrap playbook
+
+Use this sequence when creating a real app repo from the template:
+
+1. Create the new repository on GitHub (for example `card-app`).
+2. Copy this template into a new local folder.
+3. Set app-specific values:
+   - `bash scripts/init_app.sh --app-id card --app-name "Card" --firebase-project your-firebase-project-id`
+4. Point local git remote to the new repo:
+   - `git remote set-url origin git@github.com:<org-or-user>/card-app.git`
+5. Verify and push:
+   - `git remote -v`
+   - `git status`
+   - `git push -u origin main`
+
 ## App-to-platform handoff model
 
 This template aligns to the canonical release flow:
