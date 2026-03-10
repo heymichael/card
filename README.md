@@ -1,4 +1,4 @@
-# app-template
+# card
 
 Canonical starter repository for app teams deployed through the Haderach platform.
 
@@ -29,7 +29,7 @@ This repository is intentionally app-scoped. It owns app code, app CI, app docs,
 - `scripts/` - docs generation and source-to-served sync helpers.
 
 ```text
-app-template/
+card/
 ├── .cursor/
 │   └── rules/
 │       ├── architecture-pointer.mdc
@@ -56,7 +56,7 @@ app-template/
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
-│   │       ├── app-template-foundation.html
+│   │       ├── card-foundation.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
 │   │   ├── catalog.json
@@ -167,6 +167,7 @@ Use `docs/learnings/` for reusable insights discovered while building real apps 
 The docs shell assets in `docs/shared/` are the canonical UI pattern for app docs:
 
 - App docs root: `/<app>/docs/` (or `/docs` for local/dev usage).
+- Optional local parity: add hosting redirects so `/<app>/docs` resolves to `/docs` in emulator runs.
 - Required tabs: `test-status`, `priorities`, `learnings`, `requirements`, `testing`, `architecture`.
 - Architecture tab points to `architecture.html` (rendered from `architecture.md`).
 

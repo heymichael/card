@@ -29,6 +29,18 @@
         ]
       }
     ],
+    "redirects": [
+      {
+        "source": "/card/docs",
+        "destination": "/docs/",
+        "type": 302
+      },
+      {
+        "source": "/card/docs/:rest*",
+        "destination": "/docs/:rest*",
+        "type": 302
+      }
+    ],
     "rewrites": [
       {
         "source": "/",

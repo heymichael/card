@@ -6,7 +6,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-APP_DISPLAY_NAME = "Template App"
+APP_DISPLAY_NAME = "card"
 
 try:
     import markdown

@@ -1,10 +1,10 @@
 {
   "projects": [
     {
-      "slug": "app-template-foundation",
-      "title": "App Template Foundation",
-      "summary": "Baseline requirements for app-scoped docs shell behavior, generated docs workflow, and artifact manifest handoff.",
-      "url": "/docs/requirements/projects/app-template-foundation.html"
+      "slug": "card-foundation",
+      "title": "Card Foundation",
+      "summary": "Baseline requirements for card docs shell behavior, generated docs workflow, and artifact manifest handoff.",
+      "url": "/docs/requirements/projects/card-foundation.html"
     }
   ]
 }

@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
-  <title>Template App - Architecture</title>
+  <title>card - Architecture</title>
 </head>
 <body>
-  <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_app_template/docs/architecture.md. DO NOT EDIT. -->
+  <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_site/card/docs/architecture.md. DO NOT EDIT. -->
   <h1 id="architecture">Architecture</h1>
 <h2 id="purpose">Purpose</h2>
-<p><code>app-template</code> is the canonical starter for a single app repository in the Haderach ecosystem.
+<p><code>card</code> is the canonical starter for a single app repository in the Haderach ecosystem.
 It owns app implementation, app CI, app docs, and artifact publication contracts.
 It does not own platform promotion, platform deployment, or cross-app orchestration.</p>
 <h2 id="repository-tree-ascii">Repository Tree (ASCII)</h2>
-<pre><code class="language-text">app-template/
+<pre><code class="language-text">card/
 ├── .cursor/
 │   └── rules/
 │       ├── architecture-pointer.mdc
@@ -41,7 +41,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
-│   │       ├── app-template-foundation.html
+│   │       ├── card-foundation.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
 │   │   ├── catalog.json
@@ -112,7 +112,8 @@ Platform consumes this metadata to promote a specific version by environment.</p
 <h3 id="required-metadata-example-shape">Required metadata (example shape)</h3>
 <p>See <code>docs/artifact-manifest.example.json</code>.</p>
 <h2 id="docs-and-routing-model-app-scope">Docs and Routing Model (App Scope)</h2>
-<p>This template assumes app-local docs are served at one base path (for example <code>/docs</code> in local hosting, or <code>/&lt;app&gt;/docs</code> in integrated platform hosting).</p>
+<p>This template assumes app-local docs are served at one base path (for example <code>/docs</code> in local hosting, or <code>/&lt;app&gt;/docs</code> in integrated platform hosting).
+For local route-parity convenience, hosting may add optional redirects so <code>/&lt;app&gt;/docs</code> resolves to <code>/docs</code> during emulator runs.</p>
 <ul>
 <li><code>docs/index.html</code> is the docs shell entrypoint.</li>
 <li><code>docs/shared/</code> contains canonical shell assets and page template.</li>

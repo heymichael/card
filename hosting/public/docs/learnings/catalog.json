@@ -1,6 +1,15 @@
 {
   "entries": [
     {
+      "slug": "init-app-token-replacement-gaps",
+      "title": "Init App Token Replacement Gaps",
+      "summary": "The app bootstrap script can leave template-name tokens in key files after initialization, requiring manual cleanup.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/init-app-token-replacement-gaps.html"
+    },
+    {
       "slug": "template-feedback-loop",
       "title": "Template Feedback Loop",
       "summary": "Capture reusable implementation learnings in app repos and backport stable patterns into this canonical template.",

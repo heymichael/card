@@ -2,14 +2,14 @@
 
 ## Purpose
 
-`app-template` is the canonical starter for a single app repository in the Haderach ecosystem.
+`card` is the canonical starter for a single app repository in the Haderach ecosystem.
 It owns app implementation, app CI, app docs, and artifact publication contracts.
 It does not own platform promotion, platform deployment, or cross-app orchestration.
 
 ## Repository Tree (ASCII)
 
 ```text
-app-template/
+card/
 ├── .cursor/
 │   └── rules/
 │       ├── architecture-pointer.mdc
@@ -36,7 +36,7 @@ app-template/
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
-│   │       ├── app-template-foundation.html
+│   │       ├── card-foundation.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
 │   │   ├── catalog.json
@@ -117,6 +117,7 @@ See `docs/artifact-manifest.example.json`.
 ## Docs and Routing Model (App Scope)
 
 This template assumes app-local docs are served at one base path (for example `/docs` in local hosting, or `/<app>/docs` in integrated platform hosting).
+For local route-parity convenience, hosting may add optional redirects so `/<app>/docs` resolves to `/docs` during emulator runs.
 
 - `docs/index.html` is the docs shell entrypoint.
 - `docs/shared/` contains canonical shell assets and page template.
