@@ -10,15 +10,21 @@
   <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_site/card/todo/todo.md. DO NOT EDIT. -->
   <p>Todo: card</p>
 <p>Open items</p>
-<p><em>(none)</em></p>
+<ol>
+<li>[Med] Standardize technical documentation (API reference, generation, docs site integration)</li>
+</ol>
 <p>Completed items</p>
 <ul>
-<li>[2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (no PR)</li>
-<li>[2026-03-03] Launch auth-gated <code>/card</code> route with reserved <code>/card/docs</code> placeholder (PR #5)</li>
-<li>[2026-03-03] Redirect after authentication returns to the login page (no PR)</li>
-<li>[2026-03-03] Add noindex meta to card app entry (no PR)</li>
-<li>[2025-03-01] Creating the CI JSON secret (no PR)</li>
-<li>[2025-03-01] Point card app Vite build output to monorepo hosting (<code>../../hosting/public/card</code>) (no PR)</li>
+<li>[2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (PR #1)</li>
+</ul>
+<hr>
+<h3 id="1-med-standardize-technical-documentation-api-reference-generation-docs-site-integration">1. [Med] Standardize technical documentation (API reference, generation, docs site integration)</h3>
+<p><strong>Purpose:</strong> Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today <code>documentation.html</code> uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li><strong>Content standard (keep):</strong> API reference layout (Field | Type | Description), function signatures with typed params and short descriptions, file-based sections, tags (interface, type alias, function component), props/state tables—align with TypeDoc/JSDoc/Storybook-style expectations.</li>
+<li><strong>Delivery standard (improve):</strong> Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.</li>
+<li>Document the standard in learnings or architecture; apply to <code>documentation.html</code> / card app; propose template change for the canonical app template.</li>
 </ul>
 </body>
 </html>
