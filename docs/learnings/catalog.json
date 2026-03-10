@@ -28,6 +28,15 @@
       "url": "/docs/learnings/entries/init-app-token-replacement-gaps.html"
     },
     {
+      "slug": "pull-request-template-standardization",
+      "title": "Pull Request Template Standardization",
+      "summary": "Add a repository PR template so required Why/Todo Mapping/Validation/Deploy sections are present in every PR.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/pull-request-template-standardization.html"
+    },
+    {
       "slug": "template-feedback-loop",
       "title": "Template Feedback Loop",
       "summary": "Capture reusable implementation learnings in app repos and backport stable patterns into this canonical template.",
