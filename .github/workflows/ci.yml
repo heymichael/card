@@ -31,5 +31,5 @@ jobs:
 
       - name: Placeholder app CI command
         run: |
-          echo "Replace with app CI steps (lint/test/build/docs checks)."
-          echo "Example: npm ci && npm run lint && npm test && npm run build"
+          echo "Replace with app CI steps (lint/build/docs checks)."
+          echo "Example: npm ci && npm run lint && npm run build"

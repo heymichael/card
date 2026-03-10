@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <title>Learnings - Canonical App Directory Structure</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 40px 24px 64px;
+        color: #1f2937;
+        line-height: 1.55;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      h2 {
+        margin-top: 28px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+      }
+      .meta td:first-child {
+        width: 220px;
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 20px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #d1d5db;
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+      }
+      th {
+        background: #f9fafb;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 16px;
+      }
+      .status-pill {
+        display: inline-block;
+        border: 1px solid #d1d5db;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="/docs/?tab=learnings">Back to all learnings</a>
+    <h1>Canonical App Directory Structure</h1>
+    <p>
+      During card app migration from the monorepo, top-level <code>src/</code> and
+      <code>design-tokens/</code> proved to be stable, reusable structure for single-app repositories.
+    </p>
+
+    <table class="meta">
+      <tr><td>Status</td><td><span class="status-pill">active</span></td></tr>
+      <tr><td>Backported</td><td>no</td></tr>
+      <tr><td>Template reference</td><td>N/A</td></tr>
+      <tr><td>Last updated</td><td>2026-03-10</td></tr>
+    </table>
+
+    <h2>Problem</h2>
+    <p>
+      The template repository did not clearly reflect app-local runtime source and token ownership.
+      Teams migrating from monorepo layouts had to infer whether <code>src/</code> and token assets
+      should live at repo root or in nested paths.
+    </p>
+
+    <h2>Reusable Pattern</h2>
+    <p>
+      For single-app repositories, keep app runtime source under root-level <code>src/</code> and
+      semantic visual tokens under root-level <code>design-tokens/</code>. This keeps boundaries clear
+      and avoids path-coupling to monorepo conventions like <code>apps/&lt;app&gt;/</code>.
+    </p>
+
+    <h2>Proposed Template Change</h2>
+    <ul>
+      <li>Add <code>src/</code> and <code>design-tokens/</code> to canonical repo tree examples in docs.</li>
+      <li>Include short guidance in bootstrap docs on expected ownership of these directories.</li>
+      <li>Keep token naming semantic and app-oriented to avoid control-plane coupling.</li>
+    </ul>
+
+    <h2>Risk and Rollout Notes</h2>
+    <ul>
+      <li>Existing app repos may already use alternate structures and should migrate gradually.</li>
+      <li>Template updates should preserve compatibility for teams adopting incrementally.</li>
+      <li>Docs and tree snippets must be kept synchronized when structure changes.</li>
+    </ul>
+
+    <h2>Backport Status</h2>
+    <p>
+      Pending backport to canonical template repository. After backport, set
+      <code>backported: true</code> and update <code>templateRef</code> in
+      <code>docs/learnings/catalog.json</code>.
+    </p>
+
+    <p style="margin-top: 28px;">
+      <a href="/docs/?tab=learnings">Back to all learnings</a>
+    </p>
+  </body>
+</html>
