@@ -36,6 +36,7 @@ app-template/
 │       ├── branch-safety-reminder.mdc
 │       ├── pr-conventions.mdc
 │       ├── repo-hygiene.mdc
+│       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
 │   └── workflows/
@@ -48,6 +49,10 @@ app-template/
 │   ├── artifact-manifest.example.json
 │   ├── priorities/
 │   │   └── index.html
+│   ├── learnings/
+│   │   ├── catalog.json
+│   │   └── entries/
+│   │       └── template-feedback-loop.html
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
@@ -149,12 +154,20 @@ This template aligns to the canonical release flow:
 
 The integration boundary is the app artifact manifest consumed by platform.
 
+## Learnings feedback loop
+
+Use `docs/learnings/` for reusable insights discovered while building real apps from this template.
+
+- `todo/todo.md` tracks execution priorities and project tasks.
+- `docs/learnings/` captures reusable patterns that should be backported to the canonical template.
+- When a learning is backported, update `docs/learnings/catalog.json` metadata with `backported` and `templateRef`.
+
 ## Docs shell contract
 
 The docs shell assets in `docs/shared/` are the canonical UI pattern for app docs:
 
 - App docs root: `/<app>/docs/` (or `/docs` for local/dev usage).
-- Required tabs: `test-status`, `priorities`, `requirements`, `testing`, `architecture`.
+- Required tabs: `test-status`, `priorities`, `learnings`, `requirements`, `testing`, `architecture`.
 - Architecture tab points to `architecture.html` (rendered from `architecture.md`).
 
 Template tokens used by `docs/shared/docs-shell-page.template.html`:

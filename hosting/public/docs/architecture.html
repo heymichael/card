@@ -21,6 +21,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │       ├── branch-safety-reminder.mdc
 │       ├── pr-conventions.mdc
 │       ├── repo-hygiene.mdc
+│       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
 │   └── workflows/
@@ -33,6 +34,10 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   ├── artifact-manifest.example.json
 │   ├── priorities/
 │   │   └── index.html
+│   ├── learnings/
+│   │   ├── catalog.json
+│   │   └── entries/
+│   │       └── template-feedback-loop.html
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
@@ -111,17 +116,27 @@ Platform consumes this metadata to promote a specific version by environment.</p
 <ul>
 <li><code>docs/index.html</code> is the docs shell entrypoint.</li>
 <li><code>docs/shared/</code> contains canonical shell assets and page template.</li>
-<li>Required tabs: <code>test-status</code>, <code>priorities</code>, <code>requirements</code>, <code>testing</code>, <code>architecture</code>.</li>
+<li>Required tabs: <code>test-status</code>, <code>priorities</code>, <code>learnings</code>, <code>requirements</code>, <code>testing</code>, <code>architecture</code>.</li>
 <li>Architecture tab target is always <code>architecture.html</code> (rendered from <code>architecture.md</code>).</li>
 </ul>
 <h2 id="source-to-served-docs-contract">Source-to-Served Docs Contract</h2>
 <p>For docs parity and deterministic output:</p>
 <ul>
 <li>Authoring/generation source of truth: <code>docs/</code>.</li>
+<li>Learnings source of truth: <code>docs/learnings/catalog.json</code> and <code>docs/learnings/entries/*.html</code>.</li>
 <li>Generated pages from markdown:</li>
 <li><code>docs/architecture.md</code> -&gt; <code>docs/architecture.html</code></li>
 <li><code>todo/todo.md</code> -&gt; <code>docs/priorities/index.html</code></li>
 <li>Served/deploy copy after sync: <code>hosting/public/docs/</code> (full mirror of <code>docs/</code>).</li>
+</ul>
+<h2 id="learnings-feedback-loop-contract">Learnings Feedback Loop Contract</h2>
+<p>Use <code>docs/learnings/</code> to capture reusable implementation insights discovered in app repos.</p>
+<ul>
+<li>Keep project execution tracking in <code>todo/todo.md</code>.</li>
+<li>Keep reusable template feedback in <code>docs/learnings/</code>.</li>
+<li>When a learning is backported to the canonical template, update catalog metadata:</li>
+<li><code>backported: true</code></li>
+<li><code>templateRef: &lt;commit-sha or PR reference&gt;</code></li>
 </ul>
 <h2 id="testing-ownership">Testing Ownership</h2>
 <p>This app repo owns app-specific testing depth and CI signals.</p>

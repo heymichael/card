@@ -15,6 +15,7 @@
           <div class="tabs" role="tablist" aria-label="Template app docs tabs">
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="test-status">Test Status</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="priorities">Priorities</button>
+            <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="learnings">Learnings</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="requirements">Requirements</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="testing">Testing</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="architecture">Architecture</button>
@@ -95,6 +96,19 @@
             url: baseDocsPath + "/priorities/index.html",
             fallback: "no priorities available",
           },
+          learnings: {
+            mode: "catalog",
+            heading: "Learnings",
+            catalogUrl: baseDocsPath + "/learnings/catalog.json",
+            listField: "entries",
+            itemKey: "slug",
+            itemTitle: "title",
+            itemSummary: "summary",
+            itemUrl: "url",
+            backLabel: "Back to all learnings",
+            fallback: "no learnings captured yet",
+            inlineItemContent: true,
+          },
           requirements: {
             mode: "catalog",
             heading: "Requirements",
@@ -132,6 +146,7 @@
           defaultTab: "priorities",
           tabDefinitions,
           tabItemParams: {
+            learnings: "learning",
             requirements: "project",
             "test-status": "report",
             testing: "doc",
