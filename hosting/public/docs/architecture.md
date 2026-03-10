@@ -27,6 +27,7 @@ card/
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
+│   ├── artifact-manifest.schema.json
 │   ├── priorities/
 │   │   └── index.html
 │   ├── learnings/
@@ -113,6 +114,7 @@ Platform consumes this metadata to promote a specific version by environment.
 ### Required metadata (example shape)
 
 See `docs/artifact-manifest.example.json`.
+See `docs/artifact-manifest.schema.json` for the canonical machine-readable schema.
 
 ## Docs and Routing Model (App Scope)
 
