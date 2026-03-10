@@ -6,6 +6,7 @@ Open items
 2. [Med] Add tests and testing framework
 3. [Med] Add authentication
 4. [Med] Add analytics
+5. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)
 
 Completed items
 
@@ -40,3 +41,9 @@ Completed items
 **Purpose:** Capture usage analytics (e.g. page views, feature usage) to inform product and prioritization decisions.
 
 **Approach:** Choose an analytics solution (e.g. Firebase Analytics, GA, or platform-provided). Integrate with the app and any docs routes; document what is collected and how to configure/disable in docs or privacy notes.
+
+### 5. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)
+
+**Purpose:** Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond `platform_contract_version: "v1"`, while deferring implementation details until after the first successful deploy.
+
+**Approach:** After first deploy, update platform `docs/architecture.md` with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's `docs/architecture.md`/`README.md` to that platform-owned protocol as the source of truth.
