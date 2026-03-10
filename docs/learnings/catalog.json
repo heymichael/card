@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "slug": "template-feedback-loop",
+      "title": "Template Feedback Loop",
+      "summary": "Capture reusable implementation learnings in app repos and backport stable patterns into this canonical template.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/template-feedback-loop.html"
+    }
+  ]
+}

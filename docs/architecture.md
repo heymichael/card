@@ -16,6 +16,7 @@ app-template/
 │       ├── branch-safety-reminder.mdc
 │       ├── pr-conventions.mdc
 │       ├── repo-hygiene.mdc
+│       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
 │   └── workflows/
@@ -28,6 +29,10 @@ app-template/
 │   ├── artifact-manifest.example.json
 │   ├── priorities/
 │   │   └── index.html
+│   ├── learnings/
+│   │   ├── catalog.json
+│   │   └── entries/
+│   │       └── template-feedback-loop.html
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
@@ -115,7 +120,7 @@ This template assumes app-local docs are served at one base path (for example `/
 
 - `docs/index.html` is the docs shell entrypoint.
 - `docs/shared/` contains canonical shell assets and page template.
-- Required tabs: `test-status`, `priorities`, `requirements`, `testing`, `architecture`.
+- Required tabs: `test-status`, `priorities`, `learnings`, `requirements`, `testing`, `architecture`.
 - Architecture tab target is always `architecture.html` (rendered from `architecture.md`).
 
 ## Source-to-Served Docs Contract
@@ -123,10 +128,21 @@ This template assumes app-local docs are served at one base path (for example `/
 For docs parity and deterministic output:
 
 - Authoring/generation source of truth: `docs/`.
+- Learnings source of truth: `docs/learnings/catalog.json` and `docs/learnings/entries/*.html`.
 - Generated pages from markdown:
   - `docs/architecture.md` -> `docs/architecture.html`
   - `todo/todo.md` -> `docs/priorities/index.html`
 - Served/deploy copy after sync: `hosting/public/docs/` (full mirror of `docs/`).
+
+## Learnings Feedback Loop Contract
+
+Use `docs/learnings/` to capture reusable implementation insights discovered in app repos.
+
+- Keep project execution tracking in `todo/todo.md`.
+- Keep reusable template feedback in `docs/learnings/`.
+- When a learning is backported to the canonical template, update catalog metadata:
+  - `backported: true`
+  - `templateRef: <commit-sha or PR reference>`
 
 ## Testing Ownership
 

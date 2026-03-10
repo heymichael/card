@@ -1,0 +1,21 @@
+---
+description: Capture reusable app learnings for template backport
+alwaysApply: true
+---
+
+# Template Learnings Rule
+
+When working in an app repository that was created from this template:
+
+- If you discover a reusable implementation pattern, document it in `docs/learnings/`.
+- Keep learnings separate from execution tracking in `todo/todo.md`.
+- Each learnings entry should include:
+  - Problem
+  - Reusable Pattern
+  - Proposed Template Change
+  - Risk and Rollout Notes
+  - Backport Status
+- Update `docs/learnings/catalog.json` when adding or modifying an entry.
+- When a learning is backported to the canonical template, update the catalog metadata:
+  - `backported: true`
+  - `templateRef: <commit-sha or PR reference>`
