@@ -4,26 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
-    <title>Haderach Platform Documents</title>
+    <title>Template App Documents</title>
     <link rel="stylesheet" href="/docs/shared/docs-shell.css" />
   </head>
   <body>
     <main class="shell">
-      <section id="loading-view" hidden>
-        <h1>Loading</h1>
-        <p>Preparing documents...</p>
-      </section>
-
-      <section id="signed-out-view" hidden>
-        <h1>Haderach Platform Documents</h1>
-        <p>This page requires app access. Sign in with Google to continue.</p>
-        <button id="sign-in-button" type="button">Sign in with Google</button>
-      </section>
-
       <section id="authorized-view">
         <div class="docs-header">
-          <h1>Haderach Platform Documents</h1>
-          <div class="tabs" role="tablist" aria-label="Platform docs tabs">
+          <h1>Template App Documents</h1>
+          <div class="tabs" role="tablist" aria-label="Template app docs tabs">
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="test-status">Test Status</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="priorities">Priorities</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="requirements">Requirements</button>
@@ -42,14 +31,9 @@
             </button>
           </div>
           <div id="doc-content" class="doc-content" hidden></div>
-          <iframe id="docs-frame" class="tab-frame" title="Haderach documents" referrerpolicy="no-referrer"></iframe>
+          <iframe id="docs-frame" class="tab-frame" title="Template app documents" referrerpolicy="no-referrer"></iframe>
           <div id="docs-fallback" class="tab-fallback" hidden></div>
         </section>
-      </section>
-
-      <section id="error-view" hidden>
-        <h1>Authentication error</h1>
-        <p id="error-text" class="error"></p>
       </section>
     </main>
 
@@ -67,6 +51,7 @@
           ".doc-root li{margin:0 0 6px;}" +
           ".doc-root code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:0.95em;}";
 
+        // Replace with your integrated docs base (for example "/card/docs") when templating.
         const baseDocsPath = "/docs";
         const tabDefinitions = {
           "test-status": {

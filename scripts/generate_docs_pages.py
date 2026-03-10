@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Generate platform docs pages from markdown sources."""
+"""Generate app docs pages from markdown sources."""
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
-APP_DISPLAY_NAME = "Haderach Platform"
+APP_DISPLAY_NAME = "Template App"
 
 try:
     import markdown

@@ -8,32 +8,32 @@
   </head>
   <body>
     <h1>Test Lineup</h1>
-    <p>Selection: haderach platform baseline</p>
-    <p>Trigger: deploy-linked + scheduled + canary</p>
-    <p>Environment: staging first, then production monitor</p>
-    <p>Platforms: firebase-hosting, docs-shell routes</p>
+    <p>Selection: app-template baseline</p>
+    <p>Trigger: pull request, main publish, and optional schedule</p>
+    <p>Environment: repository CI environment</p>
+    <p>Platforms: app runtime and docs shell routes</p>
 
-    <h2>Deploy Smoke (Blocking)</h2>
+    <h2>PR Checks (Blocking)</h2>
     <ul>
-      <li>Root route reachability (`/`).</li>
-      <li>Docs shell route reachability (`/docs`).</li>
-      <li>Requirements catalog loads and project deep-link resolves.</li>
-      <li>Priorities and Architecture tabs render expected content.</li>
+      <li>Lint, unit tests, and build checks pass.</li>
+      <li>Docs generation and sync scripts run cleanly.</li>
+      <li>Requirements/testing catalogs parse and link targets exist.</li>
+      <li>Architecture and priorities pages render expected content.</li>
     </ul>
 
-    <h2>Nightly E2E Regression (Non-Blocking)</h2>
+    <h2>Main Publish Validation (Blocking for publish)</h2>
     <ul>
-      <li>Tab navigation + URL state persistence for `tab` and item params.</li>
-      <li>Catalog/list/detail transitions for requirements and testing tabs.</li>
-      <li>Fallback handling for missing/invalid catalog slugs.</li>
-      <li>Generated docs integrity after regeneration and sync workflows.</li>
+      <li>Artifact packaging succeeds for runtime and docs outputs.</li>
+      <li>Manifest payload includes required metadata fields and checksum.</li>
+      <li>Artifact destination write succeeds (bucket/registry placeholder until wired).</li>
+      <li>Publish logs include immutable version identifier.</li>
     </ul>
 
-    <h2>Prod Monitor (Non-Blocking)</h2>
+    <h2>Scheduled Non-Blocking Checks (Optional)</h2>
     <ul>
-      <li>Route health for `/`, `/docs`, and promoted app docs routes.</li>
-      <li>Header/indexing policy checks (`X-Robots-Tag`, noindex/noarchive).</li>
-      <li>Basic shell marker checks for critical docs pages.</li>
+      <li>Docs shell deep-link behavior for `tab` and item params.</li>
+      <li>Fallback behavior for missing or invalid catalog entries.</li>
+      <li>Noindex policy checks in page metadata and hosting headers.</li>
     </ul>
   </body>
 </html>

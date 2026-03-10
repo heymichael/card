@@ -3,13 +3,13 @@
     {
       "slug": "testing-infrastructure",
       "title": "Testing Infrastructure",
-      "summary": "Overview of frameworks, execution modes, and CI integration.",
+      "summary": "Overview of app-owned testing layers, tooling, and CI publish expectations.",
       "url": "/docs/testing/testing-infrastructure.html"
     },
     {
       "slug": "test-lineup",
       "title": "Test Lineup",
-      "summary": "Current suites grouped by Deploy Smoke, Nightly Regression, and Prod Monitor triggers.",
+      "summary": "Baseline app suite lineup grouped by pull request, main publish, and scheduled checks.",
       "url": "/docs/testing/test-lineup.html"
     }
   ]

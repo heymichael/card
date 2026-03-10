@@ -1,67 +1,65 @@
-Todo: haderach (repo / infrastructure)
+Todo: app template baseline
 
 Open items
 
-1. [Med] Extend automatic testing coverage to all apps
-2. [Med] Add PR process/template and requirements process/template
-3. [Med] Define full local parity contract for multi-app platform testing
-4. [Low] Migrate private docs delivery to Cloud Run + IAP (replace temporary static hosting)
-5. [Low] Improve deploy-time E2E test visibility in GitHub Actions
-6. [Low] Enforce Required PR Gate via branch protection on main
-7. [Low] Amend Root routing section after homepage app onboarding
+1. [High] Define first app requirements baseline
+2. [Med] Wire real app CI and artifact publish pipeline
+3. [Low] Replace template branding and docs base path
 
 Completed items
 
-- [2026-03-05] Document shared docs-shell architecture after haderach rollout (no PR)
-- [2026-03-03] Implement tabbed docs generation and requirements catalog workflow (PR #6)
-- [2026-03-03] Generate rendered todo docs per app (no PR)
-- [2026-03-03] Document local GitHub PR tooling setup (git + gh + auth + access checks) (PR #4)
-- [2026-03-03] Improve PR conventions rule for commit-to-PR approval workflow (PR #4)
-- [2026-03-03] Point haderach.ai DNS to Firebase Hosting (no PR)
-- [2026-03-03] Add global robots.txt to block crawling (no PR)
-- [2026-03-02] Implement app + docs auth (Google, per-app rules, single sign-on) (no PR)
-- [2026-03-02] Document infrastructure (hosting, directory structure, CI pipeline, and related) (no PR)
+_(none)_
 
 ## Details
 
-**1. Extend automatic testing coverage to all apps**
+**1. Define first app requirements baseline**
 
-Purpose: Extend automated testing beyond the card app so each app has appropriate app-specific tests while maintaining a single, consistent testing framework and workflow across the monorepo.
+Purpose: Establish a concrete requirements record before implementation starts so app scope, acceptance checks, and constraints are explicit.
 
-Approach: Define and adopt a unified testing framework (commands, structure, reporting, CI integration, and quality gates) used consistently across all apps. Implement only app-specific test suites per app under that shared framework, so each app tests its own behavior while tooling, execution flow, and reporting remain standardized.
+Approach: Copy `docs/requirements/projects/requirements-project.template.html` to a project-specific file, fill in required fields and requirement IDs, add catalog entry in `docs/requirements/catalog.json`, and verify list/detail rendering in the docs shell.
 
-**2. Add PR process/template and requirements process/template**
+**2. Wire real app CI and artifact publish pipeline**
 
-Purpose: Establish a consistent, repeatable process for pull requests and requirements capture so contributors follow the same standards and reviewers have predictable context.
+Purpose: Replace placeholder automation with production-ready checks that guard merges and publish immutable artifacts for platform promotion.
 
-Approach: Define a lightweight PR process doc and PR template covering scope, validation, rollout/rollback notes, and review expectations. In parallel, define a requirements process doc and requirements template that capture objective, constraints, acceptance criteria, dependencies, and release impact. Link both from `README.md` and `docs/architecture.md` once approved.
+Approach: Update `.github/workflows/ci.yml` to run actual lint/test/build commands on pull requests and `.github/workflows/publish-artifact.yml` to publish runtime/docs artifacts plus manifest on pushes to `main`.
 
-**3. Define full local parity contract for multi-app platform testing**
+**3. Replace template branding and docs base path**
 
-Purpose: Restore a predictable "full platform on localhost" workflow after moving from a monorepo to separate app repositories, so routing/docs/auth/indexing behavior can be validated end-to-end before deployment. This reduces integration surprises that are not caught by app-only local runs.
+Purpose: Ensure this repository reflects the target app identity and route contract instead of template labels.
 
-Approach: Specify a documented local parity contract that defines how each app repo publishes local runtime/docs artifacts for this platform repo, where those artifacts must be placed under `hosting/public`, and how parity prep is executed from repo root before running the Firebase Hosting emulator. Include required commands, optional venv/docs generation prerequisites, route/path conventions per app, and a smoke-check checklist covering root, app runtime, app docs, and policy headers. Decide and document whether artifact handoff is done via copy/sync scripts, symlinks, or manifest-driven pull, and capture trade-offs so onboarding future apps stays consistent.
+Approach: Update app name and wording in `README.md`, `docs/architecture.md`, and `docs/index.html`; set `baseDocsPath` to the app's integrated docs route; regenerate docs and sync to hosting output.
 
-**4. Migrate private docs delivery to Cloud Run + IAP (replace temporary static hosting)**
+## Build-first then canonicalize checklist
 
-Purpose: Replace the temporary static-hosted docs approach with server-enforced private access so docs are no longer accessible via direct static URLs.
+Use this checklist while building the first real app from this template.
 
-Approach: Implement per-app docs services behind Cloud Run + IAP, route `/app/docs/**` to the docs service before `/app/**`, preserve the tabbed docs shell UX, and verify only authorized users can load underlying tab documents.
+### Phase 1 - Build first app
 
-**5. Improve deploy-time E2E test visibility in GitHub Actions**
+- [ ] Keep a running "template drift" log with every app-specific change you make.
+- [ ] Wire real CI commands in `.github/workflows/ci.yml` (lint, tests, build, docs checks).
+- [ ] Wire real artifact packaging and publish in `.github/workflows/publish-artifact.yml`.
+- [ ] Confirm manifest payload matches `docs/artifact-manifest.example.json`.
+- [ ] Validate docs shell tabs and deep links work for real app routes.
 
-Purpose: Reduce uncertainty during long deploys by making it clear where E2E execution is in progress and whether tests are actively advancing.
+### Phase 2 - Stabilize app handoff
 
-Approach: Update CI test reporting to stream per-test progress in Action logs (for example using Playwright line reporter alongside HTML), define expected duration thresholds/alerts for the deploy test step, and add lightweight runbook guidance for when to cancel/retry stalled runs.
+- [ ] Verify canonical flow end-to-end through app step 4 (feature branch -> PR CI -> merge -> publish).
+- [ ] Confirm platform can consume published manifest/artifacts without app-source access.
+- [ ] Verify noindex defaults remain correct in both page meta and hosting headers.
+- [ ] Document required secrets/env vars and required IAM roles for publish.
 
-**6. Enforce Required PR Gate via branch protection on main**
+### Phase 3 - Re-template into canonical app repo
 
-Purpose: Ensure deploy-smoke and required quality checks are true merge blockers by enforcing the Required PR Gate status check at the branch level.
+- [ ] Remove app-specific names, IDs, paths, and secrets from docs/workflow examples.
+- [ ] Keep only reusable defaults; move app-specific decisions to examples or placeholders.
+- [ ] Update `README.md` and `docs/architecture.md` with final canonical contracts.
+- [ ] Regenerate/sync docs and verify `docs/` equals `hosting/public/docs/` for served content.
+- [ ] Smoke-test bootstrap experience by cloning into a second "new app" repo.
 
-Approach: After this PR merges and the new workflow has run at least once on main, configure GitHub branch protection for main to require Required PR Gate before merge. Then verify with a test PR that merge is blocked on failure and allowed on success.
+### Exit criteria for canonical template
 
-**7. Amend Root routing section after homepage app onboarding**
-
-Purpose: Keep `docs/architecture.md` accurate by updating the Root routing section once the dedicated homepage app exists and serves `haderach.ai/`.
-
-Approach: After the homepage app is onboarded and promoted through the platform flow, update the `### Root` section to describe the steady-state model (`haderach.ai/` served from homepage app artifact) and clarify the role of `hosting/public/index.html` as bootstrap/fallback.
+- [ ] A new app can be bootstrapped with only identity/path/secret replacements.
+- [ ] CI and publish scaffolds run cleanly after minimal app-specific command wiring.
+- [ ] Artifact manifest contract is stable and accepted by platform promotion flow.
+- [ ] Docs shell behavior is consistent and requires no structural rewrites per app.

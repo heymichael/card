@@ -1,0 +1,25 @@
+name: app-publish-artifact
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-artifact:
+    name: Publish artifact metadata (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Placeholder artifact publish step
+        run: |
+          echo "This workflow does not deploy platform environments."
+          echo "Replace with app artifact packaging and manifest publication."
+          echo "Use docs/artifact-manifest.example.json as the publish contract."

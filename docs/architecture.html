@@ -4,16 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
-  <title>Haderach Platform - Architecture</title>
+  <title>Template App - Architecture</title>
 </head>
 <body>
-  <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_site/haderach-platform/docs/architecture.md. DO NOT EDIT. -->
+  <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_app_template/docs/architecture.md. DO NOT EDIT. -->
   <h1 id="architecture">Architecture</h1>
 <h2 id="purpose">Purpose</h2>
-<p><code>haderach-platform</code> is the deployment and routing control plane for <code>haderach.ai</code>.
-It does not own app business logic. It owns shared hosting/routing/deployment orchestration and cross-app smoke checks.</p>
+<p><code>app-template</code> is the canonical starter for a single app repository in the Haderach ecosystem.
+It owns app implementation, app CI, app docs, and artifact publication contracts.
+It does not own platform promotion, platform deployment, or cross-app orchestration.</p>
 <h2 id="repository-tree-ascii">Repository Tree (ASCII)</h2>
-<pre><code class="language-text">haderach-platform/
+<pre><code class="language-text">app-template/
 ├── .cursor/
 │   └── rules/
 │       ├── architecture-pointer.mdc
@@ -23,35 +24,25 @@ It does not own app business logic. It owns shared hosting/routing/deployment or
 │       └── todo-conventions.mdc
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml
+│       ├── ci.yml
+│       └── publish-artifact.yml
 ├── docs/
 │   ├── index.html
 │   ├── architecture.md
 │   ├── architecture.html
-│   ├── app-registry.example.json
+│   ├── artifact-manifest.example.json
 │   ├── priorities/
 │   │   └── index.html
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
+│   │       ├── app-template-foundation.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
 │   │   ├── catalog.json
 │   │   ├── checks/
-│   │   │   ├── deploy-smoke-artifact-checks.html
-│   │   │   ├── deploy-smoke-contract-checks.html
-│   │   │   ├── nightly-e2e-regression-artifact-checks.html
-│   │   │   ├── nightly-e2e-regression-contract-checks.html
-│   │   │   ├── prod-monitor-artifact-checks.html
-│   │   │   └── prod-monitor-contract-checks.html
 │   │   ├── reports/
-│   │       ├── deploy-smoke.html
-│   │       ├── nightly-e2e-regression.html
-│   │       └── prod-monitor.html
 │   │   └── summaries/
-│   │       ├── deploy-smoke-summary.json
-│   │       ├── nightly-e2e-regression-summary.json
-│   │       └── prod-monitor-summary.json
 │   ├── testing/
 │   │   ├── catalog.json
 │   │   ├── test-lineup.html
@@ -79,23 +70,22 @@ It does not own app business logic. It owns shared hosting/routing/deployment or
 └── README.md
 </code></pre>
 <h2 id="ownership-boundaries">Ownership Boundaries</h2>
-<h3 id="platform-repo-owns">Platform repo owns</h3>
+<h3 id="this-app-repository-owns">This app repository owns</h3>
 <ul>
-<li>Shared hosting and route topology for <code>haderach.ai</code>.</li>
-<li>Promotion decisions from app artifacts to deployed platform state.</li>
-<li>Environment deployment orchestration (staging/production).</li>
-<li>Cross-app smoke tests after deployment.</li>
-<li>Security defaults at host/platform level (headers, indexing defaults).</li>
+<li>App business logic and runtime behavior.</li>
+<li>App CI checks (lint, test, build, contract validation).</li>
+<li>App docs authoring plus docs-shell experience at app scope.</li>
+<li>Versioned artifact packaging and manifest publication.</li>
 </ul>
-<h3 id="app-repos-own">App repos own</h3>
+<h3 id="external-platform-owns">External platform owns</h3>
 <ul>
-<li>App implementation and runtime behavior.</li>
-<li>App CI (build, unit/integration tests, app-level checks).</li>
-<li>App release artifact production and metadata publication.</li>
-<li>App-local docs generation.</li>
+<li>Promotion decisions from published app versions to environments.</li>
+<li>Global deployment orchestration and environment rollout.</li>
+<li>Cross-app smoke tests and route collision protection.</li>
+<li>Global host/routing policy for production domains.</li>
 </ul>
-<h2 id="release-flow">Release Flow</h2>
-<p>Canonical flow:</p>
+<h2 id="canonical-release-flow">Canonical Release Flow</h2>
+<p>Canonical end-to-end flow across app + platform:</p>
 <ol>
 <li>App feature branch</li>
 <li>App PR CI</li>
@@ -105,100 +95,66 @@ It does not own app business logic. It owns shared hosting/routing/deployment or
 <li>Platform deploy</li>
 <li>Platform smoke checks</li>
 </ol>
-<p>The platform never builds app source directly; it consumes app-published artifacts.</p>
-<h2 id="routing-model">Routing Model</h2>
-<h3 id="root">Root</h3>
-<ul>
-<li><code>haderach.ai/</code></li>
-<li>Platform landing/status page (or future shared portal shell).</li>
-</ul>
-<h3 id="root-docs">Root docs</h3>
-<ul>
-<li><code>haderach.ai/docs/</code></li>
-<li>Platform-level docs hub/shell route.</li>
-<li>Implemented with shared docs-shell assets to keep UX consistent with app docs surfaces.</li>
-</ul>
-<h3 id="app-runtime">App runtime</h3>
-<ul>
-<li><code>haderach.ai/&lt;app&gt;/</code></li>
-<li>Served from promoted artifact for that app ID.</li>
-</ul>
-<h3 id="app-docs">App docs</h3>
-<ul>
-<li><code>haderach.ai/&lt;app&gt;/docs/</code></li>
-<li>Served from promoted docs artifact path for that app ID.</li>
-<li>App repos should reuse the same docs-shell files/patterns used by platform docs for consistent tabs/layout.</li>
-</ul>
-<p>Route names are stable platform-facing identifiers and are decoupled from app repository names.</p>
-<h2 id="deployment-contract-for-app-repos">Deployment Contract for App Repos</h2>
-<p>Each app repo must publish immutable versioned artifacts plus metadata.</p>
+<p>This repository implements and validates steps 1-4. Steps 5-7 are outside this repository and run in the platform control plane.</p>
+<h2 id="app-delivery-contract">App Delivery Contract</h2>
+<p>Each app repo publishes immutable versioned artifacts plus metadata.
+Platform consumes this metadata to promote a specific version by environment.</p>
 <h3 id="artifact-format-minimal-baseline">Artifact format (minimal baseline)</h3>
 <ul>
-<li>Runtime artifact: static bundle directory (or tarball) suitable for hosting at <code>/&lt;route_prefix&gt;/</code>.</li>
-<li>Docs artifact: static docs directory (or tarball) suitable for hosting at <code>/&lt;route_prefix&gt;/docs/</code>.</li>
+<li>Runtime artifact: static bundle directory (or tarball) suitable for hosting at the app route.</li>
+<li>Docs artifact: static docs directory (or tarball) suitable for hosting at the app docs route.</li>
 </ul>
 <h3 id="required-metadata-example-shape">Required metadata (example shape)</h3>
-<pre><code class="language-json">{
-  &quot;app_id&quot;: &quot;card&quot;,
-  &quot;version&quot;: &quot;1.2.3+build.45&quot;,
-  &quot;commit_sha&quot;: &quot;abc123...&quot;,
-  &quot;published_at&quot;: &quot;2026-03-05T12:00:00Z&quot;,
-  &quot;artifact&quot;: {
-    &quot;runtime_uri&quot;: &quot;gs://example-bucket/card/1.2.3/runtime.tar.gz&quot;,
-    &quot;docs_uri&quot;: &quot;gs://example-bucket/card/1.2.3/docs.tar.gz&quot;,
-    &quot;checksum_sha256&quot;: &quot;...&quot;
-  },
-  &quot;compatibility&quot;: {
-    &quot;platform_contract_version&quot;: &quot;v1&quot;
-  }
-}
-</code></pre>
-<p>Platform consumes metadata and promotes specific versions by environment.</p>
-<h2 id="app-registry-contract">App Registry Contract</h2>
-<p>Registry lives at <code>docs/app-registry.example.json</code> (template).
-Fields intentionally decouple route naming from repository naming.</p>
+<p>See <code>docs/artifact-manifest.example.json</code>.</p>
+<h2 id="docs-and-routing-model-app-scope">Docs and Routing Model (App Scope)</h2>
+<p>This template assumes app-local docs are served at one base path (for example <code>/docs</code> in local hosting, or <code>/&lt;app&gt;/docs</code> in integrated platform hosting).</p>
 <ul>
-<li><code>app_id</code>: stable platform identifier.</li>
-<li><code>route_prefix</code>: URL segment used at <code>haderach.ai/&lt;route_prefix&gt;/</code>.</li>
-<li><code>artifact_source</code>: where platform discovers published metadata/artifacts.</li>
-<li><code>docs_route</code>: explicit docs route (normally <code>/&lt;route_prefix&gt;/docs/</code>).</li>
+<li><code>docs/index.html</code> is the docs shell entrypoint.</li>
+<li><code>docs/shared/</code> contains canonical shell assets and page template.</li>
+<li>Required tabs: <code>test-status</code>, <code>priorities</code>, <code>requirements</code>, <code>testing</code>, <code>architecture</code>.</li>
+<li>Architecture tab target is always <code>architecture.html</code> (rendered from <code>architecture.md</code>).</li>
 </ul>
-<h2 id="smoke-test-ownership">Smoke Test Ownership</h2>
-<p>Platform owns post-deploy smoke tests that validate:</p>
+<h2 id="source-to-served-docs-contract">Source-to-Served Docs Contract</h2>
+<p>For docs parity and deterministic output:</p>
 <ul>
-<li>Route reachability for root, app runtime, and app docs.</li>
-<li>Basic health signals (HTTP status, expected shell marker).</li>
-<li>Cross-app routing integrity (no collisions/regressions).</li>
+<li>Authoring/generation source of truth: <code>docs/</code>.</li>
+<li>Generated pages from markdown:</li>
+<li><code>docs/architecture.md</code> -&gt; <code>docs/architecture.html</code></li>
+<li><code>todo/todo.md</code> -&gt; <code>docs/priorities/index.html</code></li>
+<li>Served/deploy copy after sync: <code>hosting/public/docs/</code> (full mirror of <code>docs/</code>).</li>
 </ul>
-<p>App repos own deep app behavior tests; platform only verifies deploy/routing health.</p>
+<h2 id="testing-ownership">Testing Ownership</h2>
+<p>This app repo owns app-specific testing depth and CI signals.</p>
+<ul>
+<li><code>docs/testing/</code> documents app testing strategy and lineup.</li>
+<li><code>docs/test-status/</code> holds report metadata and placeholder report/check artifacts.</li>
+</ul>
+<p>Platform still performs post-deploy cross-app smoke checks after promotion/deploy.</p>
 <h2 id="security-and-indexing-defaults">Security and Indexing Defaults</h2>
-<p>Default indexing policy is deny-by-default:</p>
+<p>Default indexing policy is deny-by-default for template docs:</p>
 <ul>
-<li>Platform sets <code>X-Robots-Tag: noindex, nofollow, noarchive</code>.</li>
-<li>Individual app/docs routes can be explicitly allowlisted by platform review.</li>
-<li>No public indexing by default until explicit approval.</li>
+<li>HTML pages include <code>&lt;meta name="robots" content="noindex, nofollow, noarchive" /&gt;</code>.</li>
+<li>Hosting adds <code>X-Robots-Tag: noindex, nofollow, noarchive</code>.</li>
+<li>Any indexing allowlist should be explicit and documented.</li>
 </ul>
-<p>Additional baseline host headers should remain centrally managed in platform config.</p>
 <h2 id="local-parity-prep">Local Parity Prep</h2>
-<p>For local Hosting parity around platform docs/priorities:</p>
+<p>For local hosting parity around docs:</p>
 <ol>
-<li>Generate docs from <code>todo/todo.md</code> via <code>python3 scripts/generate_docs_pages.py</code>.</li>
-<li>Sync <code>docs/</code> into <code>hosting/public/docs/</code> via <code>bash scripts/sync_docs.sh</code>.</li>
+<li>Generate docs from source markdown:
+   <code>python3 scripts/generate_docs_pages.py</code></li>
+<li>Sync <code>docs/</code> into <code>hosting/public/docs/</code>:
+   <code>bash scripts/sync_docs.sh</code></li>
 <li>Run Hosting emulator from repo root:
-   <code>firebase emulators:start --only hosting --project haderach-ai --config firebase.json</code>.</li>
+   <code>firebase emulators:start --only hosting --project REPLACE_WITH_FIREBASE_PROJECT_ID --config firebase.json</code></li>
 </ol>
-<h2 id="docs-ux-reuse-contract">Docs UX Reuse Contract</h2>
-<p>For consistent docs UI across platform and apps:</p>
-<ul>
-<li>Canonical shell assets live in <code>docs/shared/docs-shell.css</code> and <code>docs/shared/docs-shell.js</code>.</li>
-<li>Platform page at <code>docs/index.html</code> uses those shared assets for <code>/docs</code>.</li>
-<li>App repos should use the same markup pattern (template: <code>docs/shared/docs-shell-page.template.html</code>) and only customize app-specific labels, route base path, and tab sources.</li>
-</ul>
-<p>For requirements docs, use the same source-&gt;served contract used by priorities:</p>
-<ul>
-<li>Authoring source of truth: <code>docs/requirements/projects/*.html</code> and <code>docs/requirements/catalog.json</code>.</li>
-<li>Served/deploy copy after sync: <code>hosting/public/docs/requirements/projects/*.html</code> and <code>hosting/public/docs/requirements/catalog.json</code>.</li>
-<li>Canonical project template: <code>docs/requirements/projects/requirements-project.template.html</code>.</li>
-</ul>
+<h2 id="template-customization-checklist">Template Customization Checklist</h2>
+<p>When creating a real app repo from this template:</p>
+<ol>
+<li>Replace app identity labels in README/docs/shell pages.</li>
+<li>Set the docs base path in <code>docs/index.html</code>.</li>
+<li>Replace placeholder workflow logic in <code>.github/workflows/ci.yml</code> and <code>.github/workflows/publish-artifact.yml</code>.</li>
+<li>Publish artifacts using <code>docs/artifact-manifest.example.json</code> as contract baseline.</li>
+<li>Keep <code>README.md</code> and this architecture tree synchronized when structure changes.</li>
+</ol>
 </body>
 </html>

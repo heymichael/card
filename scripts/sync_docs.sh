@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync platform docs sources into hosting/public/docs.
+# Sync app docs sources into hosting/public/docs.
 # Run from repo root.
 set -euo pipefail
 

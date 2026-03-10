@@ -1,22 +1,22 @@
 ---
-description: Platform repo boundaries and documentation-first guardrails
+description: App-template repo boundaries and documentation-first guardrails
 alwaysApply: true
 ---
 
-# Platform Boundary Rule
+# App Template Boundary Rule
 
-This repository is the control plane for hosting, routing, deployment orchestration, and cross-app smoke checks.
+This repository is the canonical template for a single app repository that is integrated into an external platform control plane.
 
 - Keep strict separation of concerns:
-  - Platform repo owns orchestration and shared infrastructure.
-  - App repos own app code, app CI, and app-local tests.
-- Do not add app business logic to this repository.
+  - This repo owns app-local implementation patterns, CI patterns, docs patterns, and artifact publish contracts.
+  - Platform orchestration, promotion, and cross-app routing checks remain outside this repo.
+- Keep app logic and app tests in this repository; do not add platform orchestration logic here.
 - Keep naming kebab-case for repo/path conventions unless language-specific rules require otherwise.
 - Prefer explicit docs and small config contracts over heavy scripts or premature automation.
 - Use or update docs when behavior/contracts change:
   - `README.md`
   - `docs/architecture.md`
-  - app registry contract docs/config
+  - app artifact contract docs/config
   - `todo/todo.md` when work priority/state changes
   - keep repository ASCII trees in `README.md` and `docs/architecture.md` synchronized with actual repo structure
 - Preserve security/indexing defaults:
