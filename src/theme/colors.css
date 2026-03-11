@@ -24,4 +24,10 @@
   --color-text-hint: #9d9d9d;
   --color-surface-canvas-stage-area: #f7f4f0;
   --color-shadow-canvas-stage: rgba(15, 15, 15, 0.15);
+  --color-auth-card-bg: #ffffff;
+  --color-auth-card-border: #deddd5;
+  --color-auth-card-shadow: rgba(15, 15, 15, 0.08);
+  --color-auth-button-bg: #cba85a;
+  --color-auth-button-text: #0f0f0f;
+  --color-auth-error: #a9442a;
 }

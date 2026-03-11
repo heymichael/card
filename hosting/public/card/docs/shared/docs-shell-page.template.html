@@ -37,6 +37,14 @@
       </section>
     </main>
 
+    <script src="__DOCS_BASE_PATH__/shared/auth-runtime.js"></script>
+    <script>
+      window.__CARD_AUTH_RUNTIME__ = window.__CARD_AUTH_RUNTIME__ || {
+        bypassAuth: false,
+        firebase: null,
+      };
+    </script>
+    <script src="__DOCS_BASE_PATH__/shared/docs-auth-gate.js"></script>
     <script src="__DOCS_BASE_PATH__/shared/docs-shell.js"></script>
     <script>
       (function () {
@@ -129,7 +137,15 @@
           },
         });
 
-        shell.init();
+        const authGate = window.createDocsAuthGate({
+          surface: "docs",
+          root: document.querySelector("main.shell"),
+          docsView: document.getElementById("docs-view"),
+          onAuthorized: function () {
+            shell.init();
+          },
+        });
+        authGate.init();
       })();
     </script>
   </body>

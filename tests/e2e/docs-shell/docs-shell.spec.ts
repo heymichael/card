@@ -1,7 +1,14 @@
 import { expect, test } from "@playwright/test";
 
-test("docs shell renders required tabs @smoke @docs-shell", async ({ page }) => {
+test("docs shell shows login gate when auth is required @smoke @docs-shell", async ({ page }) => {
   await page.goto("/card/docs/?tab=test-status");
+
+  await expect(page.getByRole("heading", { name: "Sign in required" })).toBeVisible();
+  await expect(page.getByText("Please contact your administrator")).toBeVisible();
+});
+
+test("docs shell renders required tabs @smoke @docs-shell", async ({ page }) => {
+  await page.goto("/card/docs/?tab=test-status&authBypass=1");
 
   await expect(page.getByRole("tab", { name: "Test Status" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Priorities" })).toBeVisible();
@@ -14,7 +21,7 @@ test("docs shell renders required tabs @smoke @docs-shell", async ({ page }) => 
 test("requirements detail returns to list cleanly @smoke @docs-shell", async ({
   page,
 }) => {
-  await page.goto("/card/docs/?tab=requirements");
+  await page.goto("/card/docs/?tab=requirements&authBypass=1");
 
   const projectLink = page.getByRole("button", { name: "Greeting Card Designer" });
   await expect(projectLink).toBeVisible();
@@ -29,7 +36,7 @@ test("requirements detail returns to list cleanly @smoke @docs-shell", async ({
 test("rapid tab switching keeps final tab content @regression @docs-shell", async ({
   page,
 }) => {
-  await page.goto("/card/docs/?tab=test-status");
+  await page.goto("/card/docs/?tab=test-status&authBypass=1");
 
   await page.getByRole("tab", { name: "Testing" }).click();
   await page.getByRole("tab", { name: "Priorities" }).click();
@@ -40,7 +47,7 @@ test("rapid tab switching keeps final tab content @regression @docs-shell", asyn
 });
 
 test("prod monitor docs shell availability @prod-monitor", async ({ page }) => {
-  await page.goto("/card/docs/?tab=test-status");
+  await page.goto("/card/docs/?tab=test-status&authBypass=1");
   await expect(page.getByRole("heading", { name: "card Documents" })).toBeVisible();
   await expect(page.getByRole("button", { name: "PR Checks" })).toBeVisible();
 });

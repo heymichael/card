@@ -14,3 +14,53 @@ body {
   color: var(--color-text-app-default);
   background: var(--color-surface-app-bg);
 }
+
+.auth-gate-shell {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-gate-card {
+  width: min(560px, 100%);
+  background: var(--color-auth-card-bg);
+  border: 1px solid var(--color-auth-card-border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 28px var(--color-auth-card-shadow);
+}
+
+.auth-gate-card h1 {
+  margin-bottom: 12px;
+  font-size: 26px;
+}
+
+.auth-gate-card p {
+  margin-bottom: 10px;
+  line-height: 1.45;
+}
+
+.auth-gate-actions {
+  margin-top: 16px;
+}
+
+.auth-gate-actions button {
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-auth-button-bg);
+  color: var(--color-auth-button-text);
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-gate-actions button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.auth-gate-error {
+  color: var(--color-auth-error);
+}
