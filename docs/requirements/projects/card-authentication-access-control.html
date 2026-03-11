@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <title>Requirements - Card Authentication and Access Control</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 40px 24px 64px;
+        color: #1f2937;
+        line-height: 1.55;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      h2 {
+        margin-top: 36px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 20px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #d1d5db;
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+      }
+      th {
+        background: #f9fafb;
+      }
+      .meta td:first-child {
+        width: 220px;
+        font-weight: 600;
+      }
+      .req-id {
+        white-space: nowrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 600;
+      }
+      .must {
+        color: #b91c1c;
+        font-weight: 600;
+      }
+      .should {
+        color: #92400e;
+        font-weight: 600;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="/docs/?tab=requirements">Back to all requirements</a>
+    <h1>Card Authentication and Access Control Requirements</h1>
+    <p>
+      This document defines business and product requirements for phase 1 authentication across
+      the card app and docs surfaces, including sign-in flow, authorization policy, and deploy/runtime
+      auth contract inputs needed for stable platform integration.
+    </p>
+
+    <table class="meta">
+      <tr><td>Status</td><td>Draft baseline</td></tr>
+      <tr><td>Scope Type</td><td>Product / Security / Platform Contract</td></tr>
+      <tr><td>Primary Domain</td><td><code>card-authentication-and-access-control</code></td></tr>
+      <tr><td>Related Todo</td><td><code>todo/todo.md</code> item #1</td></tr>
+      <tr>
+        <td>Implementation Plan</td>
+        <td>
+          <a href="file:///Users/michaelmader_1/.cursor/plans/auth-implementation-plan_6749b0c1.plan.md">
+            file:///Users/michaelmader_1/.cursor/plans/auth-implementation-plan_6749b0c1.plan.md
+          </a>
+        </td>
+      </tr>
+      <tr><td>Owner(s)</td><td>Michael Mader</td></tr>
+      <tr><td>Last Updated</td><td>2026-03-11</td></tr>
+    </table>
+
+    <h2>1. Objectives</h2>
+    <ul>
+      <li>Require authenticated access to the app and docs surfaces for approved users only.</li>
+      <li>Support Google-only sign-in with predictable allowlist-based authorization.</li>
+      <li>Define runtime auth contract inputs early so deployment integration does not need rework.</li>
+    </ul>
+
+    <h2>2. In Scope</h2>
+    <ul>
+      <li>Client-side authentication for app and docs in this repository.</li>
+      <li>Shared sign-in session across this app/docs pair with separate allowlists per surface.</li>
+      <li>Phase 1 deploy/runtime auth contract documentation and validation expectations.</li>
+    </ul>
+
+    <h2>3. Out of Scope</h2>
+    <ul>
+      <li>Cross-app single sign-on in the broader Haderach environment.</li>
+      <li>Server-side docs auth enforcement in this phase.</li>
+      <li>IAP integration in this phase.</li>
+    </ul>
+
+    <h2>4. Functional Requirements</h2>
+    <table>
+      <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+      <tr>
+        <td class="req-id">FR-AUTH-01</td>
+        <td>The system must support Google-only login using Firebase Authentication.</td>
+        <td class="must">Must</td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-AUTH-02</td>
+        <td>
+          The app and docs must share sign-in state within this repository while enforcing separate
+          allowlists for app authorization and docs authorization.
+        </td>
+        <td class="must">Must</td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-AUTH-03</td>
+        <td>
+          Authorization checks must support both per-user email allowlists and per-domain allowlists,
+          using case-insensitive matching.
+        </td>
+        <td class="must">Must</td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-AUTH-04</td>
+        <td>
+          Unauthorized users must remain signed in but see a blocked/login screen with a generic
+          "contact administrator" message and a sign-out action.
+        </td>
+        <td class="must">Must</td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-AUTH-05</td>
+        <td>
+          Local development must support authentication by default and optional bypass for both app
+          and docs together through a single explicit developer flag.
+        </td>
+        <td class="should">Should</td>
+      </tr>
+    </table>
+
+    <h2>5. Non-Functional Requirements</h2>
+    <table>
+      <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+      <tr>
+        <td class="req-id">NFR-SEC-01</td>
+        <td>Production auth config failure modes must fail closed (deny access).</td>
+        <td class="must">Must</td>
+      </tr>
+      <tr>
+        <td class="req-id">NFR-OPS-01</td>
+        <td>Runtime auth configuration must come from deploy env vars and local <code>.env.local</code>.</td>
+        <td class="must">Must</td>
+      </tr>
+      <tr>
+        <td class="req-id">NFR-UX-01</td>
+        <td>
+          Transient auth failures must present a retryable message and preserve blocked state until
+          successful authentication.
+        </td>
+        <td class="must">Must</td>
+      </tr>
+    </table>
+
+    <h2>6. Acceptance Criteria</h2>
+    <ul>
+      <li>Allowed users can sign in with Google and access app and docs according to per-surface policy.</li>
+      <li>Non-allowlisted users can sign in but are blocked with contact-administrator guidance.</li>
+      <li>Case-insensitive email/domain matching works as specified for app and docs checks.</li>
+      <li>Missing/invalid production auth config blocks access and surfaces clear failure messaging.</li>
+      <li>Local auth bypass flag can disable auth checks for both surfaces when explicitly enabled.</li>
+    </ul>
+
+    <h2>7. Deploy and Runtime Auth Contract Inputs (Exact Detail)</h2>
+    <p>This section reproduces the exact detail list finalized in planning:</p>
+    <ul>
+      <li><strong>Auth stack:</strong> Firebase Auth with Google provider (Google-only sign-in UX)</li>
+      <li><strong>Scope:</strong> one shared sign-in session for this app/docs pair only (not cross-app SSO)</li>
+      <li><strong>Authorization model:</strong> separate allowlists for app vs docs</li>
+      <li><strong>Initial allowlisted users (both):</strong> michael@haderachi.ai, michael@heretic.fund, mariam@heretic.fund, mariam@heretic.ventures, alexmader@gmail.com</li>
+      <li><strong>Initial allowed domains (both):</strong> haderach.ai</li>
+      <li><strong>Matching rules:</strong> case-insensitive; exact domain match only (wildcards later)</li>
+      <li><strong>Unauthorized behavior:</strong> remain signed in, show blocked/login screen with generic "contact administrator" message + sign-out option</li>
+      <li><strong>Failure policy:</strong> fail closed in production for missing/invalid auth config</li>
+      <li><strong>Transient auth errors:</strong> show retryable login error; keep blocked</li>
+      <li><strong>Environments:</strong> local + prod now (preview/staging same model when introduced)</li>
+      <li><strong>Local dev:</strong> auth enabled by default, optional single bypass flag for both app and docs</li>
+      <li><strong>Config source of truth:</strong> deploy env vars + local .env.local</li>
+      <li><strong>Ownership:</strong> you own auth config/rotation</li>
+      <li><strong>Platform assumptions:</strong> no IAP in this phase; docs server-side auth deferred; current enforcement is client-side</li>
+      <li><strong>Session policy:</strong> default Firebase persistence for phase 1</li>
+    </ul>
+
+    <h2>8. Risks, Rollback, and Follow-Ups</h2>
+    <ul>
+      <li><strong>Risk:</strong> Client-side checks alone do not replace server-side enforcement for sensitive docs.</li>
+      <li><strong>Risk:</strong> Incorrect allowlist entries can block intended users or over-allow access.</li>
+      <li><strong>Rollback:</strong> Disable auth gate via controlled config rollback only if emergency access is required.</li>
+      <li><strong>Follow-up:</strong> Add wildcard domain support and server-side docs authorization in next phase.</li>
+    </ul>
+
+    <p style="margin-top: 28px;">
+      <a href="/docs/?tab=requirements">Back to all requirements</a>
+    </p>
+  </body>
+</html>
