@@ -2,8 +2,8 @@ Todo: card
 
 Open items
 
-1. [Med] Standardize technical documentation (API reference, generation, docs site integration)
-2. [Med] Add tests and testing framework
+1. [High] Wire main-branch artifact publish to GCS for platform deployment
+2. [Med] Standardize technical documentation (API reference, generation, docs site integration)
 3. [Med] Add authentication
 4. [Med] Add analytics
 5. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)
@@ -11,11 +11,23 @@ Open items
 
 Completed items
 
+- [2026-03-11] Add tests and testing framework (PR #3)
 - [2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (PR #1)
 
 ---
 
-### 1. [Med] Standardize technical documentation (API reference, generation, docs site integration)
+### 1. [High] Wire main-branch artifact publish to GCS for platform deployment
+
+**Purpose:** Ensure merge-to-main publishes versioned runtime/docs artifacts to GCS so platform can consistently fetch immutable app assets for promotion and deploy.
+
+**Approach:**
+
+- Add explicit artifact packaging/upload steps in `.github/workflows/publish-artifact.yml` (tarballing runtime and docs outputs, uploading to configured GCS bucket/path).
+- Generate/update a concrete artifact manifest with real `gs://...` URIs and checksum, then publish/store it in a platform-consumable location.
+- Add validation checks for upload success, manifest completeness, and URI/version consistency; document required auth/secrets in README/architecture.
+- Coordinate with platform contract expectations so the publish output and platform consume path are aligned end-to-end.
+
+### 2. [Med] Standardize technical documentation (API reference, generation, docs site integration)
 
 **Purpose:** Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today `documentation.html` uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.
 
@@ -24,12 +36,6 @@ Completed items
 - **Content standard (keep):** API reference layout (Field | Type | Description), function signatures with typed params and short descriptions, file-based sections, tags (interface, type alias, function component), props/state tables—align with TypeDoc/JSDoc/Storybook-style expectations.
 - **Delivery standard (improve):** Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.
 - Document the standard in learnings or architecture; apply to `documentation.html` / card app; propose template change for the canonical app template.
-
-### 2. [Med] Add tests and testing framework
-
-**Purpose:** Introduce a testing framework and tests for the card app so behavior is validated automatically and regressions are caught in CI.
-
-**Approach:** Choose and add a testing framework (e.g. unit/component tests and optionally e2e). Wire tests into the existing CI workflow; document test layout and how to run tests in README/architecture.
 
 ### 3. [Med] Add authentication
 

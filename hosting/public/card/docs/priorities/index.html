@@ -11,8 +11,8 @@
   <p>Todo: card</p>
 <p>Open items</p>
 <ol>
+<li>[High] Wire main-branch artifact publish to GCS for platform deployment</li>
 <li>[Med] Standardize technical documentation (API reference, generation, docs site integration)</li>
-<li>[Med] Add tests and testing framework</li>
 <li>[Med] Add authentication</li>
 <li>[Med] Add analytics</li>
 <li>[Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)</li>
@@ -20,10 +20,20 @@
 </ol>
 <p>Completed items</p>
 <ul>
+<li>[2026-03-11] Add tests and testing framework (PR #3)</li>
 <li>[2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (PR #1)</li>
 </ul>
 <hr>
-<h3 id="1-med-standardize-technical-documentation-api-reference-generation-docs-site-integration">1. [Med] Standardize technical documentation (API reference, generation, docs site integration)</h3>
+<h3 id="1-high-wire-main-branch-artifact-publish-to-gcs-for-platform-deployment">1. [High] Wire main-branch artifact publish to GCS for platform deployment</h3>
+<p><strong>Purpose:</strong> Ensure merge-to-main publishes versioned runtime/docs artifacts to GCS so platform can consistently fetch immutable app assets for promotion and deploy.</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li>Add explicit artifact packaging/upload steps in <code>.github/workflows/publish-artifact.yml</code> (tarballing runtime and docs outputs, uploading to configured GCS bucket/path).</li>
+<li>Generate/update a concrete artifact manifest with real <code>gs://...</code> URIs and checksum, then publish/store it in a platform-consumable location.</li>
+<li>Add validation checks for upload success, manifest completeness, and URI/version consistency; document required auth/secrets in README/architecture.</li>
+<li>Coordinate with platform contract expectations so the publish output and platform consume path are aligned end-to-end.</li>
+</ul>
+<h3 id="2-med-standardize-technical-documentation-api-reference-generation-docs-site-integration">2. [Med] Standardize technical documentation (API reference, generation, docs site integration)</h3>
 <p><strong>Purpose:</strong> Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today <code>documentation.html</code> uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.</p>
 <p><strong>Approach:</strong></p>
 <ul>
@@ -31,9 +41,6 @@
 <li><strong>Delivery standard (improve):</strong> Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.</li>
 <li>Document the standard in learnings or architecture; apply to <code>documentation.html</code> / card app; propose template change for the canonical app template.</li>
 </ul>
-<h3 id="2-med-add-tests-and-testing-framework">2. [Med] Add tests and testing framework</h3>
-<p><strong>Purpose:</strong> Introduce a testing framework and tests for the card app so behavior is validated automatically and regressions are caught in CI.</p>
-<p><strong>Approach:</strong> Choose and add a testing framework (e.g. unit/component tests and optionally e2e). Wire tests into the existing CI workflow; document test layout and how to run tests in README/architecture.</p>
 <h3 id="3-med-add-authentication">3. [Med] Add authentication</h3>
 <p><strong>Purpose:</strong> Enable authenticated access to the card app (and optionally docs) so only authorized users can use the app.</p>
 <p><strong>Approach:</strong> Decide auth mechanism (e.g. Firebase Auth, IAP, platform SSO). Implement sign-in/sign-out, gate app entry and/or docs as needed, document auth flow and any secrets/env in architecture or deploy notes.</p>

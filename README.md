@@ -57,7 +57,12 @@ card/
 │   ├── learnings/
 │   │   ├── catalog.json
 │   │   └── entries/
-│   │       └── template-feedback-loop.html
+│   │       ├── artifact-manifest-contract-alignment.html
+│   │       ├── canonical-app-directory-structure.html
+│   │       ├── init-app-token-replacement-gaps.html
+│   │       ├── pull-request-template-standardization.html
+│   │       ├── template-feedback-loop.html
+│   │       └── testing-suite-rollout-pattern.html
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/

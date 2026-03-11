@@ -44,6 +44,15 @@
       "backported": false,
       "templateRef": "N/A",
       "url": "/docs/learnings/entries/template-feedback-loop.html"
+    },
+    {
+      "slug": "testing-suite-rollout-pattern",
+      "title": "Testing Suite Rollout Pattern",
+      "summary": "Stage test execution into smoke, publish, regression, and prod-monitor buckets with clear workflow triggers and status reporting.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/testing-suite-rollout-pattern.html"
     }
   ]
 }
