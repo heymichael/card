@@ -40,9 +40,9 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          `npx --yes firebase-tools emulators:start --only hosting --project ${firebaseProject} --config firebase.json`,
+          `firebase emulators:start --only hosting --project ${firebaseProject} --config firebase.json`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
+        timeout: 300_000,
       },
 });
