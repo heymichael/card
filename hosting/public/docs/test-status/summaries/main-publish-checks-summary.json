@@ -1,9 +1,13 @@
 {
   "suite": "main-publish-checks",
-  "status": "placeholder",
-  "lastRunUtc": "not run yet",
-  "notes": [
-    "Placeholder summary until main publish checks are wired.",
-    "Use this location for machine-readable suite summaries."
-  ]
+  "status": "pass",
+  "lastRunUtc": "2026-03-11T02:02:29.032Z",
+  "runUrl": "https://github.com/heymichael/card/actions/runs/22933066881",
+  "commitSha": "c0b845204eb0ab95ed96c0e9d2eb06a88b1767f4",
+  "counts": {
+    "playwrightFailed": 0,
+    "contractFailed": 0,
+    "artifactFailed": 0
+  },
+  "notes": []
 }
