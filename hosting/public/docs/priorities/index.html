@@ -11,7 +11,6 @@
   <p>Todo: card</p>
 <p>Open items</p>
 <ol>
-<li>[High] Wire main-branch artifact publish to GCS for platform deployment</li>
 <li>[Med] Standardize technical documentation (API reference, generation, docs site integration)</li>
 <li>[Med] Add analytics</li>
 <li>[Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)</li>
@@ -20,21 +19,13 @@
 </ol>
 <p>Completed items</p>
 <ul>
+<li>[2026-03-11] Wire main-branch artifact publish to GCS for platform deployment (no PR)</li>
 <li>[2026-03-11] Add authentication (PR #4)</li>
 <li>[2026-03-11] Add tests and testing framework (PR #3)</li>
 <li>[2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (PR #1)</li>
 </ul>
 <hr>
-<h3 id="1-high-wire-main-branch-artifact-publish-to-gcs-for-platform-deployment">1. [High] Wire main-branch artifact publish to GCS for platform deployment</h3>
-<p><strong>Purpose:</strong> Ensure merge-to-main publishes versioned runtime/docs artifacts to GCS so platform can consistently fetch immutable app assets for promotion and deploy.</p>
-<p><strong>Approach:</strong></p>
-<ul>
-<li>Add explicit artifact packaging/upload steps in <code>.github/workflows/publish-artifact.yml</code> (tarballing runtime and docs outputs, uploading to configured GCS bucket/path).</li>
-<li>Generate/update a concrete artifact manifest with real <code>gs://...</code> URIs and checksum, then publish/store it in a platform-consumable location.</li>
-<li>Add validation checks for upload success, manifest completeness, and URI/version consistency; document required auth/secrets in README/architecture.</li>
-<li>Coordinate with platform contract expectations so the publish output and platform consume path are aligned end-to-end.</li>
-</ul>
-<h3 id="2-med-standardize-technical-documentation-api-reference-generation-docs-site-integration">2. [Med] Standardize technical documentation (API reference, generation, docs site integration)</h3>
+<h3 id="1-med-standardize-technical-documentation-api-reference-generation-docs-site-integration">1. [Med] Standardize technical documentation (API reference, generation, docs site integration)</h3>
 <p><strong>Purpose:</strong> Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today <code>documentation.html</code> uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.</p>
 <p><strong>Approach:</strong></p>
 <ul>
@@ -42,16 +33,16 @@
 <li><strong>Delivery standard (improve):</strong> Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.</li>
 <li>Document the standard in learnings or architecture; apply to <code>documentation.html</code> / card app; propose template change for the canonical app template.</li>
 </ul>
-<h3 id="3-med-add-analytics">3. [Med] Add analytics</h3>
+<h3 id="2-med-add-analytics">2. [Med] Add analytics</h3>
 <p><strong>Purpose:</strong> Capture usage analytics (e.g. page views, feature usage) to inform product and prioritization decisions.</p>
 <p><strong>Approach:</strong> Choose an analytics solution (e.g. Firebase Analytics, GA, or platform-provided). Integrate with the app and any docs routes; document what is collected and how to configure/disable in docs or privacy notes.</p>
-<h3 id="4-med-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">4. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
+<h3 id="3-med-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">3. [Med] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
 <p><strong>Purpose:</strong> Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond <code>platform_contract_version: "v1"</code>, while deferring implementation details until after the first successful deploy.</p>
 <p><strong>Approach:</strong> After first deploy, update platform <code>docs/architecture.md</code> with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's <code>docs/architecture.md</code>/<code>README.md</code> to that platform-owned protocol as the source of truth.</p>
-<h3 id="5-med-enforce-docs-source-to-served-sync-in-ci">5. [Med] Enforce docs source-to-served sync in CI</h3>
+<h3 id="4-med-enforce-docs-source-to-served-sync-in-ci">4. [Med] Enforce docs source-to-served sync in CI</h3>
 <p><strong>Purpose:</strong> Prevent drift between <code>docs/</code> and <code>hosting/public/docs/</code> by making the existing generate-and-sync workflow a required CI gate.</p>
 <p><strong>Approach:</strong> Add CI steps that run <code>python3 scripts/generate_docs_pages.py</code> and <code>bash scripts/sync_docs.sh</code>, then fail if <code>git diff --exit-code</code> is non-empty so PRs cannot merge with stale served docs output.</p>
-<h3 id="6-low-create-automated-authentication-testing-plan">6. [Low] Create automated authentication testing plan</h3>
+<h3 id="5-low-create-automated-authentication-testing-plan">5. [Low] Create automated authentication testing plan</h3>
 <p><strong>Purpose:</strong> Define a repeatable automated testing strategy for app/docs auth behavior so future auth changes can ship safely with clear CI coverage expectations.</p>
 <p><strong>Approach:</strong> Document auth testing scope across unit, integration, and e2e layers (allowlist match rules, login/unauthorized flows, bypass behavior, and failure states), decide which checks run on PR vs nightly, and map each test area to existing scripts/workflows.</p>
 </body>
