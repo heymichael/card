@@ -7,7 +7,7 @@
   <title>card - Architecture</title>
 </head>
 <body>
-  <!-- AUTO-GENERATED FROM /home/runner/work/card/card/docs/architecture.md. DO NOT EDIT. -->
+  <!-- AUTO-GENERATED FROM /Users/michaelmader_1/haderach_org/haderach_site/card/docs/architecture.md. DO NOT EDIT. -->
   <h1 id="architecture">Architecture</h1>
 <h2 id="purpose">Purpose</h2>
 <p><code>card</code> is the canonical starter for a single app repository in the Haderach ecosystem.
@@ -24,10 +24,13 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
+│   ├── pull_request_template.md
 │   └── workflows/
 │       ├── ci.yml
 │       ├── nightly-checks.yml
 │       └── publish-artifact.yml
+├── design-tokens/
+│   └── colors.json
 ├── docs/
 │   ├── index.html
 │   ├── architecture.md
@@ -41,15 +44,20 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   │   └── entries/
 │   │       ├── artifact-manifest-contract-alignment.html
 │   │       ├── canonical-app-directory-structure.html
+│   │       ├── client-auth-runtime-contract-pattern.html
 │   │       ├── init-app-token-replacement-gaps.html
 │   │       ├── pull-request-template-standardization.html
 │   │       ├── template-feedback-loop.html
 │   │       └── testing-suite-rollout-pattern.html
 │   ├── requirements/
 │   │   ├── catalog.json
+│   │   ├── index.html
+│   │   ├── index.md
 │   │   └── projects/
 │   │       ├── card-authentication-access-control.html
+│   │       ├── card-docs-shell-ux-refresh.html
 │   │       ├── card-foundation.html
+│   │       ├── greeting-card-designer.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
 │   │   ├── catalog.json
@@ -74,22 +82,41 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │       │       └── logo.svg
 │       ├── index.html
 │       └── robots.txt
+├── public/
+│   ├── _redirects
+│   └── docs/
+│       └── index.html
 ├── scripts/
+│   ├── build_card.sh
 │   ├── checks/
 │   │   ├── artifact-check.mjs
 │   │   └── contract-check.mjs
+│   ├── copy-playwright-report-to-docs.sh
+│   ├── generate-manifest.mjs
 │   ├── generate_docs_auth_runtime.mjs
 │   ├── generate_docs_pages.py
+│   ├── init_app.sh
+│   ├── package-artifacts.sh
 │   ├── requirements-docs.txt
 │   ├── sync_docs.sh
 │   └── test-status/
 │       └── generate-suite-report.mjs
 ├── src/
+│   ├── App.css
+│   ├── App.tsx
+│   ├── CardCanvas.tsx
+│   ├── ControlsPanel.tsx
 │   ├── auth/
 │   │   ├── accessPolicy.ts
 │   │   ├── AuthGate.tsx
 │   │   └── runtimeConfig.ts
+│   ├── constants.ts
+│   ├── index.css
 │   ├── main.tsx
+│   ├── theme/
+│   │   ├── colors.css
+│   │   └── colors.ts
+│   ├── types.ts
 │   └── vite-env.d.ts
 ├── tests/
 │   └── e2e/
@@ -102,10 +129,19 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
+├── check-color-tokens.mjs
+├── documentation.html
+├── eslint.config.js
 ├── firebase.json
+├── index.html
+├── package-lock.json
+├── package.json
 ├── playwright.app.config.ts
 ├── playwright.docs.config.ts
-├── package.json
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
 └── README.md
 </code></pre>
 <h2 id="ownership-boundaries">Ownership Boundaries</h2>
@@ -138,14 +174,59 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 <h2 id="app-delivery-contract">App Delivery Contract</h2>
 <p>Each app repo publishes immutable versioned artifacts plus metadata.
 Platform consumes this metadata to promote a specific version by environment.</p>
-<h3 id="artifact-format-minimal-baseline">Artifact format (minimal baseline)</h3>
+<h3 id="artifact-format">Artifact format</h3>
 <ul>
-<li>Runtime artifact: static bundle directory (or tarball) suitable for hosting at the app route.</li>
-<li>Docs artifact: static docs directory (or tarball) suitable for hosting at the app docs route.</li>
+<li>Runtime artifact: <code>runtime.tar.gz</code> — compressed <code>dist/</code> directory from Vite build.</li>
+<li>Docs artifact: <code>docs.tar.gz</code> — compressed <code>hosting/public/docs/</code> directory after generation and sync.</li>
+<li>Packaging script: <code>scripts/package-artifacts.sh</code> creates both tarballs and computes SHA-256 checksums.</li>
 </ul>
-<h3 id="required-metadata-example-shape">Required metadata (example shape)</h3>
-<p>See <code>docs/artifact-manifest.example.json</code>.
-See <code>docs/artifact-manifest.schema.json</code> for the canonical machine-readable schema.</p>
+<h3 id="gcs-artifact-paths">GCS artifact paths</h3>
+<p>Immutable versioned artifacts are stored at:</p>
+<pre><code class="language-text">gs://&lt;bucket&gt;/card/versions/&lt;commit-sha&gt;/
+  runtime.tar.gz
+  docs.tar.gz
+  checksums.txt
+  manifest.json
+</code></pre>
+<p>Channel pointers (e.g. <code>channels/prod/manifest.json</code>) are owned and written by the
+platform repository during promotion.</p>
+<h3 id="manifest">Manifest</h3>
+<p>See <code>docs/artifact-manifest.schema.json</code> for the canonical machine-readable schema.
+See <code>docs/artifact-manifest.example.json</code> for a reference instance.</p>
+<p>Manifests are generated by <code>scripts/generate-manifest.mjs</code> during the publish workflow.
+Each manifest includes <code>app_id</code>, semantic version with build metadata, commit SHA,
+publication timestamp, GCS URIs for both tarballs, a SHA-256 runtime checksum,
+and the platform contract version.</p>
+<h3 id="publish-workflow">Publish workflow</h3>
+<p><code>publish-artifact.yml</code> triggers on merge to <code>main</code> or manual dispatch. It runs the
+full validation suite, packages artifacts, authenticates to GCP via Workload Identity
+Federation, uploads immutable versioned artifacts to GCS, and verifies upload.</p>
+<p>Promotion (selecting which version to deploy to an environment) is owned by the
+platform repository.</p>
+<h3 id="required-github-configuration">Required GitHub configuration</h3>
+<p>Repository variables (not secrets — these are non-sensitive identifiers):</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GCS_ARTIFACT_BUCKET</code></td>
+<td>GCS bucket name for artifact storage</td>
+</tr>
+<tr>
+<td><code>GCP_WORKLOAD_IDENTITY_PROVIDER</code></td>
+<td>WIF provider resource name for OIDC auth</td>
+</tr>
+<tr>
+<td><code>GCP_SERVICE_ACCOUNT</code></td>
+<td>GCP service account email for GCS writes</td>
+</tr>
+</tbody>
+</table>
 <h3 id="platform-app-registry-reference">Platform app registry reference</h3>
 <p>App registration and route mapping are owned by the platform repository.
 Use the platform <code>docs/app-registry.example.json</code> contract to coordinate <code>app_id</code>,
