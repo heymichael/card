@@ -43,6 +43,7 @@ card/
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
+│   │       ├── card-authentication-access-control.html
 │   │       ├── card-foundation.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
@@ -56,6 +57,8 @@ card/
 │   │   ├── test-lineup.html
 │   │   └── testing-infrastructure.html
 │   └── shared/
+│       ├── auth-runtime.js
+│       ├── docs-auth-gate.js
 │       ├── docs-shell.css
 │       ├── docs-shell-page.template.html
 │       └── docs-shell.js
@@ -70,11 +73,19 @@ card/
 │   ├── checks/
 │   │   ├── artifact-check.mjs
 │   │   └── contract-check.mjs
+│   ├── generate_docs_auth_runtime.mjs
 │   ├── generate_docs_pages.py
 │   ├── requirements-docs.txt
 │   ├── sync_docs.sh
 │   └── test-status/
 │       └── generate-suite-report.mjs
+├── src/
+│   ├── auth/
+│   │   ├── accessPolicy.ts
+│   │   ├── AuthGate.tsx
+│   │   └── runtimeConfig.ts
+│   ├── main.tsx
+│   └── vite-env.d.ts
 ├── tests/
 │   └── e2e/
 │       ├── card-app/
@@ -83,6 +94,7 @@ card/
 │           └── docs-shell.spec.ts
 ├── todo/
 │   └── todo.md
+├── .env.example
 ├── .firebaserc
 ├── .gitignore
 ├── firebase.json
@@ -197,15 +209,46 @@ Default indexing policy is deny-by-default for template docs:
 - Hosting adds `X-Robots-Tag: noindex, nofollow, noarchive`.
 - Any indexing allowlist should be explicit and documented.
 
+## Authentication Contract (Phase 1)
+
+Authentication for this phase is client-side and fail-closed.
+
+- Auth provider: Firebase Authentication with Google provider only.
+- Shared session scope: this app/docs pair only (no cross-app SSO).
+- Authorization policy: separate app and docs allowlists.
+- Initial allowlist policy:
+  - allowed domains: `haderach.ai` for app and docs
+  - allowed users: `michael@haderachi.ai`, `michael@heretic.fund`,
+    `mariam@heretic.fund`, `mariam@heretic.ventures`, `alexmader@gmail.com`
+- Matching rules: case-insensitive exact email and exact domain checks.
+- Unauthorized behavior: stay signed in, show blocked screen with generic
+  contact-administrator guidance, and allow sign-out.
+- Transient auth errors: show retry flow and keep access blocked.
+- Session policy: Firebase default local persistence.
+
+### Runtime Config Inputs
+
+- App runtime reads Firebase config from `VITE_*` variables.
+- Local bypass is supported with `VITE_AUTH_BYPASS=true` (or `authBypass=1` query
+  parameter for local test/debug convenience).
+- Docs shell reads runtime auth config from `window.__CARD_AUTH_RUNTIME__`.
+- Local docs flow generates `docs/shared/auth-runtime.js` from `.env.local` via
+  `node scripts/generate_docs_auth_runtime.mjs` (used by `npm run docs:prepare`
+  and `npm run local:docs:serve`).
+- Production behavior on missing/invalid config is fail-closed.
+
+### Platform Assumptions
+
+- No IAP in this phase.
+- Server-side docs auth is deferred to a later phase.
+
 ## Local Parity Prep
 
 For local hosting parity around docs:
 
-1. Generate docs from source markdown:
-   `python3 scripts/generate_docs_pages.py`
-2. Sync `docs/` into `hosting/public/docs/`:
-   `bash scripts/sync_docs.sh`
-3. Run Hosting emulator from repo root:
+1. Prepare docs outputs and local auth runtime from source:
+   `npm run docs:prepare`
+2. Run Hosting emulator from repo root:
    `firebase serve --port 5001`
 
 Notes:

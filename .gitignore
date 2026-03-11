@@ -15,6 +15,7 @@ pnpm-debug.log*
 .env.*
 !.env.example
 .venv/
+/.venv-docs/
 
 # Firebase local state
 .firebase/

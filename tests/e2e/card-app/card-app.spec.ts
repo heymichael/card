@@ -1,7 +1,14 @@
 import { expect, test } from "@playwright/test";
 
-test("card app default controls render @smoke @regression @card-app", async ({ page }) => {
+test("app shows login gate when auth is required @smoke @card-app", async ({ page }) => {
   await page.goto("/");
+
+  await expect(page.getByRole("heading", { name: "Sign in required" })).toBeVisible();
+  await expect(page.getByText("Please contact your administrator")).toBeVisible();
+});
+
+test("card app default controls render @smoke @regression @card-app", async ({ page }) => {
+  await page.goto("/?authBypass=1");
 
   await expect(page.getByRole("heading", { name: "Card Designer" })).toBeVisible();
   await expect(page.getByRole("button", { name: "A — Headline" })).toBeVisible();
@@ -10,7 +17,7 @@ test("card app default controls render @smoke @regression @card-app", async ({ p
 });
 
 test("text and font controls update state @smoke @regression @card-app", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?authBypass=1");
 
   const textInput = page.locator("#text-input");
   await textInput.fill("Testing greeting");
@@ -22,7 +29,7 @@ test("text and font controls update state @smoke @regression @card-app", async (
 });
 
 test("export triggers jpeg download @smoke @card-app", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?authBypass=1");
 
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Finish (Export JPEG)" }).click();

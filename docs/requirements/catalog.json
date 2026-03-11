@@ -2,6 +2,12 @@
   "app": "card",
   "projects": [
     {
+      "title": "Card Authentication and Access Control",
+      "slug": "card-authentication-access-control",
+      "summary": "Phase 1 business requirements and runtime contract for Google auth and allowlist-based access across card app and docs.",
+      "url": "/card/docs/requirements/projects/card-authentication-access-control.html"
+    },
+    {
       "title": "Greeting Card Designer",
       "slug": "greeting-card-designer",
       "summary": "Core product requirements and acceptance criteria for the card designer application.",

@@ -66,6 +66,7 @@ card/
 │   ├── requirements/
 │   │   ├── catalog.json
 │   │   └── projects/
+│   │       ├── card-authentication-access-control.html
 │   │       ├── card-foundation.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
@@ -79,6 +80,8 @@ card/
 │   │   ├── test-lineup.html
 │   │   └── testing-infrastructure.html
 │   └── shared/
+│       ├── auth-runtime.js
+│       ├── docs-auth-gate.js
 │       ├── docs-shell.css
 │       ├── docs-shell-page.template.html
 │       └── docs-shell.js
@@ -93,11 +96,19 @@ card/
 │   ├── checks/
 │   │   ├── artifact-check.mjs
 │   │   └── contract-check.mjs
+│   ├── generate_docs_auth_runtime.mjs
 │   ├── generate_docs_pages.py
 │   ├── requirements-docs.txt
 │   ├── sync_docs.sh
 │   └── test-status/
 │       └── generate-suite-report.mjs
+├── src/
+│   ├── auth/
+│   │   ├── accessPolicy.ts
+│   │   ├── AuthGate.tsx
+│   │   └── runtimeConfig.ts
+│   ├── main.tsx
+│   └── vite-env.d.ts
 ├── tests/
 │   └── e2e/
 │       ├── card-app/
@@ -106,6 +117,7 @@ card/
 │           └── docs-shell.spec.ts
 ├── todo/
 │   └── todo.md
+├── .env.example
 ├── .firebaserc
 ├── .gitignore
 ├── firebase.json
@@ -145,6 +157,40 @@ bash scripts/sync_docs.sh
 firebase serve --port 5001
 ```
 
+### Authentication configuration (phase 1)
+
+Create local auth config from `.env.example`:
+
+```bash
+cp .env.example .env.local
+```
+
+Required values:
+
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_APP_ID`
+
+Optional values:
+
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_MEASUREMENT_ID`
+
+Local bypass:
+
+- `VITE_AUTH_BYPASS=true` disables auth locally.
+- Query parameter `authBypass=1` can bypass auth for local test/debug routes.
+
+Docs shell runtime config:
+
+- `npm run local:docs:serve` now runs `npm run docs:prepare` first.
+- `docs:prepare` generates `docs/shared/auth-runtime.js` from `.env.local` so
+  docs auth config is loaded automatically for local hosting.
+- Docs gate still supports host/deploy runtime injection through
+  `window.__CARD_AUTH_RUNTIME__`.
+
 When running docs smoke against an already running local server, use:
 
 ```bash
@@ -159,6 +205,17 @@ For broader browser coverage on regression runs (Chromium + Firefox + WebKit):
 PLAYWRIGHT_ALL_BROWSERS=1 npm run test:e2e:docs:regression
 PLAYWRIGHT_ALL_BROWSERS=1 npm run test:e2e:app -- --grep "@regression"
 ```
+
+Run Playwright checks from your own terminal environment:
+
+```bash
+npx playwright install
+npm run test:e2e:app:smoke
+npm run test:e2e:docs:smoke
+```
+
+If browser download is blocked in restricted/sandboxed environments, install and execute
+Playwright locally in your terminal to validate e2e behavior.
 
 ## Initialize a new app copy
 
