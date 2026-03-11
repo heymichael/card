@@ -1,9 +1,9 @@
 {
   "suite": "pr-checks",
   "status": "pass",
-  "lastRunUtc": "2026-03-11T00:32:18.090Z",
-  "runUrl": "",
-  "commitSha": "",
+  "lastRunUtc": "2026-03-11T01:41:05.259Z",
+  "runUrl": "https://github.com/heymichael/card/actions/runs/22932516705",
+  "commitSha": "c67f9f100ba06b3cc344bc4f197e5bb6b0e7219d",
   "counts": {
     "playwrightFailed": 0,
     "contractFailed": 0,

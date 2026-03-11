@@ -5,7 +5,7 @@
       "title": "PR Checks",
       "summary": "Blocking checks for pull requests (impact-routed smoke, contract, artifact, and docs parity).",
       "status": "pass",
-      "lastRunUtc": "2026-03-11T00:32:18.090Z",
+      "lastRunUtc": "2026-03-11T01:41:05.259Z",
       "environment": "ci",
       "platforms": "linux (ubuntu-latest)",
       "trigger": "on pull_request",
