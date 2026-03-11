@@ -21,13 +21,15 @@ This repository is intentionally app-scoped. It owns app code, app CI, app docs,
 
 - `hosting/public/` - app-hosted static content and served docs mirror.
 - `firebase.json` - hosting defaults (including deny-by-default indexing headers).
-- `.github/workflows/ci.yml` - starter pull request CI placeholder workflow.
-- `.github/workflows/publish-artifact.yml` - starter main-branch artifact publish placeholder workflow.
+- `.github/workflows/ci.yml` - pull request checks with impact-routed smoke suites.
+- `.github/workflows/publish-artifact.yml` - main-branch publish checks and snapshot refresh.
+- `.github/workflows/nightly-checks.yml` - scheduled regression and production monitor suites.
 - `docs/architecture.md` - app boundaries, handoff contract, and template invariants.
 - `docs/artifact-manifest.example.json` - app artifact metadata shape consumed by platform.
 - `docs/artifact-manifest.schema.json` - canonical machine-readable schema for artifact manifest validation.
 - `docs/index.html` + `docs/shared/` - canonical docs shell and reusable template.
-- `scripts/` - docs generation and source-to-served sync helpers.
+- `scripts/` - docs generation/sync plus contract/artifact and test-status scripts.
+- `tests/e2e/` - Playwright suites tagged for smoke, regression, and prod-monitor runs.
 
 ```text
 card/
@@ -42,6 +44,7 @@ card/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml
+│       ├── nightly-checks.yml
 │       └── publish-artifact.yml
 ├── docs/
 │   ├── index.html
@@ -63,6 +66,7 @@ card/
 │   ├── test-status/
 │   │   ├── catalog.json
 │   │   ├── checks/
+│   │   ├── playwright/
 │   │   ├── reports/
 │   │   └── summaries/
 │   ├── testing/
@@ -81,14 +85,28 @@ card/
 │       ├── index.html
 │       └── robots.txt
 ├── scripts/
+│   ├── checks/
+│   │   ├── artifact-check.mjs
+│   │   └── contract-check.mjs
 │   ├── generate_docs_pages.py
 │   ├── requirements-docs.txt
-│   └── sync_docs.sh
+│   ├── sync_docs.sh
+│   └── test-status/
+│       └── generate-suite-report.mjs
+├── tests/
+│   └── e2e/
+│       ├── card-app/
+│       │   └── card-app.spec.ts
+│       └── docs-shell/
+│           └── docs-shell.spec.ts
 ├── todo/
 │   └── todo.md
 ├── .firebaserc
 ├── .gitignore
 ├── firebase.json
+├── playwright.app.config.ts
+├── playwright.docs.config.ts
+├── package.json
 └── README.md
 ```
 
@@ -107,9 +125,34 @@ npm --version
 python3 --version
 firebase --version
 python3 -m pip install -r scripts/requirements-docs.txt
+npm ci
+npx playwright install --with-deps
+npm run local:docs:serve
+npm run lint
+npm run test:e2e:docs:smoke
+npm run test:e2e:docs:smoke:local
+npm run test:e2e:app:smoke
+PLAYWRIGHT_ALL_BROWSERS=1 npm run test:e2e:docs:regression
+npm run check:contract -- pr-checks
+npm run check:artifact -- pr-checks
 python3 scripts/generate_docs_pages.py
 bash scripts/sync_docs.sh
-firebase emulators:start --only hosting --project REPLACE_WITH_FIREBASE_PROJECT_ID --config firebase.json
+firebase serve --port 5001
+```
+
+When running docs smoke against an already running local server, use:
+
+```bash
+npm run test:e2e:docs:smoke:local
+```
+
+This targets `http://localhost:5002`, which is the common local hosting URL when `firebase serve --port 5001` is used.
+
+For broader browser coverage on regression runs (Chromium + Firefox + WebKit):
+
+```bash
+PLAYWRIGHT_ALL_BROWSERS=1 npm run test:e2e:docs:regression
+PLAYWRIGHT_ALL_BROWSERS=1 npm run test:e2e:app -- --grep "@regression"
 ```
 
 ## Initialize a new app copy

@@ -1,0 +1,13 @@
+{
+  "suite": "pr-checks",
+  "status": "pass",
+  "lastRunUtc": "2026-03-11T00:32:18.090Z",
+  "runUrl": "",
+  "commitSha": "",
+  "counts": {
+    "playwrightFailed": 0,
+    "contractFailed": 0,
+    "artifactFailed": 0
+  },
+  "notes": []
+}

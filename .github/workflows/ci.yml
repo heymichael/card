@@ -7,29 +7,130 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   ci:
-    name: CI checks (placeholder)
+    name: PR checks
     runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Show event metadata
-        run: |
-          echo "event=${{ github.event_name }}"
-          echo "ref=${{ github.ref }}"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
 
-      - name: Verify template contract files exist
-        run: |
-          test -f README.md
-          test -f docs/architecture.md
-          test -f docs/artifact-manifest.example.json
-          test -f firebase.json
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-      - name: Placeholder app CI command
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Install docs python dependencies
+        run: python3 -m pip install -r scripts/requirements-docs.txt
+
+      - name: Compute impact flags
+        id: impact
         run: |
-          echo "Replace with app CI steps (lint/build/docs checks)."
-          echo "Example: npm ci && npm run lint && npm run build"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+          echo "$CHANGED"
+          DOCS_ONLY=true
+          DOCS_SHELL=false
+          CARD_APP=false
+          for file in $CHANGED; do
+            if [[ "$file" == src/* || "$file" == package.json || "$file" == package-lock.json || "$file" == "playwright.app.config.ts" || "$file" == tests/e2e/card-app/* ]]; then
+              CARD_APP=true
+              DOCS_ONLY=false
+            elif [[ "$file" == docs/index.html || "$file" == docs/shared/* || "$file" == hosting/public/docs/index.html || "$file" == hosting/public/docs/shared/* || "$file" == tests/e2e/docs-shell/* || "$file" == "playwright.docs.config.ts" ]]; then
+              DOCS_SHELL=true
+              DOCS_ONLY=false
+            elif [[ "$file" == docs/* || "$file" == hosting/public/docs/* ]]; then
+              true
+            else
+              DOCS_ONLY=false
+              DOCS_SHELL=true
+              CARD_APP=true
+            fi
+          done
+          echo "docs_only=$DOCS_ONLY" >> "$GITHUB_OUTPUT"
+          echo "docs_shell=$DOCS_SHELL" >> "$GITHUB_OUTPUT"
+          echo "card_app=$CARD_APP" >> "$GITHUB_OUTPUT"
+
+      - name: Lint and build
+        run: |
+          npm run lint
+          npm run build
+
+      - name: Run docs shell smoke tests
+        if: steps.impact.outputs.docs_shell == 'true' || steps.impact.outputs.card_app == 'true'
+        run: npm run test:e2e:docs:smoke
+
+      - name: Run card app smoke tests
+        if: steps.impact.outputs.card_app == 'true'
+        run: npm run test:e2e:app:smoke
+
+      - name: Publish Playwright HTML into docs snapshot
+        run: |
+          rm -rf docs/test-status/playwright/pr-checks
+          mkdir -p docs/test-status/playwright/pr-checks
+          if [ -d playwright-report/docs ]; then
+            mkdir -p docs/test-status/playwright/pr-checks/docs
+            cp -R playwright-report/docs/. docs/test-status/playwright/pr-checks/docs/
+          fi
+          if [ -d playwright-report/app ]; then
+            mkdir -p docs/test-status/playwright/pr-checks/app
+            cp -R playwright-report/app/. docs/test-status/playwright/pr-checks/app/
+          fi
+
+      - name: Run contract checks
+        run: npm run check:contract -- pr-checks
+
+      - name: Run artifact checks
+        run: npm run check:artifact -- pr-checks
+
+      - name: Generate test status snapshot
+        run: npm run report:test-status -- pr-checks
+
+      - name: Generate and sync docs
+        run: |
+          python3 scripts/generate_docs_pages.py
+          bash scripts/sync_docs.sh
+
+      - name: Upload Playwright reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-reports-pr-checks
+          path: |
+            playwright-report
+            artifacts/playwright
+          if-no-files-found: warn
+
+      - name: Commit test-status snapshot
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/test-status hosting/public/docs/test-status
+          if git diff --cached --quiet; then
+            echo "No test-status snapshot changes."
+            exit 0
+          fi
+          git commit -m "ci: refresh pr-checks test status snapshot [skip ci]"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}

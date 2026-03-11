@@ -1,4 +1,9 @@
 {
+  "emulators": {
+    "hosting": {
+      "port": 5001
+    }
+  },
   "hosting": {
     "public": "hosting/public",
     "ignore": [
@@ -8,6 +13,24 @@
     ],
     "headers": [
       {
+        "source": "/card/docs/test-status/playwright/**",
+        "headers": [
+          {
+            "key": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          }
+        ]
+      },
+      {
+        "source": "/docs/test-status/playwright/**",
+        "headers": [
+          {
+            "key": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          }
+        ]
+      },
+      {
         "source": "**",
         "headers": [
           {
@@ -16,7 +39,7 @@
           },
           {
             "key": "X-Frame-Options",
-            "value": "DENY"
+            "value": "SAMEORIGIN"
           },
           {
             "key": "Referrer-Policy",
