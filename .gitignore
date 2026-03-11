@@ -22,6 +22,9 @@ pnpm-debug.log*
 firebase-debug.log
 .firebaserc.local
 
+# Platform handoff (local reference only)
+docs/platform-deploy-handoff.md
+
 # Artifacts / temp
 tmp/
 dist/

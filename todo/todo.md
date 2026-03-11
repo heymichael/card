@@ -10,7 +10,7 @@ Open items
 
 Completed items
 
-- [2026-03-11] Wire main-branch artifact publish to GCS for platform deployment (no PR)
+- [2026-03-11] Wire main-branch artifact publish to GCS for platform deployment (PR #5)
 - [2026-03-11] Add authentication (PR #4)
 - [2026-03-11] Add tests and testing framework (PR #3)
 - [2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (PR #1)
