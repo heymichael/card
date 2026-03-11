@@ -2,6 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 const useExternalBase = process.env.PLAYWRIGHT_USE_EXTERNAL_BASE_URL === "1";
 const runAllBrowsers = process.env.PLAYWRIGHT_ALL_BROWSERS === "1";
+const firebaseProject = process.env.PLAYWRIGHT_FIREBASE_PROJECT || "demo-card";
 // Port 5001 avoids conflict with macOS AirPlay Receiver on 5000
 const baseURL = process.env.E2E_BASE_URL || "http://localhost:5001";
 
@@ -39,7 +40,7 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          "npx firebase emulators:start --only hosting --config firebase.json",
+          `npx --yes firebase-tools emulators:start --only hosting --project ${firebaseProject} --config firebase.json`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
