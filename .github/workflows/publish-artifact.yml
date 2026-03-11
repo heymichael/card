@@ -99,3 +99,60 @@ jobs:
           fi
           git commit -m "ci: refresh main publish test status snapshot [skip ci]"
           git push
+
+      # --- Artifact packaging and GCS publish ---
+
+      - name: Package artifacts
+        run: bash scripts/package-artifacts.sh
+
+      - name: Determine version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          SHA=$(git rev-parse HEAD)
+          RUN="${{ github.run_number }}"
+          echo "semver=${VERSION}+build.${RUN}" >> "$GITHUB_OUTPUT"
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate manifest
+        run: |
+          node scripts/generate-manifest.mjs \
+            --bucket "${{ vars.GCS_ARTIFACT_BUCKET }}" \
+            --sha    "${{ steps.version.outputs.sha }}" \
+            --version "${{ steps.version.outputs.semver }}"
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload versioned artifacts to GCS
+        run: |
+          BUCKET="${{ vars.GCS_ARTIFACT_BUCKET }}"
+          SHA="${{ steps.version.outputs.sha }}"
+          PREFIX="gs://${BUCKET}/card/versions/${SHA}"
+
+          gsutil -m cp \
+            artifacts/publish/runtime.tar.gz \
+            artifacts/publish/docs.tar.gz \
+            artifacts/publish/checksums.txt \
+            artifacts/publish/manifest.json \
+            "${PREFIX}/"
+
+          echo "Uploaded artifacts to ${PREFIX}/"
+
+      - name: Verify upload
+        run: |
+          BUCKET="${{ vars.GCS_ARTIFACT_BUCKET }}"
+          SHA="${{ steps.version.outputs.sha }}"
+          PREFIX="gs://${BUCKET}/card/versions/${SHA}"
+
+          echo "Listing uploaded objects:"
+          gsutil ls "${PREFIX}/"
+
+          echo "Verifying manifest download:"
+          gsutil cat "${PREFIX}/manifest.json" | python3 -m json.tool

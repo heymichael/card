@@ -22,7 +22,7 @@ This repository is intentionally app-scoped. It owns app code, app CI, app docs,
 - `hosting/public/` - app-hosted static content and served docs mirror.
 - `firebase.json` - hosting defaults (including deny-by-default indexing headers).
 - `.github/workflows/ci.yml` - pull request checks with impact-routed smoke suites.
-- `.github/workflows/publish-artifact.yml` - main-branch publish checks and snapshot refresh.
+- `.github/workflows/publish-artifact.yml` - main-branch publish checks, artifact packaging, and GCS upload.
 - `.github/workflows/nightly-checks.yml` - scheduled regression and production monitor suites.
 - `docs/architecture.md` - app boundaries, handoff contract, and template invariants.
 - `docs/artifact-manifest.example.json` - app artifact metadata shape consumed by platform.
@@ -42,10 +42,13 @@ card/
 │       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
+│   ├── pull_request_template.md
 │   └── workflows/
 │       ├── ci.yml
 │       ├── nightly-checks.yml
 │       └── publish-artifact.yml
+├── design-tokens/
+│   └── colors.json
 ├── docs/
 │   ├── index.html
 │   ├── architecture.md
@@ -59,15 +62,20 @@ card/
 │   │   └── entries/
 │   │       ├── artifact-manifest-contract-alignment.html
 │   │       ├── canonical-app-directory-structure.html
+│   │       ├── client-auth-runtime-contract-pattern.html
 │   │       ├── init-app-token-replacement-gaps.html
 │   │       ├── pull-request-template-standardization.html
 │   │       ├── template-feedback-loop.html
 │   │       └── testing-suite-rollout-pattern.html
 │   ├── requirements/
 │   │   ├── catalog.json
+│   │   ├── index.html
+│   │   ├── index.md
 │   │   └── projects/
 │   │       ├── card-authentication-access-control.html
+│   │       ├── card-docs-shell-ux-refresh.html
 │   │       ├── card-foundation.html
+│   │       ├── greeting-card-designer.html
 │   │       └── requirements-project.template.html
 │   ├── test-status/
 │   │   ├── catalog.json
@@ -92,22 +100,41 @@ card/
 │       │       └── logo.svg
 │       ├── index.html
 │       └── robots.txt
+├── public/
+│   ├── _redirects
+│   └── docs/
+│       └── index.html
 ├── scripts/
+│   ├── build_card.sh
 │   ├── checks/
 │   │   ├── artifact-check.mjs
 │   │   └── contract-check.mjs
+│   ├── copy-playwright-report-to-docs.sh
+│   ├── generate-manifest.mjs
 │   ├── generate_docs_auth_runtime.mjs
 │   ├── generate_docs_pages.py
+│   ├── init_app.sh
+│   ├── package-artifacts.sh
 │   ├── requirements-docs.txt
 │   ├── sync_docs.sh
 │   └── test-status/
 │       └── generate-suite-report.mjs
 ├── src/
+│   ├── App.css
+│   ├── App.tsx
+│   ├── CardCanvas.tsx
+│   ├── ControlsPanel.tsx
 │   ├── auth/
 │   │   ├── accessPolicy.ts
 │   │   ├── AuthGate.tsx
 │   │   └── runtimeConfig.ts
+│   ├── constants.ts
+│   ├── index.css
 │   ├── main.tsx
+│   ├── theme/
+│   │   ├── colors.css
+│   │   └── colors.ts
+│   ├── types.ts
 │   └── vite-env.d.ts
 ├── tests/
 │   └── e2e/
@@ -120,10 +147,19 @@ card/
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
+├── check-color-tokens.mjs
+├── documentation.html
+├── eslint.config.js
 ├── firebase.json
+├── index.html
+├── package-lock.json
+├── package.json
 ├── playwright.app.config.ts
 ├── playwright.docs.config.ts
-├── package.json
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
 └── README.md
 ```
 
@@ -246,6 +282,29 @@ Use this sequence when creating a real app repo from the template:
    - `git remote -v`
    - `git status`
    - `git push -u origin main`
+
+## GCS artifact publish prerequisites
+
+The publish workflow requires three GitHub repository variables:
+
+| Variable | Purpose |
+|---|---|
+| `GCS_ARTIFACT_BUCKET` | GCS bucket name for artifact storage |
+| `GCP_WORKLOAD_IDENTITY_PROVIDER` | Workload Identity Federation provider resource name |
+| `GCP_SERVICE_ACCOUNT` | GCP service account email with `roles/storage.objectCreator` on the bucket |
+
+These are non-secret identifiers configured as repository variables (Settings > Secrets and variables > Actions > Variables).
+
+GCP setup required outside this repo:
+
+1. Create a GCS bucket for artifacts.
+2. Create a service account with write access to the bucket.
+3. Configure Workload Identity Federation to allow GitHub Actions OIDC tokens from this repo to impersonate the service account.
+
+First deploy flow:
+
+1. Merge to `main` — publish workflow packages, uploads, and verifies immutable artifacts at `gs://<bucket>/card/versions/<sha>/`.
+2. Platform repo promotes and deploys using the versioned manifest at the immutable path.
 
 ## App-to-platform handoff model
 
