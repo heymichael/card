@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "REPLACE_WITH_FIREBASE_PROJECT_ID"
-  }
+    "default": "haderach-ai",
+    "local_test": "haderach-ai"
+  },
+  "targets": {},
+  "etags": {}
 }

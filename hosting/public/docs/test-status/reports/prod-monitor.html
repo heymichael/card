@@ -4,32 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
-    <title>Scheduled Regression Report (Placeholder)</title>
+    <title>Prod Monitor Report</title>
+    <style>
+      .playwright-frame {
+        width: 100%;
+        min-height: 820px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Scheduled Regression Report</h1>
-    <p>This is a placeholder report page for optional scheduled regression checks.</p>
-
-    <h2>Current State</h2>
-    <ul>
-      <li>Status: placeholder</li>
-      <li>Last run: not run yet</li>
-      <li>Environment: ci</li>
-      <li>Trigger: schedule + manual dispatch</li>
-    </ul>
-
-    <h2>Planned Playwright Output</h2>
-    <ul>
-      <li>Docs shell deep-link checks for tab and item params.</li>
-      <li>Fallback checks for missing/invalid catalog entries.</li>
-      <li>Noindex policy checks for pages and headers.</li>
-    </ul>
-
+    <h1>Prod Monitor Report</h1>
     <h2>Additional Checks</h2>
     <ul>
       <li><a href="/docs/test-status/summaries/prod-monitor-summary.json">Run summary JSON</a></li>
       <li><a href="/docs/test-status/checks/prod-monitor-contract-checks.html">Contract checks output</a></li>
       <li><a href="/docs/test-status/checks/prod-monitor-artifact-checks.html">Artifact checks output</a></li>
     </ul>
+    <h2>Playwright Output</h2>
+    <h3>Docs Shell Suite</h3>
+    <iframe class="playwright-frame" src="/docs/test-status/playwright/prod-monitor/docs/index.html" title="prod-monitor docs playwright report"></iframe>
   </body>
 </html>

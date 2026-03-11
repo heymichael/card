@@ -26,6 +26,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml
+│       ├── nightly-checks.yml
 │       └── publish-artifact.yml
 ├── docs/
 │   ├── index.html
@@ -47,6 +48,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   ├── test-status/
 │   │   ├── catalog.json
 │   │   ├── checks/
+│   │   ├── playwright/
 │   │   ├── reports/
 │   │   └── summaries/
 │   ├── testing/
@@ -65,14 +67,28 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │       ├── index.html
 │       └── robots.txt
 ├── scripts/
+│   ├── checks/
+│   │   ├── artifact-check.mjs
+│   │   └── contract-check.mjs
 │   ├── generate_docs_pages.py
 │   ├── requirements-docs.txt
-│   └── sync_docs.sh
+│   ├── sync_docs.sh
+│   └── test-status/
+│       └── generate-suite-report.mjs
+├── tests/
+│   └── e2e/
+│       ├── card-app/
+│       │   └── card-app.spec.ts
+│       └── docs-shell/
+│           └── docs-shell.spec.ts
 ├── todo/
 │   └── todo.md
 ├── .firebaserc
 ├── .gitignore
 ├── firebase.json
+├── playwright.app.config.ts
+├── playwright.docs.config.ts
+├── package.json
 └── README.md
 </code></pre>
 <h2 id="ownership-boundaries">Ownership Boundaries</h2>
@@ -151,6 +167,11 @@ This local redirect pattern is a developer convenience for URL parity and is not
 <ul>
 <li><code>docs/testing/</code> documents app testing strategy and lineup.</li>
 <li><code>docs/test-status/</code> holds report metadata and placeholder report/check artifacts.</li>
+<li>Playwright suites live in <code>tests/e2e/</code> with tags for smoke, regression, and prod monitor.</li>
+<li>CI workflows map those tags to PR (<code>pr-checks</code>), main publish (<code>main-publish-checks</code>), and nightly suites (<code>scheduled-regression</code>, <code>prod-monitor</code>).</li>
+<li>Smoke checks default to Chromium-only for speed; regression jobs set <code>PLAYWRIGHT_ALL_BROWSERS=1</code> to run Chromium, Firefox, and WebKit.</li>
+<li>Non-Playwright contract and artifact checks run via <code>scripts/checks/</code>.</li>
+<li>Snapshot generation for the Test Status docs tab runs via <code>scripts/test-status/generate-suite-report.mjs</code>.</li>
 </ul>
 <p>Platform still performs post-deploy cross-app smoke checks after promotion/deploy.</p>
 <h2 id="security-and-indexing-defaults">Security and Indexing Defaults</h2>
@@ -168,8 +189,14 @@ This local redirect pattern is a developer convenience for URL parity and is not
 <li>Sync <code>docs/</code> into <code>hosting/public/docs/</code>:
    <code>bash scripts/sync_docs.sh</code></li>
 <li>Run Hosting emulator from repo root:
-   <code>firebase emulators:start --only hosting --project REPLACE_WITH_FIREBASE_PROJECT_ID --config firebase.json</code></li>
+   <code>firebase serve --port 5001</code></li>
 </ol>
+<p>Notes:</p>
+<ul>
+<li>On macOS, port <code>5000</code> is commonly occupied by AirPlay Receiver, so this repo defaults hosting emulator config to <code>5001</code>.</li>
+<li><code>firebase serve --port 5001</code> may report <code>Local server: http://localhost:5002</code> if <code>5001</code> is already in use.</li>
+<li>For docs smoke tests against a running local host server, prefer <code>E2E_BASE_URL=http://localhost:5002</code> (use <code>localhost</code> over <code>127.0.0.1</code> to avoid IPv4/IPv6 loopback mismatch).</li>
+</ul>
 <h2 id="template-customization-checklist">Template Customization Checklist</h2>
 <p>When creating a real app repo from this template:</p>
 <ol>

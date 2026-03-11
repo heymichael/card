@@ -1,0 +1,17 @@
+{
+  "app": "card",
+  "projects": [
+    {
+      "title": "Greeting Card Designer",
+      "slug": "greeting-card-designer",
+      "summary": "Core product requirements and acceptance criteria for the card designer application.",
+      "url": "/card/docs/requirements/projects/greeting-card-designer.html"
+    },
+    {
+      "title": "Card Docs Shell UX Refresh",
+      "slug": "card-docs-shell-ux-refresh",
+      "summary": "UX and rendering requirements for consistent inline docs behavior across card docs tabs.",
+      "url": "/card/docs/requirements/projects/card-docs-shell-ux-refresh.html"
+    }
+  ]
+}

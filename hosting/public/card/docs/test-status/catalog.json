@@ -1,0 +1,60 @@
+{
+  "reports": [
+    {
+      "slug": "pr-checks",
+      "title": "PR Checks",
+      "summary": "Blocking checks for pull requests (impact-routed smoke, contract, artifact, and docs parity).",
+      "status": "pass",
+      "lastRunUtc": "2026-03-11T00:32:18.090Z",
+      "environment": "ci",
+      "platforms": "linux (ubuntu-latest)",
+      "trigger": "on pull_request",
+      "reportUrl": "/card/docs/test-status/reports/pr-checks.html",
+      "summaryUrl": "/card/docs/test-status/summaries/pr-checks-summary.json",
+      "contractChecksUrl": "/card/docs/test-status/checks/pr-checks-contract-checks.html",
+      "artifactChecksUrl": "/card/docs/test-status/checks/pr-checks-artifact-checks.html"
+    },
+    {
+      "slug": "main-publish-checks",
+      "title": "Main Publish Checks",
+      "summary": "Blocking checks for main-branch artifact and manifest publication.",
+      "status": "placeholder",
+      "lastRunUtc": "not run yet",
+      "environment": "ci",
+      "platforms": "linux (ubuntu-latest)",
+      "trigger": "on push to main",
+      "reportUrl": "/docs/test-status/reports/main-publish-checks.html",
+      "summaryUrl": "/docs/test-status/summaries/main-publish-checks-summary.json",
+      "contractChecksUrl": "/docs/test-status/checks/main-publish-checks-contract-checks.html",
+      "artifactChecksUrl": "/docs/test-status/checks/main-publish-checks-artifact-checks.html"
+    },
+    {
+      "slug": "scheduled-regression",
+      "title": "Scheduled Regression",
+      "summary": "Nightly full regression in test environment for docs shell and app runtime coverage.",
+      "status": "placeholder",
+      "lastRunUtc": "not run yet",
+      "environment": "test",
+      "platforms": "linux (ubuntu-latest)",
+      "trigger": "schedule + manual dispatch",
+      "reportUrl": "/docs/test-status/reports/scheduled-regression.html",
+      "summaryUrl": "/docs/test-status/summaries/scheduled-regression-summary.json",
+      "contractChecksUrl": "/docs/test-status/checks/scheduled-regression-contract-checks.html",
+      "artifactChecksUrl": "/docs/test-status/checks/scheduled-regression-artifact-checks.html"
+    },
+    {
+      "slug": "prod-monitor",
+      "title": "Prod Monitor",
+      "summary": "Small nightly monitor suite against production availability and core docs routes.",
+      "status": "placeholder",
+      "lastRunUtc": "not run yet",
+      "environment": "production",
+      "platforms": "linux (ubuntu-latest)",
+      "trigger": "schedule + manual dispatch",
+      "reportUrl": "/docs/test-status/reports/prod-monitor.html",
+      "summaryUrl": "/docs/test-status/summaries/prod-monitor-summary.json",
+      "contractChecksUrl": "/docs/test-status/checks/prod-monitor-contract-checks.html",
+      "artifactChecksUrl": "/docs/test-status/checks/prod-monitor-artifact-checks.html"
+    }
+  ]
+}

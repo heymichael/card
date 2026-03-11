@@ -15,19 +15,26 @@
     <h2>Current Test Model</h2>
     <p>App testing should cover three complementary layers:</p>
     <ul>
-      <li>Pull request checks: blocking lint, test, and build validation.</li>
-      <li>Main publish checks: blocking artifact package and metadata validation.</li>
-      <li>Scheduled checks: optional non-blocking regression and docs deep-link checks.</li>
+  <li>Pull request checks: blocking, impact-routed smoke and validation checks.</li>
+  <li>Main publish checks: blocking regression and artifact/contract validation before publish.</li>
+  <li>Nightly checks: non-blocking full regression in test plus minimal production monitor checks.</li>
     </ul>
 
     <h2>Workflows and Triggers</h2>
-    <p>Workflow wiring is intentionally placeholder in this template and must be finalized per app.</p>
-    <p>When added, latest report snapshots should be published under <code>/docs/test-status/</code>.</p>
+<ul>
+  <li><code>.github/workflows/ci.yml</code> - pull request checks (suite: <code>pr-checks</code>).</li>
+  <li><code>.github/workflows/publish-artifact.yml</code> - main publish checks (suite: <code>main-publish-checks</code>).</li>
+  <li><code>.github/workflows/nightly-checks.yml</code> - nightly suites (<code>scheduled-regression</code>, <code>prod-monitor</code>).</li>
+</ul>
+<p>Each workflow generates report artifacts plus docs snapshots under <code>docs/test-status/</code>.</p>
 
     <h2>Source of Truth</h2>
     <ul>
       <li>Test status catalog: <code>docs/test-status/catalog.json</code></li>
       <li>Testing catalog: <code>docs/testing/catalog.json</code></li>
+  <li>Check scripts: <code>scripts/checks/</code></li>
+  <li>Snapshot/report generation: <code>scripts/test-status/</code></li>
+  <li>Playwright tests: <code>tests/e2e/</code></li>
     </ul>
 
     <h2>Notes</h2>

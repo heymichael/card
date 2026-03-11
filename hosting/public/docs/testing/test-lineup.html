@@ -8,32 +8,45 @@
   </head>
   <body>
     <h1>Test Lineup</h1>
-    <p>Selection: card baseline</p>
-    <p>Trigger: pull request, main publish, and optional schedule</p>
-    <p>Environment: repository CI environment</p>
-    <p>Platforms: app runtime and docs shell routes</p>
-
-    <h2>PR Checks (Blocking)</h2>
+    <h2>Smoke (PR Checks)</h2>
+    <h3>Docs Shell</h3>
     <ul>
-      <li>Lint, unit tests, and build checks pass.</li>
-      <li>Docs generation and sync scripts run cleanly.</li>
-      <li>Requirements/testing catalogs parse and link targets exist.</li>
-      <li>Architecture and priorities pages render expected content.</li>
+      <li><code>docs shell renders required tabs</code></li>
+      <li><code>requirements detail returns to list cleanly</code></li>
+    </ul>
+    <h3>Card App</h3>
+    <ul>
+      <li><code>card app default controls render</code></li>
+      <li><code>text and font controls update state</code></li>
+      <li><code>export triggers jpeg download</code></li>
     </ul>
 
-    <h2>Main Publish Validation (Blocking for publish)</h2>
+    <h2>Main Publish</h2>
+    <h3>Docs Shell</h3>
     <ul>
-      <li>Artifact packaging succeeds for runtime and docs outputs.</li>
-      <li>Manifest payload includes required metadata fields and checksum.</li>
-      <li>Artifact destination write succeeds (bucket/registry placeholder until wired).</li>
-      <li>Publish logs include immutable version identifier.</li>
+      <li><code>rapid tab switching keeps final tab content</code></li>
+    </ul>
+    <h3>Card App</h3>
+    <ul>
+      <li><code>card app default controls render</code></li>
+      <li><code>text and font controls update state</code></li>
     </ul>
 
-    <h2>Scheduled Non-Blocking Checks (Optional)</h2>
+    <h2>Regression (Manual Dispatch for Now)</h2>
+    <h3>Docs Shell</h3>
     <ul>
-      <li>Docs shell deep-link behavior for `tab` and item params.</li>
-      <li>Fallback behavior for missing or invalid catalog entries.</li>
-      <li>Noindex policy checks in page metadata and hosting headers.</li>
+      <li><code>rapid tab switching keeps final tab content</code></li>
+    </ul>
+    <h3>Card App</h3>
+    <ul>
+      <li><code>card app default controls render</code></li>
+      <li><code>text and font controls update state</code></li>
+    </ul>
+
+    <h2>Prod Monitor</h2>
+    <h3>Docs Shell</h3>
+    <ul>
+      <li><code>prod monitor docs shell availability</code></li>
     </ul>
   </body>
 </html>
