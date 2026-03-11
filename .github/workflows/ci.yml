@@ -133,4 +133,4 @@ jobs:
             exit 0
           fi
           git commit -m "ci: refresh pr-checks test status snapshot [skip ci]"
-          git push
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
