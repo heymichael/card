@@ -43,7 +43,7 @@
 </ul>
 <h3 id="3-med-add-authentication">3. [Med] Add authentication</h3>
 <p><strong>Purpose:</strong> Enable authenticated access to the card app (and optionally docs) so only authorized users can use the app.</p>
-<p><strong>Approach:</strong> Decide auth mechanism (e.g. Firebase Auth, IAP, platform SSO). Implement sign-in/sign-out, gate app entry and/or docs as needed, document auth flow and any secrets/env in architecture or deploy notes.</p>
+<p><strong>Approach:</strong> Decide auth mechanism (e.g. Firebase Auth, IAP, platform SSO). Implement sign-in/sign-out, gate app entry and/or docs as needed, and define deploy/runtime contract inputs early (required env vars, secrets, IAP/auth assumptions, and failure behavior) so platform deployment integration can consume a stable auth contract without rework.</p>
 <h3 id="4-med-add-analytics">4. [Med] Add analytics</h3>
 <p><strong>Purpose:</strong> Capture usage analytics (e.g. page views, feature usage) to inform product and prioritization decisions.</p>
 <p><strong>Approach:</strong> Choose an analytics solution (e.g. Firebase Analytics, GA, or platform-provided). Integrate with the app and any docs routes; document what is collected and how to configure/disable in docs or privacy notes.</p>

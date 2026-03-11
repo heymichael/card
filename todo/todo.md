@@ -41,7 +41,7 @@ Completed items
 
 **Purpose:** Enable authenticated access to the card app (and optionally docs) so only authorized users can use the app.
 
-**Approach:** Decide auth mechanism (e.g. Firebase Auth, IAP, platform SSO). Implement sign-in/sign-out, gate app entry and/or docs as needed, document auth flow and any secrets/env in architecture or deploy notes.
+**Approach:** Decide auth mechanism (e.g. Firebase Auth, IAP, platform SSO). Implement sign-in/sign-out, gate app entry and/or docs as needed, and define deploy/runtime contract inputs early (required env vars, secrets, IAP/auth assumptions, and failure behavior) so platform deployment integration can consume a stable auth contract without rework.
 
 ### 4. [Med] Add analytics
 
