@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "local:docs:serve": "firebase serve --port 5001",
+    "docs:prepare": "python3 scripts/generate_docs_pages.py && node scripts/generate_docs_auth_runtime.mjs && bash scripts/sync_docs.sh",
+    "local:docs:serve": "npm run docs:prepare && firebase serve --port 5001",
     "build": "tsc -b && vite build && cp public/_redirects dist/_redirects",
     "lint": "eslint . && npm run lint:colors",
     "lint:colors": "node ./check-color-tokens.mjs",
@@ -21,17 +22,18 @@
     "check:artifact": "node scripts/checks/artifact-check.mjs",
     "report:test-status": "node scripts/test-status/generate-suite-report.mjs",
     "report:playwright-to-docs": "bash scripts/copy-playwright-report-to-docs.sh",
-    "check:docs-sync": "python3 scripts/generate_docs_pages.py && bash scripts/sync_docs.sh && git diff --exit-code -- docs hosting/public/docs"
+    "check:docs-sync": "python3 scripts/generate_docs_pages.py && node scripts/generate_docs_auth_runtime.mjs && bash scripts/sync_docs.sh && git diff --exit-code -- docs hosting/public/docs"
   },
   "dependencies": {
+    "firebase": "^12.10.0",
     "konva": "^10.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-konva": "^19.2.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
