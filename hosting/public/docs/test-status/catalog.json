@@ -19,7 +19,7 @@
       "title": "Main Publish Checks",
       "summary": "Blocking checks for main-branch artifact and manifest publication.",
       "status": "pass",
-      "lastRunUtc": "2026-03-11T02:48:27.094Z",
+      "lastRunUtc": "2026-03-11T16:56:52.210Z",
       "environment": "ci",
       "platforms": "linux (ubuntu-latest)",
       "trigger": "on push to main",
