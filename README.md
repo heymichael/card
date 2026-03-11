@@ -63,6 +63,7 @@ card/
 │   │       ├── artifact-manifest-contract-alignment.html
 │   │       ├── canonical-app-directory-structure.html
 │   │       ├── client-auth-runtime-contract-pattern.html
+│   │       ├── gcs-artifact-publish-with-wif.html
 │   │       ├── init-app-token-replacement-gaps.html
 │   │       ├── pull-request-template-standardization.html
 │   │       ├── template-feedback-loop.html

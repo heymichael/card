@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <title>Learnings - GCS Artifact Publish with Workload Identity Federation</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 40px 24px 64px;
+        color: #1f2937;
+        line-height: 1.55;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      h2 {
+        margin-top: 28px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+      }
+      .meta td:first-child {
+        width: 220px;
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 20px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #d1d5db;
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+      }
+      th {
+        background: #f9fafb;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 16px;
+      }
+      .status-pill {
+        display: inline-block;
+        border: 1px solid #d1d5db;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="/docs/?tab=learnings">Back to all learnings</a>
+    <h1>GCS Artifact Publish with Workload Identity Federation</h1>
+    <p>
+      Publish immutable versioned app artifacts from GitHub Actions to GCS using
+      keyless Workload Identity Federation auth, avoiding long-lived service account keys.
+    </p>
+
+    <table class="meta">
+      <tr><td>Status</td><td><span class="status-pill">active</span></td></tr>
+      <tr><td>Backported</td><td>no</td></tr>
+      <tr><td>Template reference</td><td>N/A</td></tr>
+      <tr><td>Last updated</td><td>2026-03-11</td></tr>
+    </table>
+
+    <h2>Problem</h2>
+    <p>
+      The publish workflow validated and snapshotted artifacts but never uploaded them
+      to a platform-consumable location. The platform repo had no stable discovery path
+      for app artifacts, blocking first deploy. Additionally, authenticating GitHub Actions
+      to GCP without storing long-lived JSON keys required Workload Identity Federation,
+      which has several non-obvious configuration pitfalls.
+    </p>
+
+    <h2>Reusable Pattern</h2>
+    <ul>
+      <li>
+        <strong>Immutable versioned artifacts:</strong> Store tarballs and manifest at
+        <code>gs://&lt;bucket&gt;/&lt;app-id&gt;/versions/&lt;commit-sha&gt;/</code>.
+        Each version is a complete, self-contained set: <code>runtime.tar.gz</code>,
+        <code>docs.tar.gz</code>, <code>checksums.txt</code>, and <code>manifest.json</code>.
+      </li>
+      <li>
+        <strong>Packaging scripts:</strong> Use a shell script (<code>scripts/package-artifacts.sh</code>)
+        for tarball creation and checksums, and a Node script (<code>scripts/generate-manifest.mjs</code>)
+        for manifest generation with schema field validation.
+      </li>
+      <li>
+        <strong>WIF auth in CI:</strong> Use <code>google-github-actions/auth@v2</code> with
+        three non-secret repo variables (<code>GCS_ARTIFACT_BUCKET</code>,
+        <code>GCP_WORKLOAD_IDENTITY_PROVIDER</code>, <code>GCP_SERVICE_ACCOUNT</code>).
+        No JSON keys stored as secrets.
+      </li>
+      <li>
+        <strong>Ownership boundary:</strong> App repo publishes to immutable versioned paths.
+        Platform repo owns promotion (writing channel pointers like <code>channels/prod/manifest.json</code>)
+        and deployment. Keep promotion logic out of app repos.
+      </li>
+    </ul>
+
+    <h2>Proposed Template Change</h2>
+    <ul>
+      <li>
+        Add <code>scripts/package-artifacts.sh</code> and <code>scripts/generate-manifest.mjs</code>
+        to the canonical template.
+      </li>
+      <li>
+        Add GCS upload and verify steps to <code>publish-artifact.yml</code> after the existing
+        validation suite.
+      </li>
+      <li>
+        Document the three required GitHub repo variables and GCP prerequisites in
+        <code>README.md</code> and <code>docs/architecture.md</code>.
+      </li>
+      <li>
+        Make the snapshot commit step <code>continue-on-error: true</code> so artifact
+        publish is never blocked by snapshot push races.
+      </li>
+    </ul>
+
+    <h2>Risk and Rollout Notes</h2>
+    <ul>
+      <li>
+        <strong>WIF audience mismatch:</strong> The <code>google-github-actions/auth</code> action
+        sends the provider resource path (with <code>https://iam.googleapis.com/</code> prefix)
+        as the OIDC audience. The GCP WIF provider must be configured with "Allowed audiences"
+        matching this exact value. "Default audience" does not match and will fail with
+        <code>invalid_target</code> or <code>invalid_grant</code>.
+      </li>
+      <li>
+        <strong>Provider ID alignment:</strong> The WIF provider ID in GCP must match the
+        suffix of the <code>GCP_WORKLOAD_IDENTITY_PROVIDER</code> variable
+        (<code>.../providers/&lt;this-must-match&gt;</code>). Mismatches produce
+        "pool or provider does not exist" errors.
+      </li>
+      <li>
+        <strong>Bucket permissions:</strong> The service account needs <code>Storage Object Creator</code>
+        for uploads and <code>Storage Object Viewer</code> for the verify step (list/read).
+      </li>
+      <li>
+        <strong>Deleted pool recovery:</strong> GCP soft-deletes WIF pools. Recreating with the
+        same ID fails; use "Show deleted pools" to undelete instead.
+      </li>
+      <li>
+        <strong>Concurrent CI runs:</strong> Snapshot commits can race when multiple workflow runs
+        push to the same branch. Use <code>git pull --rebase</code> and
+        <code>continue-on-error: true</code> to prevent blocking artifact publish.
+      </li>
+    </ul>
+
+    <h2>Backport Status</h2>
+    <p>
+      Not yet backported. When adopted in the canonical template, set
+      <code>backported: true</code> and replace <code>templateRef</code> with the commit SHA
+      or PR reference.
+    </p>
+
+    <p style="margin-top: 28px;">
+      <a href="/docs/?tab=learnings">Back to all learnings</a>
+    </p>
+  </body>
+</html>

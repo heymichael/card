@@ -1,6 +1,15 @@
 {
   "entries": [
     {
+      "slug": "gcs-artifact-publish-with-wif",
+      "title": "GCS Artifact Publish with Workload Identity Federation",
+      "summary": "Publish immutable versioned app artifacts from GitHub Actions to GCS using keyless WIF auth, with pitfalls around audience config, provider ID alignment, and concurrent CI runs.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/gcs-artifact-publish-with-wif.html"
+    },
+    {
       "slug": "client-auth-runtime-contract-pattern",
       "title": "Client Auth Runtime Contract Pattern",
       "summary": "Deliver shared client auth across app and static docs by splitting runtime config delivery while keeping a single policy model.",
