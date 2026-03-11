@@ -7,19 +7,92 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
   publish-artifact:
-    name: Publish artifact metadata (placeholder)
+    name: Main publish checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Placeholder artifact publish step
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Install docs python dependencies
+        run: python3 -m pip install -r scripts/requirements-docs.txt
+
+      - name: Build runtime artifact
+        run: npm run build
+
+      - name: Run docs regression suite
+        env:
+          PLAYWRIGHT_ALL_BROWSERS: "1"
+        run: npm run test:e2e:docs:regression
+
+      - name: Publish Playwright HTML into docs snapshot
         run: |
-          echo "This workflow does not deploy platform environments."
-          echo "Replace with app artifact packaging and manifest publication."
-          echo "Use docs/artifact-manifest.example.json as the publish contract."
+          rm -rf docs/test-status/playwright/main-publish-checks
+          mkdir -p docs/test-status/playwright/main-publish-checks
+          if [ -d playwright-report/docs ]; then
+            mkdir -p docs/test-status/playwright/main-publish-checks/docs
+            cp -R playwright-report/docs/. docs/test-status/playwright/main-publish-checks/docs/
+          fi
+          if [ -d playwright-report/app ]; then
+            mkdir -p docs/test-status/playwright/main-publish-checks/app
+            cp -R playwright-report/app/. docs/test-status/playwright/main-publish-checks/app/
+          fi
+
+      - name: Run contract checks
+        run: npm run check:contract -- main-publish-checks
+
+      - name: Run artifact checks
+        run: npm run check:artifact -- main-publish-checks
+
+      - name: Generate test status snapshot
+        run: npm run report:test-status -- main-publish-checks
+
+      - name: Generate and sync docs
+        run: |
+          python3 scripts/generate_docs_pages.py
+          bash scripts/sync_docs.sh
+
+      - name: Upload Playwright reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-reports-main-publish-checks
+          path: |
+            playwright-report
+            artifacts/playwright
+          if-no-files-found: warn
+
+      - name: Commit test-status snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/test-status hosting/public/docs/test-status docs/architecture.html docs/priorities/index.html hosting/public/docs/architecture.html hosting/public/docs/priorities/index.html
+          if git diff --cached --quiet; then
+            echo "No generated snapshot changes."
+            exit 0
+          fi
+          git commit -m "ci: refresh main publish test status snapshot [skip ci]"
+          git push

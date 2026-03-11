@@ -1,0 +1,16 @@
+{
+  "links": [
+    {
+      "slug": "testing-infrastructure",
+      "title": "Testing Infrastructure",
+      "summary": "Overview of app-owned testing layers, tooling, and CI publish expectations.",
+      "url": "/docs/testing/testing-infrastructure.html"
+    },
+    {
+      "slug": "test-lineup",
+      "title": "Test Lineup",
+      "summary": "Baseline app suite lineup grouped by pull request, main publish, and scheduled checks.",
+      "url": "/docs/testing/test-lineup.html"
+    }
+  ]
+}

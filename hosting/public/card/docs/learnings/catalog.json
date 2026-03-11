@@ -1,0 +1,49 @@
+{
+  "entries": [
+    {
+      "slug": "artifact-manifest-contract-alignment",
+      "title": "Artifact Manifest Contract Alignment",
+      "summary": "Use a canonical JSON Schema plus aligned manifest examples to keep platform and app artifact contracts in sync.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/artifact-manifest-contract-alignment.html"
+    },
+    {
+      "slug": "canonical-app-directory-structure",
+      "title": "Canonical App Directory Structure",
+      "summary": "Single-app repositories should include top-level src and design-tokens directories as standard app-owned structure.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/canonical-app-directory-structure.html"
+    },
+    {
+      "slug": "init-app-token-replacement-gaps",
+      "title": "Init App Token Replacement Gaps",
+      "summary": "The app bootstrap script can leave template-name tokens in key files after initialization, requiring manual cleanup.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/init-app-token-replacement-gaps.html"
+    },
+    {
+      "slug": "pull-request-template-standardization",
+      "title": "Pull Request Template Standardization",
+      "summary": "Add a repository PR template so required Why/Todo Mapping/Validation/Deploy sections are present in every PR.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/pull-request-template-standardization.html"
+    },
+    {
+      "slug": "template-feedback-loop",
+      "title": "Template Feedback Loop",
+      "summary": "Capture reusable implementation learnings in app repos and backport stable patterns into this canonical template.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/template-feedback-loop.html"
+    }
+  ]
+}

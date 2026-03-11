@@ -21,6 +21,7 @@ card/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml
+│       ├── nightly-checks.yml
 │       └── publish-artifact.yml
 ├── docs/
 │   ├── index.html
@@ -42,6 +43,7 @@ card/
 │   ├── test-status/
 │   │   ├── catalog.json
 │   │   ├── checks/
+│   │   ├── playwright/
 │   │   ├── reports/
 │   │   └── summaries/
 │   ├── testing/
@@ -60,14 +62,28 @@ card/
 │       ├── index.html
 │       └── robots.txt
 ├── scripts/
+│   ├── checks/
+│   │   ├── artifact-check.mjs
+│   │   └── contract-check.mjs
 │   ├── generate_docs_pages.py
 │   ├── requirements-docs.txt
-│   └── sync_docs.sh
+│   ├── sync_docs.sh
+│   └── test-status/
+│       └── generate-suite-report.mjs
+├── tests/
+│   └── e2e/
+│       ├── card-app/
+│       │   └── card-app.spec.ts
+│       └── docs-shell/
+│           └── docs-shell.spec.ts
 ├── todo/
 │   └── todo.md
 ├── .firebaserc
 ├── .gitignore
 ├── firebase.json
+├── playwright.app.config.ts
+├── playwright.docs.config.ts
+├── package.json
 └── README.md
 ```
 
@@ -160,6 +176,11 @@ This app repo owns app-specific testing depth and CI signals.
 
 - `docs/testing/` documents app testing strategy and lineup.
 - `docs/test-status/` holds report metadata and placeholder report/check artifacts.
+- Playwright suites live in `tests/e2e/` with tags for smoke, regression, and prod monitor.
+- CI workflows map those tags to PR (`pr-checks`), main publish (`main-publish-checks`), and nightly suites (`scheduled-regression`, `prod-monitor`).
+- Smoke checks default to Chromium-only for speed; regression jobs set `PLAYWRIGHT_ALL_BROWSERS=1` to run Chromium, Firefox, and WebKit.
+- Non-Playwright contract and artifact checks run via `scripts/checks/`.
+- Snapshot generation for the Test Status docs tab runs via `scripts/test-status/generate-suite-report.mjs`.
 
 Platform still performs post-deploy cross-app smoke checks after promotion/deploy.
 
@@ -180,7 +201,13 @@ For local hosting parity around docs:
 2. Sync `docs/` into `hosting/public/docs/`:
    `bash scripts/sync_docs.sh`
 3. Run Hosting emulator from repo root:
-   `firebase emulators:start --only hosting --project REPLACE_WITH_FIREBASE_PROJECT_ID --config firebase.json`
+   `firebase serve --port 5001`
+
+Notes:
+
+- On macOS, port `5000` is commonly occupied by AirPlay Receiver, so this repo defaults hosting emulator config to `5001`.
+- `firebase serve --port 5001` may report `Local server: http://localhost:5002` if `5001` is already in use.
+- For docs smoke tests against a running local host server, prefer `E2E_BASE_URL=http://localhost:5002` (use `localhost` over `127.0.0.1` to avoid IPv4/IPv6 loopback mismatch).
 
 ## Template Customization Checklist
 
