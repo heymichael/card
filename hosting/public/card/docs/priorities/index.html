@@ -13,6 +13,7 @@
 <ol>
 <li>[Med] [BUG] Logout from unauthorized screen does not reset auth state</li>
 <li>[Med] Create automated authentication testing plan</li>
+<li>[Med] Adopt taskmd for task management, remove priorities pipeline</li>
 <li>[Low] Standardize technical documentation (API reference, generation, docs site integration)</li>
 <li>[Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)</li>
 <li>[Low] Enforce docs source-to-served sync in CI</li>
@@ -39,7 +40,22 @@
 <h3 id="2-med-create-automated-authentication-testing-plan">2. [Med] Create automated authentication testing plan</h3>
 <p><strong>Purpose:</strong> Define a repeatable automated testing strategy for app/docs auth behavior so future auth changes can ship safely with clear CI coverage expectations.</p>
 <p><strong>Approach:</strong> Document auth testing scope across unit, integration, and e2e layers (allowlist match rules, login/unauthorized flows, bypass behavior, and failure states), decide which checks run on PR vs nightly, and map each test area to existing scripts/workflows.</p>
-<h3 id="3-low-standardize-technical-documentation-api-reference-generation-docs-site-integration">3. [Low] Standardize technical documentation (API reference, generation, docs site integration)</h3>
+<h3 id="3-med-adopt-taskmd-for-task-management-remove-priorities-pipeline">3. [Med] Adopt taskmd for task management, remove priorities pipeline</h3>
+<p><strong>Purpose:</strong> Replace the manual <code>todo/todo.md</code> + generate/sync priorities pipeline with taskmd (one markdown file per task, YAML frontmatter, CLI/web dashboard). This simplifies the repo, removes the regeneration requirement on every todo change, and gives the agent richer per-task context with structured metadata (priority, status, dependencies, effort, tags).</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li>Install taskmd (<code>brew install driangle/tap/taskmd</code>) and run <code>taskmd init</code> in the repo.</li>
+<li>Migrate the open items from <code>todo/todo.md</code> into individual task files under <code>tasks/</code>.</li>
+<li>Record completed items as done tasks or note them and remove (history lives in git).</li>
+<li>Replace <code>.cursor/rules/todo-conventions.mdc</code> with a new rule pointing the agent at <code>tasks/</code> with status-based filtering (only read <code>pending</code>/<code>in-progress</code> tasks for context).</li>
+<li>Remove <code>docs/priorities/index.html</code> and <code>hosting/public/docs/priorities/</code> (and <code>hosting/public/card/docs/priorities/</code>).</li>
+<li>Strip the priorities generation logic from <code>scripts/generate_docs_pages.py</code>.</li>
+<li>Remove the "Priorities" tab from <code>docs-shell.js</code> and <code>docs-shell-page.template.html</code>.</li>
+<li>Update <code>docs/architecture.md</code> and <code>README.md</code> ASCII trees and references.</li>
+<li>Run sync to clean up hosted copies.</li>
+<li>Delete <code>todo/todo.md</code> once migration is verified.</li>
+</ul>
+<h3 id="4-low-standardize-technical-documentation-api-reference-generation-docs-site-integration">4. [Low] Standardize technical documentation (API reference, generation, docs site integration)</h3>
 <p><strong>Purpose:</strong> Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today <code>documentation.html</code> uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.</p>
 <p><strong>Approach:</strong></p>
 <ul>
@@ -47,13 +63,13 @@
 <li><strong>Delivery standard (improve):</strong> Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.</li>
 <li>Document the standard in learnings or architecture; apply to <code>documentation.html</code> / card app; propose template change for the canonical app template.</li>
 </ul>
-<h3 id="4-low-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">4. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
+<h3 id="5-low-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">5. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
 <p><strong>Purpose:</strong> Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond <code>platform_contract_version: "v1"</code>, while deferring implementation details until after the first successful deploy.</p>
 <p><strong>Approach:</strong> After first deploy, update platform <code>docs/architecture.md</code> with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's <code>docs/architecture.md</code>/<code>README.md</code> to that platform-owned protocol as the source of truth.</p>
-<h3 id="5-low-enforce-docs-source-to-served-sync-in-ci">5. [Low] Enforce docs source-to-served sync in CI</h3>
+<h3 id="6-low-enforce-docs-source-to-served-sync-in-ci">6. [Low] Enforce docs source-to-served sync in CI</h3>
 <p><strong>Purpose:</strong> Prevent drift between <code>docs/</code> and <code>hosting/public/docs/</code> by making the existing generate-and-sync workflow a required CI gate.</p>
 <p><strong>Approach:</strong> Add CI steps that run <code>python3 scripts/generate_docs_pages.py</code> and <code>bash scripts/sync_docs.sh</code>, then fail if <code>git diff --exit-code</code> is non-empty so PRs cannot merge with stale served docs output.</p>
-<h3 id="6-low-add-defensive-try-catch-around-analytics-initialization">6. [Low] Add defensive try-catch around analytics initialization</h3>
+<h3 id="7-low-add-defensive-try-catch-around-analytics-initialization">7. [Low] Add defensive try-catch around analytics initialization</h3>
 <p><strong>Purpose:</strong> <code>getAnalytics(app)</code> in <code>initAnalytics()</code> currently has no error handling. If it throws (e.g. in a restricted browser context, aggressive privacy settings, or a future SDK change), the error propagates through <code>getFirebaseAppInstance()</code> and could disrupt the auth flow. Analytics should degrade gracefully — never block the app.</p>
 <p><strong>Approach:</strong> Wrap the <code>getAnalytics(app)</code> call in <code>src/analytics/analytics.ts</code> with a try-catch that logs a <code>console.warn</code> on failure and leaves the <code>analytics</code> variable <code>null</code>, so all subsequent <code>trackOnce</code>/<code>trackAlways</code> calls silently no-op via the existing <code>if (!analytics) return</code> guard.</p>
 </body>

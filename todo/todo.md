@@ -4,10 +4,11 @@ Open items
 
 1. [Med] [BUG] Logout from unauthorized screen does not reset auth state
 2. [Med] Create automated authentication testing plan
-3. [Low] Standardize technical documentation (API reference, generation, docs site integration)
-4. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)
-5. [Low] Enforce docs source-to-served sync in CI
-6. [Low] Add defensive try-catch around analytics initialization
+3. [Med] Adopt taskmd for task management, remove priorities pipeline
+4. [Low] Standardize technical documentation (API reference, generation, docs site integration)
+5. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)
+6. [Low] Enforce docs source-to-served sync in CI
+7. [Low] Add defensive try-catch around analytics initialization
 
 Completed items
 
@@ -36,7 +37,24 @@ Completed items
 
 **Approach:** Document auth testing scope across unit, integration, and e2e layers (allowlist match rules, login/unauthorized flows, bypass behavior, and failure states), decide which checks run on PR vs nightly, and map each test area to existing scripts/workflows.
 
-### 3. [Low] Standardize technical documentation (API reference, generation, docs site integration)
+### 3. [Med] Adopt taskmd for task management, remove priorities pipeline
+
+**Purpose:** Replace the manual `todo/todo.md` + generate/sync priorities pipeline with taskmd (one markdown file per task, YAML frontmatter, CLI/web dashboard). This simplifies the repo, removes the regeneration requirement on every todo change, and gives the agent richer per-task context with structured metadata (priority, status, dependencies, effort, tags).
+
+**Approach:**
+
+- Install taskmd (`brew install driangle/tap/taskmd`) and run `taskmd init` in the repo.
+- Migrate the open items from `todo/todo.md` into individual task files under `tasks/`.
+- Record completed items as done tasks or note them and remove (history lives in git).
+- Replace `.cursor/rules/todo-conventions.mdc` with a new rule pointing the agent at `tasks/` with status-based filtering (only read `pending`/`in-progress` tasks for context).
+- Remove `docs/priorities/index.html` and `hosting/public/docs/priorities/` (and `hosting/public/card/docs/priorities/`).
+- Strip the priorities generation logic from `scripts/generate_docs_pages.py`.
+- Remove the "Priorities" tab from `docs-shell.js` and `docs-shell-page.template.html`.
+- Update `docs/architecture.md` and `README.md` ASCII trees and references.
+- Run sync to clean up hosted copies.
+- Delete `todo/todo.md` once migration is verified.
+
+### 4. [Low] Standardize technical documentation (API reference, generation, docs site integration)
 
 **Purpose:** Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today `documentation.html` uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.
 
@@ -46,19 +64,19 @@ Completed items
 - **Delivery standard (improve):** Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.
 - Document the standard in learnings or architecture; apply to `documentation.html` / card app; propose template change for the canonical app template.
 
-### 4. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)
+### 5. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)
 
 **Purpose:** Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond `platform_contract_version: "v1"`, while deferring implementation details until after the first successful deploy.
 
 **Approach:** After first deploy, update platform `docs/architecture.md` with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's `docs/architecture.md`/`README.md` to that platform-owned protocol as the source of truth.
 
-### 5. [Low] Enforce docs source-to-served sync in CI
+### 6. [Low] Enforce docs source-to-served sync in CI
 
 **Purpose:** Prevent drift between `docs/` and `hosting/public/docs/` by making the existing generate-and-sync workflow a required CI gate.
 
 **Approach:** Add CI steps that run `python3 scripts/generate_docs_pages.py` and `bash scripts/sync_docs.sh`, then fail if `git diff --exit-code` is non-empty so PRs cannot merge with stale served docs output.
 
-### 6. [Low] Add defensive try-catch around analytics initialization
+### 7. [Low] Add defensive try-catch around analytics initialization
 
 **Purpose:** `getAnalytics(app)` in `initAnalytics()` currently has no error handling. If it throws (e.g. in a restricted browser context, aggressive privacy settings, or a future SDK change), the error propagates through `getFirebaseAppInstance()` and could disrupt the auth flow. Analytics should degrade gracefully — never block the app.
 
