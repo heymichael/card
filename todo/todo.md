@@ -7,6 +7,7 @@ Open items
 3. [Low] Standardize technical documentation (API reference, generation, docs site integration)
 4. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)
 5. [Low] Enforce docs source-to-served sync in CI
+6. [Low] Add defensive try-catch around analytics initialization
 
 Completed items
 
@@ -56,3 +57,9 @@ Completed items
 **Purpose:** Prevent drift between `docs/` and `hosting/public/docs/` by making the existing generate-and-sync workflow a required CI gate.
 
 **Approach:** Add CI steps that run `python3 scripts/generate_docs_pages.py` and `bash scripts/sync_docs.sh`, then fail if `git diff --exit-code` is non-empty so PRs cannot merge with stale served docs output.
+
+### 6. [Low] Add defensive try-catch around analytics initialization
+
+**Purpose:** `getAnalytics(app)` in `initAnalytics()` currently has no error handling. If it throws (e.g. in a restricted browser context, aggressive privacy settings, or a future SDK change), the error propagates through `getFirebaseAppInstance()` and could disrupt the auth flow. Analytics should degrade gracefully — never block the app.
+
+**Approach:** Wrap the `getAnalytics(app)` call in `src/analytics/analytics.ts` with a try-catch that logs a `console.warn` on failure and leaves the `analytics` variable `null`, so all subsequent `trackOnce`/`trackAlways` calls silently no-op via the existing `if (!analytics) return` guard.

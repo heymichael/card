@@ -16,6 +16,7 @@
 <li>[Low] Standardize technical documentation (API reference, generation, docs site integration)</li>
 <li>[Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)</li>
 <li>[Low] Enforce docs source-to-served sync in CI</li>
+<li>[Low] Add defensive try-catch around analytics initialization</li>
 </ol>
 <p>Completed items</p>
 <ul>
@@ -52,5 +53,8 @@
 <h3 id="5-low-enforce-docs-source-to-served-sync-in-ci">5. [Low] Enforce docs source-to-served sync in CI</h3>
 <p><strong>Purpose:</strong> Prevent drift between <code>docs/</code> and <code>hosting/public/docs/</code> by making the existing generate-and-sync workflow a required CI gate.</p>
 <p><strong>Approach:</strong> Add CI steps that run <code>python3 scripts/generate_docs_pages.py</code> and <code>bash scripts/sync_docs.sh</code>, then fail if <code>git diff --exit-code</code> is non-empty so PRs cannot merge with stale served docs output.</p>
+<h3 id="6-low-add-defensive-try-catch-around-analytics-initialization">6. [Low] Add defensive try-catch around analytics initialization</h3>
+<p><strong>Purpose:</strong> <code>getAnalytics(app)</code> in <code>initAnalytics()</code> currently has no error handling. If it throws (e.g. in a restricted browser context, aggressive privacy settings, or a future SDK change), the error propagates through <code>getFirebaseAppInstance()</code> and could disrupt the auth flow. Analytics should degrade gracefully — never block the app.</p>
+<p><strong>Approach:</strong> Wrap the <code>getAnalytics(app)</code> call in <code>src/analytics/analytics.ts</code> with a try-catch that logs a <code>console.warn</code> on failure and leaves the <code>analytics</code> variable <code>null</code>, so all subsequent <code>trackOnce</code>/<code>trackAlways</code> calls silently no-op via the existing <code>if (!analytics) return</code> guard.</p>
 </body>
 </html>
