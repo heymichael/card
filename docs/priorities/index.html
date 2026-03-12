@@ -11,8 +11,6 @@
   <p>Todo: card</p>
 <p>Open items</p>
 <ol>
-<li>[High] Add analytics</li>
-<li>[High] Define analytics pre-deploy testing strategy</li>
 <li>[Med] [BUG] Logout from unauthorized screen does not reset auth state</li>
 <li>[Med] Create automated authentication testing plan</li>
 <li>[Low] Standardize technical documentation (API reference, generation, docs site integration)</li>
@@ -21,31 +19,15 @@
 </ol>
 <p>Completed items</p>
 <ul>
+<li>[2026-03-12] Define analytics pre-deploy testing strategy (PR #8)</li>
+<li>[2026-03-12] Add analytics (PR #8)</li>
 <li>[2026-03-11] Wire main-branch artifact publish to GCS for platform deployment (PR #5)</li>
 <li>[2026-03-11] Add authentication (PR #4)</li>
 <li>[2026-03-11] Add tests and testing framework (PR #3)</li>
 <li>[2026-03-10] Create and store Phase 2 onboarding prompt for card app platform integration (PR #1)</li>
 </ul>
 <hr>
-<h3 id="1-high-add-analytics">1. [High] Add analytics</h3>
-<p><strong>Purpose:</strong> Track user engagement and conversion through the card app funnel: page view → sign-in → feature usage → card export. Enable reporting on session engagement, download volume, conversion rate, and feature usage among converters.</p>
-<p><strong>Approach:</strong></p>
-<ul>
-<li>Use Firebase SDK (<code>firebase/analytics</code>). Decision rationale and full strategy documented in <code>docs/analytics-strategy.md</code>.</li>
-<li>Initialize <code>getAnalytics(app)</code> before the auth gate so pre-login events (page_view, sign_in_clicked) are captured.</li>
-<li>Set <code>setUserId(analytics, user.uid)</code> after successful authentication.</li>
-<li>Production only — skip analytics init in local dev and auth-bypass modes.</li>
-<li>Deduplicate feature events once per page load via in-memory Set. Conversion events: <code>card_exported</code> fires every time (volume), <code>card_conversion</code> fires once per page load (conversion rate).</li>
-<li>Auth events: <code>sign_in_clicked</code>, <code>sign_in_succeeded</code>, <code>sign_in_denied</code> (with <code>email</code>), <code>sign_in_failed</code> (with <code>error</code>), <code>sign_out_clicked</code>.</li>
-<li>Feature events: <code>photo_added</code>, <code>photo_removed</code>, <code>bg_color_changed</code> (<code>color</code>), <code>headline_text_edited</code>, <code>message_text_edited</code>, <code>font_size_changed</code> (<code>block</code>), <code>font_family_changed</code> (<code>block</code>, <code>font</code>), <code>text_color_changed</code> (<code>block</code>), <code>text_alignment_changed</code> (<code>block</code>, <code>alignment</code>), <code>element_repositioned</code> (<code>element</code>), <code>photo_resized</code>, <code>safe_margins_toggled</code> (<code>state</code>), <code>positions_reset</code>, <code>text_block_switched</code> (<code>block</code>).</li>
-<li>Conversion events: <code>card_exported</code> and <code>card_conversion</code> both include <code>headline_text</code> and <code>message_text</code>.</li>
-<li>Register custom dimensions in GA4 Admin → Custom definitions for any parameters needed in console reports.</li>
-<li>Enable BigQuery export in Firebase Console for raw event-level querying.</li>
-</ul>
-<h3 id="2-high-define-analytics-pre-deploy-testing-strategy">2. [High] Define analytics pre-deploy testing strategy</h3>
-<p><strong>Purpose:</strong> Establish a reliable way to verify analytics events are firing correctly before deploying analytics changes to production, without polluting production data.</p>
-<p><strong>Approach:</strong> Evaluate GA4 DebugView (debug-tagged events visible in real time, excluded from production reports), browser DevTools network inspection (watch <code>google-analytics.com/g/collect</code> requests), and one-off production Realtime checks. Document the chosen verification workflow so analytics changes can be validated with confidence pre-deploy.</p>
-<h3 id="3-med-bug-logout-from-unauthorized-screen-does-not-reset-auth-state">3. [Med] [BUG] Logout from unauthorized screen does not reset auth state</h3>
+<h3 id="1-med-bug-logout-from-unauthorized-screen-does-not-reset-auth-state">1. [Med] [BUG] Logout from unauthorized screen does not reset auth state</h3>
 <p><strong>Purpose:</strong> After signing in with a non-whitelisted account, the user sees the unauthorized screen. Clicking "Sign out" and then "Sign in" should re-open the Google auth popup so the user can try a different account. Instead, it immediately returns to the unauthorized screen without showing the popup, as if the previous session's auth state was not fully cleared.</p>
 <p><strong>Approach:</strong></p>
 <ul>
@@ -53,10 +35,10 @@
 <li>Investigate <code>AuthGate.tsx</code> and <code>docs-auth-gate.js</code> sign-out handlers to confirm <code>signOut()</code> fully clears Firebase auth state before the <code>onAuthStateChanged</code> listener re-fires.</li>
 <li>Likely fix: ensure the sign-out completes and the auth state listener correctly transitions to <code>signed_out</code> before allowing a new sign-in attempt. May need to guard against the listener firing with stale user state during the sign-out→sign-in transition.</li>
 </ul>
-<h3 id="4-med-create-automated-authentication-testing-plan">4. [Med] Create automated authentication testing plan</h3>
+<h3 id="2-med-create-automated-authentication-testing-plan">2. [Med] Create automated authentication testing plan</h3>
 <p><strong>Purpose:</strong> Define a repeatable automated testing strategy for app/docs auth behavior so future auth changes can ship safely with clear CI coverage expectations.</p>
 <p><strong>Approach:</strong> Document auth testing scope across unit, integration, and e2e layers (allowlist match rules, login/unauthorized flows, bypass behavior, and failure states), decide which checks run on PR vs nightly, and map each test area to existing scripts/workflows.</p>
-<h3 id="5-low-standardize-technical-documentation-api-reference-generation-docs-site-integration">5. [Low] Standardize technical documentation (API reference, generation, docs site integration)</h3>
+<h3 id="3-low-standardize-technical-documentation-api-reference-generation-docs-site-integration">3. [Low] Standardize technical documentation (API reference, generation, docs site integration)</h3>
 <p><strong>Purpose:</strong> Define a standard for technical documentation so the card app (and template) have consistent, engineer-friendly API docs. Today <code>documentation.html</code> uses a good content format (API reference layout, function signatures, file-based organization, tags, props/state tables) but is hand-maintained standalone HTML with no search, sidebar, or deep links. Standardize so docs either are generated from source (TypeDoc/JSDoc) or are integrated into a docs framework with search, sidebar, and deep links.</p>
 <p><strong>Approach:</strong></p>
 <ul>
@@ -64,10 +46,10 @@
 <li><strong>Delivery standard (improve):</strong> Decide and document: (a) generate from source (e.g. TypeDoc/JSDoc) so API docs stay in sync, or (b) keep hand-written but integrate into a docs framework (Docusaurus, MkDocs, Storybook, or existing docs shell) with search, sidebar, and deep links to symbols.</li>
 <li>Document the standard in learnings or architecture; apply to <code>documentation.html</code> / card app; propose template change for the canonical app template.</li>
 </ul>
-<h3 id="6-low-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">6. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
+<h3 id="4-low-add-contract-versioning-protocol-docs-alignment-with-platform-post-first-deploy">4. [Low] Add contract versioning protocol docs alignment with platform (post-first-deploy)</h3>
 <p><strong>Purpose:</strong> Document how app manifest contract versions evolve over time so app/platform behavior is explicit when moving beyond <code>platform_contract_version: "v1"</code>, while deferring implementation details until after the first successful deploy.</p>
 <p><strong>Approach:</strong> After first deploy, update platform <code>docs/architecture.md</code> with a Contract Versioning Protocol section (breaking vs non-breaking changes, bump process, compatibility guarantees, and deprecation window), then add a concise pointer in this app repo's <code>docs/architecture.md</code>/<code>README.md</code> to that platform-owned protocol as the source of truth.</p>
-<h3 id="7-low-enforce-docs-source-to-served-sync-in-ci">7. [Low] Enforce docs source-to-served sync in CI</h3>
+<h3 id="5-low-enforce-docs-source-to-served-sync-in-ci">5. [Low] Enforce docs source-to-served sync in CI</h3>
 <p><strong>Purpose:</strong> Prevent drift between <code>docs/</code> and <code>hosting/public/docs/</code> by making the existing generate-and-sync workflow a required CI gate.</p>
 <p><strong>Approach:</strong> Add CI steps that run <code>python3 scripts/generate_docs_pages.py</code> and <code>bash scripts/sync_docs.sh</code>, then fail if <code>git diff --exit-code</code> is non-empty so PRs cannot merge with stale served docs output.</p>
 </body>

@@ -51,6 +51,7 @@ card/
 │   └── colors.json
 ├── docs/
 │   ├── index.html
+│   ├── analytics-strategy.md
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
@@ -125,6 +126,8 @@ card/
 │   ├── App.tsx
 │   ├── CardCanvas.tsx
 │   ├── ControlsPanel.tsx
+│   ├── analytics/
+│   │   └── analytics.ts
 │   ├── auth/
 │   │   ├── accessPolicy.ts
 │   │   ├── AuthGate.tsx

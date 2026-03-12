@@ -103,6 +103,8 @@ card/
 │   ├── App.tsx
 │   ├── CardCanvas.tsx
 │   ├── ControlsPanel.tsx
+│   ├── analytics/
+│   │   └── analytics.ts
 │   ├── auth/
 │   │   ├── accessPolicy.ts
 │   │   ├── AuthGate.tsx
