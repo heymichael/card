@@ -28,6 +28,7 @@ card/
 │   └── colors.json
 ├── docs/
 │   ├── index.html
+│   ├── analytics-strategy.md
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
@@ -318,6 +319,16 @@ Authentication for this phase is client-side and fail-closed.
 
 - No IAP in this phase.
 - Server-side docs auth is deferred to a later phase.
+
+## Analytics
+
+Analytics uses the Firebase SDK (`firebase/analytics`) for client-side event collection. Events flow to Firebase Console, GA4 Console, and BigQuery (if export is enabled) from a single instrumentation point.
+
+- Analytics initializes before the auth gate to capture pre-login events (page views, sign-in interactions).
+- Production only — analytics is skipped in local dev and auth-bypass modes.
+- Feature events are deduplicated once per page load via an in-memory Set.
+- User identity is linked via `setUserId()` after successful authentication.
+- Full strategy, event specification, and future evolution paths are documented in `docs/analytics-strategy.md`.
 
 ## Local Parity Prep
 

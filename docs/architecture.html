@@ -33,6 +33,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   └── colors.json
 ├── docs/
 │   ├── index.html
+│   ├── analytics-strategy.md
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
@@ -311,6 +312,15 @@ This local redirect pattern is a developer convenience for URL parity and is not
 <ul>
 <li>No IAP in this phase.</li>
 <li>Server-side docs auth is deferred to a later phase.</li>
+</ul>
+<h2 id="analytics">Analytics</h2>
+<p>Analytics uses the Firebase SDK (<code>firebase/analytics</code>) for client-side event collection. Events flow to Firebase Console, GA4 Console, and BigQuery (if export is enabled) from a single instrumentation point.</p>
+<ul>
+<li>Analytics initializes before the auth gate to capture pre-login events (page views, sign-in interactions).</li>
+<li>Production only — analytics is skipped in local dev and auth-bypass modes.</li>
+<li>Feature events are deduplicated once per page load via an in-memory Set.</li>
+<li>User identity is linked via <code>setUserId()</code> after successful authentication.</li>
+<li>Full strategy, event specification, and future evolution paths are documented in <code>docs/analytics-strategy.md</code>.</li>
 </ul>
 <h2 id="local-parity-prep">Local Parity Prep</h2>
 <p>For local hosting parity around docs:</p>
