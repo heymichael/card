@@ -14,6 +14,15 @@ import {
 import { useEffect } from 'react'
 import { isAuthorizedEmail, type AuthSurface } from './accessPolicy'
 import { getAuthRuntimeConfig } from './runtimeConfig'
+import {
+  initAnalytics,
+  setAnalyticsUser,
+  trackSignInClicked,
+  trackSignInSucceeded,
+  trackSignInDenied,
+  trackSignInFailed,
+  trackSignOutClicked,
+} from '../analytics/analytics'
 
 interface AuthGateProps {
   surface: AuthSurface
@@ -28,7 +37,9 @@ function getFirebaseAppInstance(): FirebaseApp | null {
   if (getApps().length > 0) {
     return getApp()
   }
-  return initializeApp(runtimeConfig.firebaseConfig)
+  const app = initializeApp(runtimeConfig.firebaseConfig)
+  initAnalytics(app)
+  return app
 }
 
 type AuthStatus = 'loading' | 'signed_out' | 'authorized' | 'unauthorized' | 'config_error'
@@ -64,7 +75,14 @@ export function AuthGate({ surface, children }: AuthGateProps) {
         setStatus('signed_out')
         return
       }
-      setStatus(isAuthorizedEmail(nextUser.email, surface) ? 'authorized' : 'unauthorized')
+      if (isAuthorizedEmail(nextUser.email, surface)) {
+        setStatus('authorized')
+        trackSignInSucceeded()
+        setAnalyticsUser(nextUser.uid)
+      } else {
+        setStatus('unauthorized')
+        trackSignInDenied(nextUser.email || 'unknown')
+      }
     })
     setPersistence(auth, browserLocalPersistence).catch((error) => {
       setAuthError(error instanceof Error ? error.message : 'Failed to set auth persistence.')
@@ -80,12 +98,15 @@ export function AuthGate({ surface, children }: AuthGateProps) {
     }
     setAuthBusy(true)
     setAuthError(null)
+    trackSignInClicked()
     try {
       const auth = getAuth(app)
       const provider = new GoogleAuthProvider()
       await signInWithPopup(auth, provider)
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : 'Sign in failed.')
+      const message = error instanceof Error ? error.message : 'Sign in failed.'
+      setAuthError(message)
+      trackSignInFailed(message)
     } finally {
       setAuthBusy(false)
     }
@@ -97,6 +118,7 @@ export function AuthGate({ surface, children }: AuthGateProps) {
       setStatus('config_error')
       return
     }
+    trackSignOutClicked()
     setAuthBusy(true)
     try {
       await signOut(getAuth(app))

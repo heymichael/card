@@ -5,6 +5,24 @@ import type { CardCanvasHandle } from './CardCanvas';
 import type { TextBlock, ActiveBlock, ActiveElement, PhotoState } from './types';
 import { CARD_WIDTH, CARD_HEIGHT } from './constants';
 import { COLOR_TOKENS } from './theme/colors';
+import {
+  trackPhotoAdded,
+  trackPhotoRemoved,
+  trackBgColorChanged,
+  trackHeadlineTextEdited,
+  trackMessageTextEdited,
+  trackFontSizeChanged,
+  trackFontFamilyChanged,
+  trackTextColorChanged,
+  trackTextAlignmentChanged,
+  trackElementRepositioned,
+  trackPhotoResized,
+  trackSafeMarginsToggled,
+  trackPositionsReset,
+  trackTextBlockSwitched,
+  trackCardExported,
+  trackCardConversion,
+} from './analytics/analytics';
 import './App.css';
 
 const DEFAULT_BLOCKS: Record<string, TextBlock> = {
@@ -53,6 +71,16 @@ function App() {
   const objectUrlRef = useRef<string | null>(null);
 
   const updateBlock = useCallback((id: ActiveBlock, updates: Partial<TextBlock>) => {
+    const blockLabel = id === 'blockA' ? 'headline' : 'message';
+    if ('text' in updates) {
+      if (id === 'blockA') trackHeadlineTextEdited();
+      else trackMessageTextEdited();
+    }
+    if ('fontSize' in updates) trackFontSizeChanged(blockLabel);
+    if ('fontFamily' in updates) trackFontFamilyChanged(blockLabel, updates.fontFamily!);
+    if ('fill' in updates) trackTextColorChanged(blockLabel);
+    if ('align' in updates) trackTextAlignmentChanged(blockLabel, updates.align!);
+
     setBlocks((prev) => ({
       ...prev,
       [id]: { ...prev[id], ...updates },
@@ -60,6 +88,7 @@ function App() {
   }, []);
 
   const moveBlock = useCallback((id: ActiveBlock, x: number, y: number) => {
+    trackElementRepositioned(id === 'blockA' ? 'headline' : 'message');
     setBlocks((prev) => ({
       ...prev,
       [id]: { ...prev[id], x, y },
@@ -67,10 +96,12 @@ function App() {
   }, []);
 
   const movePhoto = useCallback((x: number, y: number) => {
+    trackElementRepositioned('photo');
     setPhoto((prev) => (prev ? { ...prev, x, y } : null));
   }, []);
 
   const resetPositions = useCallback(() => {
+    trackPositionsReset();
     setBlocks((prev) => ({
       ...prev,
       blockA: { ...prev.blockA, x: DEFAULT_BLOCKS.blockA.x, y: DEFAULT_BLOCKS.blockA.y },
@@ -99,6 +130,7 @@ function App() {
   }, []);
 
   const handleSetActiveBlock = useCallback((id: ActiveBlock) => {
+    trackTextBlockSwitched(id === 'blockA' ? 'headline' : 'message');
     setActiveBlock(id);
     setActiveElement(id);
   }, []);
@@ -132,6 +164,7 @@ function App() {
       });
       setPhotoImage(img);
       setActiveElement('photo');
+      trackPhotoAdded();
     };
     img.onerror = () => {
       alert('Could not load this image. Try a JPEG, PNG, or WebP file.');
@@ -142,6 +175,7 @@ function App() {
   }, []);
 
   const handleRemovePhoto = useCallback(() => {
+    trackPhotoRemoved();
     if (objectUrlRef.current) {
       URL.revokeObjectURL(objectUrlRef.current);
       objectUrlRef.current = null;
@@ -155,6 +189,7 @@ function App() {
   }, [activeElement]);
 
   const resizePhoto = useCallback((x: number, y: number, scaleX: number, scaleY: number) => {
+    trackPhotoResized();
     setPhoto((prev) => (prev ? { ...prev, x, y, scaleX, scaleY } : null));
   }, []);
 
@@ -171,6 +206,9 @@ function App() {
     const dataURL = canvasRef.current?.exportJPEG();
     if (!dataURL) return;
 
+    trackCardExported(blocks.blockA.text, blocks.blockB.text);
+    trackCardConversion(blocks.blockA.text, blocks.blockB.text);
+
     const now = new Date();
     const ts = now.getFullYear().toString() +
       String(now.getMonth() + 1).padStart(2, '0') +
@@ -185,7 +223,7 @@ function App() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, []);
+  }, [blocks]);
 
   // Keyboard nudge: arrow keys move selected element
   useEffect(() => {
@@ -263,11 +301,19 @@ function App() {
         onSetActiveElement={handleSetActiveElement}
         onUpdateBlock={updateBlock}
         onResetPositions={resetPositions}
-        onToggleGuides={() => setShowGuides((v) => !v)}
+        onToggleGuides={() => {
+          setShowGuides((v) => {
+            trackSafeMarginsToggled(!v ? 'on' : 'off');
+            return !v;
+          });
+        }}
         onExport={handleExport}
         onAddPhoto={handleAddPhoto}
         bgColor={bgColor}
-        onChangeBgColor={setBgColor}
+        onChangeBgColor={(color: string) => {
+          trackBgColorChanged(color);
+          setBgColor(color);
+        }}
       />
       <CardCanvas
         ref={canvasRef}
