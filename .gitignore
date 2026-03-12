@@ -23,6 +23,9 @@ firebase-debug.log
 .firebaserc.local
 
 
+# taskmd cache
+.taskmd/
+
 # Artifacts / temp
 tmp/
 dist/

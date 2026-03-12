@@ -14,7 +14,6 @@
           <h1>__APP_NAME__ Documents</h1>
           <div class="tabs" role="tablist" aria-label="__APP_NAME__ docs tabs">
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="test-status">Test Status</button>
-            <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="priorities">Priorities</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="requirements">Requirements</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="testing">Testing</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="architecture">Architecture</button>
@@ -61,7 +60,7 @@
 
         const baseDocsPath = "__DOCS_BASE_PATH__";
         const shell = window.createDocsShell({
-          defaultTab: "priorities",
+          defaultTab: "architecture",
           tabDefinitions: {
             "test-status": {
               mode: "catalog",
@@ -75,11 +74,6 @@
               backLabel: "Back to all test reports",
               fallback: "no tests available",
               inlineItemContent: true,
-            },
-            priorities: {
-              mode: "inline-page",
-              url: baseDocsPath + "/priorities/index.html",
-              fallback: "no priorities available",
             },
             requirements: {
               mode: "catalog",
@@ -119,7 +113,6 @@
             testing: "doc",
           },
           inlineDocBaseStyle,
-          prioritiesHeading: "To Do List",
           elements: {
             frame: document.getElementById("docs-frame"),
             fallback: document.getElementById("docs-fallback"),

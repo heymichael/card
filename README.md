@@ -55,8 +55,6 @@ card/
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
 │   ├── artifact-manifest.schema.json
-│   ├── priorities/
-│   │   └── index.html
 │   ├── learnings/
 │   │   ├── catalog.json
 │   │   └── entries/
@@ -145,8 +143,8 @@ card/
 │       │   └── card-app.spec.ts
 │       └── docs-shell/
 │           └── docs-shell.spec.ts
-├── todo/
-│   └── todo.md
+├── tasks/
+│   └── *.md (one file per task, managed by taskmd)
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
@@ -327,7 +325,7 @@ The integration boundary is the app artifact manifest consumed by platform.
 
 Use `docs/learnings/` for reusable insights discovered while building real apps from this template.
 
-- `todo/todo.md` tracks execution priorities and project tasks.
+- `tasks/` contains per-task markdown files managed by [taskmd](https://github.com/driangle/taskmd).
 - `docs/learnings/` captures reusable patterns that should be backported to the canonical template.
 - When a learning is backported, update `docs/learnings/catalog.json` metadata with `backported` and `templateRef`.
 

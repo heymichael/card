@@ -1,0 +1,5 @@
+dir: ./tasks
+id:
+  strategy: sequential
+  padding: 3
+workflow: solo

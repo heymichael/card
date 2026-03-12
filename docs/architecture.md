@@ -32,8 +32,6 @@ card/
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
 │   ├── artifact-manifest.schema.json
-│   ├── priorities/
-│   │   └── index.html
 │   ├── learnings/
 │   │   ├── catalog.json
 │   │   └── entries/
@@ -122,8 +120,8 @@ card/
 │       │   └── card-app.spec.ts
 │       └── docs-shell/
 │           └── docs-shell.spec.ts
-├── todo/
-│   └── todo.md
+├── tasks/
+│   └── *.md (one file per task, managed by taskmd)
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
@@ -242,7 +240,7 @@ This local redirect pattern is a developer convenience for URL parity and is not
 
 - `docs/index.html` is the docs shell entrypoint.
 - `docs/shared/` contains canonical shell assets and page template.
-- Required tabs: `test-status`, `priorities`, `learnings`, `requirements`, `testing`, `architecture`.
+- Required tabs: `test-status`, `learnings`, `requirements`, `testing`, `architecture`.
 - Architecture tab target is always `architecture.html` (rendered from `architecture.md`).
 
 ## Source-to-Served Docs Contract
@@ -253,7 +251,6 @@ For docs parity and deterministic output:
 - Learnings source of truth: `docs/learnings/catalog.json` and `docs/learnings/entries/*.html`.
 - Generated pages from markdown:
   - `docs/architecture.md` -> `docs/architecture.html`
-  - `todo/todo.md` -> `docs/priorities/index.html`
 - Served/deploy copy after sync: `hosting/public/docs/` (full mirror of `docs/`).
 
 ## Learnings Feedback Loop Contract

@@ -14,7 +14,6 @@
           <h1>card Documents</h1>
           <div class="tabs" role="tablist" aria-label="card docs tabs">
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="test-status">Test Status</button>
-            <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="priorities">Priorities</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="learnings">Learnings</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="requirements">Requirements</button>
             <button class="tab-button" role="tab" aria-selected="false" type="button" data-tab-key="testing">Testing</button>
@@ -99,11 +98,6 @@
               },
             ],
           },
-          priorities: {
-            mode: "inline-page",
-            url: baseDocsPath + "/priorities/index.html",
-            fallback: "no priorities available",
-          },
           learnings: {
             mode: "catalog",
             heading: "Learnings",
@@ -151,7 +145,7 @@
         };
 
         const shell = window.createDocsShell({
-          defaultTab: "priorities",
+          defaultTab: "architecture",
           tabDefinitions,
           tabItemParams: {
             learnings: "learning",
@@ -160,7 +154,6 @@
             testing: "doc",
           },
           inlineDocBaseStyle,
-          prioritiesHeading: "To Do List",
           elements: {
             frame: document.getElementById("docs-frame"),
             fallback: document.getElementById("docs-fallback"),
