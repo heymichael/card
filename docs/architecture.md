@@ -28,7 +28,6 @@ card/
 │   └── colors.json
 ├── docs/
 │   ├── index.html
-│   ├── analytics-strategy.md
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
@@ -330,7 +329,7 @@ Analytics uses the Firebase SDK (`firebase/analytics`) for client-side event col
 - Production only — analytics is skipped in local dev and auth-bypass modes.
 - Feature events are deduplicated once per page load via an in-memory Set.
 - User identity is linked via `setUserId()` after successful authentication.
-- Full strategy, event specification, and future evolution paths are documented in `docs/analytics-strategy.md`.
+- Full strategy, event specification, and future evolution paths are tracked in the Firebase and GA4 consoles.
 
 ## Local Parity Prep
 

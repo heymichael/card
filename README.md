@@ -51,7 +51,6 @@ card/
 │   └── colors.json
 ├── docs/
 │   ├── index.html
-│   ├── analytics-strategy.md
 │   ├── architecture.md
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
