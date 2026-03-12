@@ -71,6 +71,24 @@
       "backported": false,
       "templateRef": "N/A",
       "url": "/docs/learnings/entries/testing-suite-rollout-pattern.html"
+    },
+    {
+      "slug": "firebase-analytics-integration-pattern",
+      "title": "Firebase Analytics Integration Pattern",
+      "summary": "Add Firebase Analytics to an authenticated app with environment-gated initialization, per-page-load event deduplication, dev console logging, and a single analytics module owning all instrumentation.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/firebase-analytics-integration-pattern.html"
+    },
+    {
+      "slug": "vite-env-build-time-contract",
+      "title": "Vite Env Build-Time Contract",
+      "summary": "VITE_* environment variables must exist in .env.local (local dev), GitHub repository secrets (CI), and the workflow env: block (build step mapping). Missing any leg causes silent production failures.",
+      "status": "active",
+      "backported": false,
+      "templateRef": "N/A",
+      "url": "/docs/learnings/entries/vite-env-build-time-contract.html"
     }
   ]
 }

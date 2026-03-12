@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <title>Learnings - Vite Env Build-Time Contract</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 40px 24px 64px;
+        color: #1f2937;
+        line-height: 1.55;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      h2 {
+        margin-top: 28px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+      }
+      .meta td:first-child {
+        width: 220px;
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 20px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #d1d5db;
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+      }
+      th {
+        background: #f9fafb;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 16px;
+      }
+      .status-pill {
+        display: inline-block;
+        border: 1px solid #d1d5db;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="/docs/?tab=learnings">Back to all learnings</a>
+    <h1>Vite Env Build-Time Contract</h1>
+    <p>
+      This learning captures the requirement that Vite <code>VITE_*</code> environment variables
+      must be present in two places — local <code>.env.local</code> for development and GitHub
+      repository secrets for CI/production builds — and the failure modes when this contract is
+      broken.
+    </p>
+
+    <table class="meta">
+      <tr><td>Status</td><td><span class="status-pill">active</span></td></tr>
+      <tr><td>Backported</td><td>no</td></tr>
+      <tr><td>Template reference</td><td>N/A</td></tr>
+      <tr><td>Last updated</td><td>2026-03-12</td></tr>
+    </table>
+
+    <h2>Problem</h2>
+    <p>
+      Vite inlines <code>import.meta.env.VITE_*</code> values at build time as static string
+      replacements. If a variable is present in <code>.env.local</code> but not passed to the
+      CI build step, the production bundle receives <code>undefined</code> for that value.
+      This creates a class of bugs that only manifest in production:
+    </p>
+    <ul>
+      <li>
+        <strong>Local works, production breaks:</strong> The developer has all values in
+        <code>.env.local</code>, so the app works locally. But the CI build step in
+        <code>publish-artifact.yml</code> only passes variables that are explicitly mapped
+        from GitHub secrets. Any variable not mapped is silently <code>undefined</code> in
+        the production bundle.
+      </li>
+      <li>
+        <strong>Silent failures:</strong> Missing optional values (like
+        <code>VITE_FIREBASE_MEASUREMENT_ID</code>) don't cause build errors. The app loads
+        and runs but features that depend on those values (like analytics) silently fail.
+        There is no build-time or runtime error to surface the gap.
+      </li>
+      <li>
+        <strong>Incomplete secret propagation:</strong> When a new <code>VITE_*</code> variable
+        is added to <code>.env.example</code> and <code>.env.local</code>, the developer must
+        also add a matching GitHub repository secret and map it in the workflow
+        <code>env:</code> block. This is a manual two-step process with no automated check.
+      </li>
+    </ul>
+
+    <h2>Reusable Pattern</h2>
+    <ul>
+      <li>
+        <strong>Single source of truth:</strong> Treat <code>.env.example</code> as the canonical
+        list of all <code>VITE_*</code> variables the app uses. Every variable listed there must
+        exist in three places: <code>.env.example</code> (documentation),
+        <code>.env.local</code> (local development), and GitHub repository secrets (CI builds).
+      </li>
+      <li>
+        <strong>Explicit workflow mapping:</strong> In the CI workflow's build step, explicitly
+        map every <code>VITE_*</code> variable from secrets to environment, including optional
+        ones. If a secret is not set in GitHub, the value will be empty rather than the variable
+        name being absent — this is safer and makes gaps visible.
+      </li>
+      <li>
+        <strong>New variable checklist:</strong> When adding a new <code>VITE_*</code> variable:
+        <ol>
+          <li>Add to <code>.env.example</code> with a blank or example value.</li>
+          <li>Add the real value to <code>.env.local</code> (not committed).</li>
+          <li>Create a GitHub repository secret with the production value.</li>
+          <li>Map the secret in the workflow <code>env:</code> block for the build step.</li>
+        </ol>
+      </li>
+      <li>
+        <strong>GitHub secrets for all VITE_ values:</strong> Even non-sensitive identifiers
+        like project IDs should be stored as repository secrets (not variables) for consistency.
+        This avoids a split mental model where some values are secrets and some are variables.
+      </li>
+    </ul>
+
+    <h2>Proposed Template Change</h2>
+    <ul>
+      <li>
+        Add all <code>.env.example</code> entries to the publish workflow build step's
+        <code>env:</code> block, mapping each from <code>${{ secrets.VARIABLE_NAME }}</code>.
+        Include optional variables so they are present (even if empty) rather than absent.
+      </li>
+      <li>
+        Add a comment in <code>.env.example</code> noting that each variable must also be
+        set as a GitHub repository secret and mapped in the CI workflow.
+      </li>
+      <li>
+        Document the new-variable checklist in <code>README.md</code> under the authentication
+        configuration section.
+      </li>
+      <li>
+        Consider a CI pre-build check that compares <code>.env.example</code> keys against
+        the workflow's <code>env:</code> block to catch unmapped variables before they reach
+        production.
+      </li>
+    </ul>
+
+    <h2>Risk and Rollout Notes</h2>
+    <ul>
+      <li>
+        <strong>No build-time validation:</strong> Vite does not error on missing
+        <code>VITE_*</code> values. A CI check or runtime startup validation is the only
+        way to catch gaps before users do.
+      </li>
+      <li>
+        <strong>Secret rotation:</strong> When rotating Firebase credentials or API keys,
+        both <code>.env.local</code> and GitHub secrets must be updated. Forgetting the
+        GitHub secret causes the next production build to ship with stale or empty values.
+      </li>
+      <li>
+        <strong>Debugging difficulty:</strong> Because values are inlined at build time,
+        inspecting the production bundle (or the Network tab) is the only way to confirm
+        what values were actually baked in. There is no runtime config endpoint to check.
+      </li>
+    </ul>
+
+    <h2>Backport Status</h2>
+    <p>
+      Not backported to the canonical template yet. After backport, set <code>backported: true</code>
+      and record the template commit/PR in <code>templateRef</code> within
+      <code>docs/learnings/catalog.json</code>.
+    </p>
+
+    <p style="margin-top: 28px;">
+      <a href="/docs/?tab=learnings">Back to all learnings</a>
+    </p>
+  </body>
+</html>
