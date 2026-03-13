@@ -1,28 +1,44 @@
 ---
-description: Todo file structure and lifecycle conventions
+description: Task management conventions using taskmd
 alwaysApply: true
 ---
 
-# Todo Conventions
+# Task Management (taskmd)
 
-Location: Root-level `todo/` folder; single file: `todo.md`.
+Tasks live in `tasks/` as individual markdown files with YAML frontmatter. Managed via [taskmd](https://github.com/driangle/taskmd).
 
-Structure:
+## Reading tasks for context
 
-- Open items (heading at top) - Single numbered list sorted by priority in this order: `[High]`, then `[Med]`, then `[Low]`. Renumber sequentially after any reorder so numbering is always `1..N`. Format: `N. [High] <item name>`.
-- Completed items (section below open items) - Use bullets (no numbering), keep completion date in brackets, and include PR status. Format: `- [YYYY-MM-DD] <item name> (PR #123)` or `- [YYYY-MM-DD] <item name> (no PR)`. Sort in descending order by date (newest first). If there are none, use `_(none)_`.
-- Detail sections (below the lists) - Include detail sections only for open numbered items, with enough Purpose and Approach so that later instructions like "work on todo item 3" can be executed with full context.
+When looking for work or understanding project priorities, only read tasks where `status` is `pending` or `in-progress`. Ignore `completed`, `cancelled`, and `blocked` tasks unless specifically asked about them.
 
-When adding a todo: add the line to Open items with the appropriate tag (`[High]`, `[Med]`, or `[Low]`), then place it in priority order and renumber the open list. Add a matching detail section (Purpose + Approach) below.
+## Task file format
 
-When completing a todo: move the line from Open items to Completed items, convert it to completed format with PR status (e.g. `- [2025-03-01] Point card app... (PR #123)` or `... (no PR)`), sort Completed items descending by date, and renumber the open list. Remove the completed item's detail section.
+Each task is a standalone `.md` file with YAML frontmatter:
 
-If a completed item included a `[BUG]` tag in Open items, preserve `[BUG]` in the Completed item text (e.g. `- [2026-03-04] [BUG] Fix ... (PR #123)`).
+```yaml
+---
+id: "001"
+title: "Short descriptive title"
+status: pending          # pending | in-progress | in-review | completed | blocked | cancelled
+priority: medium         # low | medium | high | critical
+type: feature            # feature | bug | improvement | chore | docs
+tags: [relevant, tags]
+dependencies: ["003"]    # optional: IDs of tasks that must complete first
+effort: medium           # optional: small | medium | large
+created: YYYY-MM-DD
+---
+```
 
-When working on a todo item: read the detail section for that number to get purpose and approach before implementing.
+The markdown body should include Purpose/Objective and Approach/Acceptance Criteria sections.
 
-Regeneration requirement: Any change to `todo/todo.md` must regenerate priorities HTML before finishing:
+## Creating a task
 
-- Run `python3 scripts/generate_docs_pages.py`
-- Run `bash scripts/sync_docs.sh` to copy regenerated docs into `hosting/public/docs/`
-- Verify the matching served file updates under `hosting/public/docs/priorities/index.html`
+Use descriptive filenames: `ID-short-slug.md` (e.g., `007-add-caching-layer.md`). Use sequential IDs zero-padded to 3 digits.
+
+## Completing a task
+
+Set `status: completed` in the frontmatter. Do not delete the file.
+
+## No regeneration required
+
+Unlike the previous todo.md workflow, changes to task files do not require running any generation or sync scripts.

@@ -48,11 +48,6 @@ def main() -> int:
     root = Path(__file__).resolve().parents[1]
     mappings = [
         (
-            root / "todo" / "todo.md",
-            root / "docs" / "priorities" / "index.html",
-            f"{APP_DISPLAY_NAME} - Priorities",
-        ),
-        (
             root / "docs" / "architecture.md",
             root / "docs" / "architecture.html",
             f"{APP_DISPLAY_NAME} - Architecture",

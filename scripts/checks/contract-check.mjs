@@ -63,7 +63,7 @@ try {
 }
 
 const docsIndex = fs.readFileSync(path.join(repoRoot, "docs/index.html"), "utf8");
-["test-status", "priorities", "learnings", "requirements", "testing", "architecture"].forEach(
+["test-status", "learnings", "requirements", "testing", "architecture"].forEach(
   (tab) => {
     checks.push(
       check(
