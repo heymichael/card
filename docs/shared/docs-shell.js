@@ -35,7 +35,6 @@
       elements,
       inlineDocBaseStyle = "",
       testingInlineMetaPattern = /^(Selection|Trigger|Environment|Platforms):/,
-      prioritiesHeading = "To Do List",
     } = config;
 
     const {
@@ -155,31 +154,6 @@
 
       const html = await response.text();
       const parsed = new DOMParser().parseFromString(html, "text/html");
-
-      if (tabKey === "priorities" && parsed.body) {
-        const firstHeading = parsed.body.querySelector("h1");
-        if (firstHeading) {
-          firstHeading.textContent = prioritiesHeading;
-        } else {
-          const heading = parsed.createElement("h1");
-          heading.textContent = prioritiesHeading;
-          parsed.body.insertBefore(heading, parsed.body.firstChild);
-        }
-
-        const paragraphs = Array.from(parsed.body.querySelectorAll("p"));
-        paragraphs.forEach((paragraph) => {
-          const text = (paragraph.textContent || "").trim();
-          if (/^todo:\s*/i.test(text)) {
-            paragraph.remove();
-            return;
-          }
-          if (text === "Open items" || text === "Completed items") {
-            const h2 = parsed.createElement("h2");
-            h2.textContent = text;
-            paragraph.replaceWith(h2);
-          }
-        });
-      }
 
       if (tabKey === "testing" && parsed.body && url.includes("/test-lineup.html")) {
         const firstHeading = parsed.body.querySelector("h1");

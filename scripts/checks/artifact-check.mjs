@@ -64,7 +64,6 @@ try {
 
 [
   "docs/architecture.html",
-  "docs/priorities/index.html",
   "hosting/public/docs/index.html",
   "hosting/public/docs/architecture.html",
 ].forEach((requiredPath) => {

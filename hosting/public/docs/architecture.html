@@ -37,8 +37,6 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │   ├── architecture.html
 │   ├── artifact-manifest.example.json
 │   ├── artifact-manifest.schema.json
-│   ├── priorities/
-│   │   └── index.html
 │   ├── learnings/
 │   │   ├── catalog.json
 │   │   └── entries/
@@ -127,8 +125,8 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 │       │   └── card-app.spec.ts
 │       └── docs-shell/
 │           └── docs-shell.spec.ts
-├── todo/
-│   └── todo.md
+├── tasks/
+│   └── *.md (one file per task, managed by taskmd)
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
@@ -241,7 +239,7 @@ This local redirect pattern is a developer convenience for URL parity and is not
 <ul>
 <li><code>docs/index.html</code> is the docs shell entrypoint.</li>
 <li><code>docs/shared/</code> contains canonical shell assets and page template.</li>
-<li>Required tabs: <code>test-status</code>, <code>priorities</code>, <code>learnings</code>, <code>requirements</code>, <code>testing</code>, <code>architecture</code>.</li>
+<li>Required tabs: <code>test-status</code>, <code>learnings</code>, <code>requirements</code>, <code>testing</code>, <code>architecture</code>.</li>
 <li>Architecture tab target is always <code>architecture.html</code> (rendered from <code>architecture.md</code>).</li>
 </ul>
 <h2 id="source-to-served-docs-contract">Source-to-Served Docs Contract</h2>
@@ -251,7 +249,6 @@ This local redirect pattern is a developer convenience for URL parity and is not
 <li>Learnings source of truth: <code>docs/learnings/catalog.json</code> and <code>docs/learnings/entries/*.html</code>.</li>
 <li>Generated pages from markdown:</li>
 <li><code>docs/architecture.md</code> -&gt; <code>docs/architecture.html</code></li>
-<li><code>todo/todo.md</code> -&gt; <code>docs/priorities/index.html</code></li>
 <li>Served/deploy copy after sync: <code>hosting/public/docs/</code> (full mirror of <code>docs/</code>).</li>
 </ul>
 <h2 id="learnings-feedback-loop-contract">Learnings Feedback Loop Contract</h2>
