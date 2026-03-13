@@ -1,11 +1,12 @@
 ---
 id: "001"
 title: "Logout from unauthorized screen does not reset auth state"
-status: in-progress
+status: pending
 priority: medium
 type: bug
 tags: [auth]
 created: 2026-03-12
+owner: Michael
 ---
 
 # Logout from unauthorized screen does not reset auth state
