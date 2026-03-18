@@ -10,7 +10,6 @@
  *     --out     <output-path>       (default: artifacts/publish/manifest.json)
  *
  * Reads checksums from artifacts/publish/checksums.txt.
- * Validates output against docs/artifact-manifest.schema.json.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -48,9 +47,8 @@ for (const line of checksumLines) {
 }
 
 const runtimeChecksum = checksums["runtime.tar.gz"];
-const docsChecksum = checksums["docs.tar.gz"];
-if (!runtimeChecksum || !docsChecksum) {
-  console.error("ERROR: Could not find expected checksums in checksums.txt");
+if (!runtimeChecksum) {
+  console.error("ERROR: Could not find runtime.tar.gz checksum in checksums.txt");
   process.exit(1);
 }
 
@@ -63,25 +61,12 @@ const manifest = {
   published_at: new Date().toISOString(),
   artifact: {
     runtime_uri: `${prefix}/runtime.tar.gz`,
-    docs_uri: `${prefix}/docs.tar.gz`,
     checksum_sha256: runtimeChecksum,
   },
   compatibility: {
     platform_contract_version: "v1",
   },
 };
-
-const schemaPath = path.resolve("docs/artifact-manifest.schema.json");
-if (fs.existsSync(schemaPath)) {
-  const schema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
-  const requiredFields = schema.required || [];
-  const missing = requiredFields.filter((f) => !(f in manifest));
-  if (missing.length > 0) {
-    console.error(`ERROR: Manifest missing required fields: ${missing.join(", ")}`);
-    process.exit(1);
-  }
-  console.log("Schema field presence check passed.");
-}
 
 const outPath = path.resolve(values.out);
 fs.mkdirSync(path.dirname(outPath), { recursive: true });

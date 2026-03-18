@@ -7,15 +7,10 @@ alwaysApply: true
 
 When working in an app repository that was created from this template:
 
-- If you discover a reusable implementation pattern, document it in `docs/learnings/`.
-- Keep learnings separate from execution tracking in `todo/todo.md`.
-- Each learnings entry should include:
+- If you discover a reusable implementation pattern, document it in `docs/learnings.md`.
+- Keep learnings separate from task tracking in `tasks/`.
+- Each learning section should include:
   - Problem
   - Reusable Pattern
-  - Proposed Template Change
   - Risk and Rollout Notes
-  - Backport Status
-- Update `docs/learnings/catalog.json` when adding or modifying an entry.
-- When a learning is backported to the canonical template, update the catalog metadata:
-  - `backported: true`
-  - `templateRef: <commit-sha or PR reference>`
+- To add a new learning, append a new `## Title` section at the end of the file following the existing format.

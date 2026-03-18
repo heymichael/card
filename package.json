@@ -5,24 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "docs:prepare": "python3 scripts/generate_docs_pages.py && node scripts/generate_docs_auth_runtime.mjs && bash scripts/sync_docs.sh",
-    "local:docs:serve": "npm run docs:prepare && firebase serve --port 5001",
     "build": "tsc -b && vite build && cp public/_redirects dist/_redirects",
     "lint": "eslint . && npm run lint:colors",
     "lint:colors": "node ./check-color-tokens.mjs",
     "preview": "vite preview",
     "test:e2e:app": "playwright test --config=playwright.app.config.ts",
-    "test:e2e:docs": "playwright test --config=playwright.docs.config.ts",
-    "test:e2e:app:smoke": "npm run test:e2e:app -- --grep \"@smoke\"",
-    "test:e2e:docs:smoke": "npm run test:e2e:docs -- --grep \"@smoke\"",
-    "test:e2e:docs:smoke:local": "PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/ms-playwright PLAYWRIGHT_USE_EXTERNAL_BASE_URL=1 E2E_BASE_URL=http://localhost:5002 npm run test:e2e:docs:smoke",
-    "test:e2e:docs:regression": "npm run test:e2e:docs -- --grep \"@regression\"",
-    "test:e2e:docs:prod-monitor": "npm run test:e2e:docs -- --grep \"@prod-monitor\"",
-    "check:contract": "node scripts/checks/contract-check.mjs",
-    "check:artifact": "node scripts/checks/artifact-check.mjs",
-    "report:test-status": "node scripts/test-status/generate-suite-report.mjs",
-    "report:playwright-to-docs": "bash scripts/copy-playwright-report-to-docs.sh",
-    "check:docs-sync": "python3 scripts/generate_docs_pages.py && node scripts/generate_docs_auth_runtime.mjs && bash scripts/sync_docs.sh && git diff --exit-code -- docs hosting/public/docs"
+    "test:e2e:app:smoke": "npm run test:e2e:app -- --grep \"@smoke\""
   },
   "dependencies": {
     "firebase": "^12.10.0",

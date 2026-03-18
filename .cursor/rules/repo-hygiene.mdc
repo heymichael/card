@@ -8,7 +8,7 @@ alwaysApply: true
 This repository is the canonical template for a single app repository that is integrated into an external platform control plane.
 
 - Keep strict separation of concerns:
-  - This repo owns app-local implementation patterns, CI patterns, docs patterns, and artifact publish contracts.
+  - This repo owns app-local implementation patterns, CI patterns, and artifact publish contracts.
   - Platform orchestration, promotion, and cross-app routing checks remain outside this repo.
 - Keep app logic and app tests in this repository; do not add platform orchestration logic here.
 - Keep naming kebab-case for repo/path conventions unless language-specific rules require otherwise.
@@ -16,12 +16,10 @@ This repository is the canonical template for a single app repository that is in
 - Use or update docs when behavior/contracts change:
   - `README.md`
   - `docs/architecture.md`
-  - app artifact contract docs/config
-  - `todo/todo.md` when work priority/state changes
-  - keep repository ASCII trees in `README.md` and `docs/architecture.md` synchronized with actual repo structure
+  - `docs/learnings.md`
 - Preserve security/indexing defaults:
   - default `noindex` / `nofollow`
   - only allow indexing with explicit approval path documented
 - When adding new structure, keep it minimal and production-minded.
-- Follow todo lifecycle and formatting rules defined in:
+- Follow task lifecycle and formatting rules defined in:
   - `.cursor/rules/todo-conventions.mdc`
