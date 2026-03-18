@@ -1,9 +1,0 @@
-{
-  "suite": "scheduled-regression",
-  "status": "placeholder",
-  "lastRunUtc": "not run yet",
-  "notes": [
-    "Placeholder summary until optional scheduled regressions are publishing results.",
-    "Use this location for non-blocking trend snapshots."
-  ]
-}

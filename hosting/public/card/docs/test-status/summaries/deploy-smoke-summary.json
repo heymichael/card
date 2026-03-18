@@ -1,9 +1,0 @@
-{
-  "suite": "pr-checks",
-  "status": "placeholder",
-  "lastRunUtc": "not run yet",
-  "notes": [
-    "Placeholder summary until pull-request checks are wired.",
-    "Use this location for machine-readable suite summaries."
-  ]
-}

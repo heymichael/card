@@ -1,9 +1,0 @@
-{
-  "suite": "scheduled-regression",
-  "status": "placeholder",
-  "lastRunUtc": "not run yet",
-  "notes": [
-    "Placeholder summary until scheduled regression checks are wired.",
-    "Use this location for machine-readable suite summaries."
-  ]
-}

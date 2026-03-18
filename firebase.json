@@ -13,24 +13,6 @@
     ],
     "headers": [
       {
-        "source": "/card/docs/test-status/playwright/**",
-        "headers": [
-          {
-            "key": "X-Frame-Options",
-            "value": "SAMEORIGIN"
-          }
-        ]
-      },
-      {
-        "source": "/docs/test-status/playwright/**",
-        "headers": [
-          {
-            "key": "X-Frame-Options",
-            "value": "SAMEORIGIN"
-          }
-        ]
-      },
-      {
         "source": "**",
         "headers": [
           {
@@ -50,18 +32,6 @@
             "value": "noindex, nofollow, noarchive"
           }
         ]
-      }
-    ],
-    "redirects": [
-      {
-        "source": "/card/docs",
-        "destination": "/docs/",
-        "type": 302
-      },
-      {
-        "source": "/card/docs/:rest*",
-        "destination": "/docs/:rest*",
-        "type": 302
       }
     ],
     "rewrites": [
