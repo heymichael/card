@@ -1,44 +1,28 @@
 ---
-description: Task management conventions using taskmd
+description: Task management redirect — tasks live in the platform repo
 alwaysApply: true
 ---
 
-# Task Management (taskmd)
+# Task Management
 
-Tasks live in `tasks/` as individual markdown files with YAML frontmatter. Managed via [taskmd](https://github.com/driangle/taskmd).
+All tasks are managed centrally in the **haderach-platform** repo at `../haderach-platform/tasks/` using [taskmd](https://github.com/driangle/taskmd). This app repo does not have its own tasks directory.
 
-## Reading tasks for context
+## Creating a task from this repo
 
-When looking for work or understanding project priorities, only read tasks where `status` is `pending` or `in-progress`. Ignore `completed`, `cancelled`, and `blocked` tasks unless specifically asked about them.
+Write the task file to `../haderach-platform/tasks/` with `group: card` and `phase: card` in the frontmatter. Follow the taskmd format and conventions defined in `haderach-platform/.cursor/rules/todo-conventions.mdc`.
 
-## Task file format
+Use sequential IDs zero-padded to 3 digits. Check existing files in `../haderach-platform/tasks/` to determine the next available ID.
 
-Each task is a standalone `.md` file with YAML frontmatter:
+If the task is ambiguous about which app it belongs to (e.g., cross-cutting infra work), prompt the user to specify the `group` value (`card`, `stocks`, or `platform`).
 
-```yaml
----
-id: "001"
-title: "Short descriptive title"
-status: pending          # pending | in-progress | in-review | completed | blocked | cancelled
-priority: medium         # low | medium | high | critical
-type: feature            # feature | bug | improvement | chore | docs
-tags: [relevant, tags]
-dependencies: ["003"]    # optional: IDs of tasks that must complete first
-effort: medium           # optional: small | medium | large
-created: YYYY-MM-DD
----
+## Reading tasks
+
+To see tasks for this app, read files in `../haderach-platform/tasks/` where the `group` frontmatter field is `card`. Only read tasks where `status` is `pending` or `in-progress` unless specifically asked about others.
+
+## Task dashboard
+
+To start the taskmd web dashboard, run from the platform repo:
+
+```sh
+cd ../haderach-platform && taskmd web start --dir tasks/ --open --port 4173
 ```
-
-The markdown body should include Purpose/Objective and Approach/Acceptance Criteria sections.
-
-## Creating a task
-
-Use descriptive filenames: `ID-short-slug.md` (e.g., `007-add-caching-layer.md`). Use sequential IDs zero-padded to 3 digits.
-
-## Completing a task
-
-Set `status: completed` in the frontmatter. Do not delete the file.
-
-## No regeneration required
-
-Unlike the previous todo.md workflow, changes to task files do not require running any generation or sync scripts.
