@@ -1,7 +1,7 @@
 ---
 id: "001"
 title: "Logout from unauthorized screen does not reset auth state"
-status: pending
+status: in-progress
 priority: medium
 type: bug
 tags: [auth]

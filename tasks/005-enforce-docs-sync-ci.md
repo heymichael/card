@@ -1,7 +1,7 @@
 ---
 id: "005"
 title: "Enforce docs source-to-served sync in CI"
-status: pending
+status: cancelled
 priority: low
 type: chore
 tags: [ci, docs]
