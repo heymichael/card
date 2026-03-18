@@ -207,6 +207,7 @@
       const auth = authModule.getAuth(firebaseApp);
       await authModule.setPersistence(auth, authModule.browserLocalPersistence);
       const provider = new authModule.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
 
       let transientError = "";
       const signIn = async function () {

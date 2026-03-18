@@ -102,6 +102,7 @@ export function AuthGate({ surface, children }: AuthGateProps) {
     try {
       const auth = getAuth(app)
       const provider = new GoogleAuthProvider()
+      provider.setCustomParameters({ prompt: 'select_account' })
       await signInWithPopup(auth, provider)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Sign in failed.'
