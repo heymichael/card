@@ -12,7 +12,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { useEffect } from 'react'
-import { isAuthorizedEmail, type AuthSurface } from './accessPolicy'
+import { fetchAllowlist, isAuthorizedEmail } from './accessPolicy'
 import { getAuthRuntimeConfig } from './runtimeConfig'
 import {
   initAnalytics,
@@ -25,7 +25,6 @@ import {
 } from '../analytics/analytics'
 
 interface AuthGateProps {
-  surface: AuthSurface
   children: ReactNode
 }
 
@@ -44,7 +43,7 @@ function getFirebaseAppInstance(): FirebaseApp | null {
 
 type AuthStatus = 'loading' | 'signed_out' | 'authorized' | 'unauthorized' | 'config_error'
 
-export function AuthGate({ surface, children }: AuthGateProps) {
+export function AuthGate({ children }: AuthGateProps) {
   const runtimeConfig = useMemo(() => getAuthRuntimeConfig(), [])
   const [user, setUser] = useState<User | null>(null)
   const [status, setStatus] = useState<AuthStatus>(() => {
@@ -75,20 +74,23 @@ export function AuthGate({ surface, children }: AuthGateProps) {
         setStatus('signed_out')
         return
       }
-      if (isAuthorizedEmail(nextUser.email, surface)) {
-        setStatus('authorized')
-        trackSignInSucceeded()
-        setAnalyticsUser(nextUser.uid)
-      } else {
-        setStatus('unauthorized')
-        trackSignInDenied(nextUser.email || 'unknown')
-      }
+      setStatus('loading')
+      fetchAllowlist(app).then((policy) => {
+        if (isAuthorizedEmail(nextUser.email, policy)) {
+          setStatus('authorized')
+          trackSignInSucceeded()
+          setAnalyticsUser(nextUser.uid)
+        } else {
+          setStatus('unauthorized')
+          trackSignInDenied(nextUser.email || 'unknown')
+        }
+      })
     })
     setPersistence(auth, browserLocalPersistence).catch((error) => {
       setAuthError(error instanceof Error ? error.message : 'Failed to set auth persistence.')
     })
     return unsubscribe
-  }, [runtimeConfig.bypassAuth, runtimeConfig.configError, surface])
+  }, [runtimeConfig.bypassAuth, runtimeConfig.configError])
 
   const signIn = async () => {
     const app = getFirebaseAppInstance()

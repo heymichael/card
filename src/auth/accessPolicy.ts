@@ -1,23 +1,12 @@
-export type AuthSurface = 'app' | 'docs'
+import { doc, getDoc, getFirestore } from 'firebase/firestore'
+import type { FirebaseApp } from 'firebase/app'
 
-const APP_ALLOWED_EMAILS = [
-  'michael@haderachi.ai',
-  'michael@heretic.fund',
-  'mariam@heretic.fund',
-  'mariam@heretic.ventures',
-  'alexmader@gmail.com',
-]
+interface AllowlistPolicy {
+  emails: string[]
+  domains: string[]
+}
 
-const DOCS_ALLOWED_EMAILS = [
-  'michael@haderachi.ai',
-  'michael@heretic.fund',
-  'mariam@heretic.fund',
-  'mariam@heretic.ventures',
-  'alexmader@gmail.com',
-]
-
-const APP_ALLOWED_DOMAINS = ['haderach.ai']
-const DOCS_ALLOWED_DOMAINS = ['haderach.ai']
+const EMPTY_POLICY: AllowlistPolicy = { emails: [], domains: [] }
 
 function normalizeValue(value: string): string {
   return value.trim().toLowerCase()
@@ -31,14 +20,31 @@ function parseDomain(email: string): string {
   return email.slice(atIndex + 1).toLowerCase()
 }
 
-function getPolicy(surface: AuthSurface): { emails: string[]; domains: string[] } {
-  if (surface === 'docs') {
-    return { emails: DOCS_ALLOWED_EMAILS, domains: DOCS_ALLOWED_DOMAINS }
+export async function fetchAllowlist(app: FirebaseApp): Promise<AllowlistPolicy> {
+  try {
+    const db = getFirestore(app)
+    const snap = await getDoc(doc(db, 'allowlists', 'card'))
+    if (!snap.exists()) {
+      return EMPTY_POLICY
+    }
+    const data = snap.data()
+    const surfaceData = data?.surfaces?.default
+    if (!surfaceData) {
+      return EMPTY_POLICY
+    }
+    return {
+      emails: Array.isArray(surfaceData.emails) ? surfaceData.emails : [],
+      domains: Array.isArray(surfaceData.domains) ? surfaceData.domains : [],
+    }
+  } catch {
+    return EMPTY_POLICY
   }
-  return { emails: APP_ALLOWED_EMAILS, domains: APP_ALLOWED_DOMAINS }
 }
 
-export function isAuthorizedEmail(email: string | null | undefined, surface: AuthSurface): boolean {
+export function isAuthorizedEmail(
+  email: string | null | undefined,
+  policy: AllowlistPolicy,
+): boolean {
   if (!email) {
     return false
   }
@@ -48,7 +54,6 @@ export function isAuthorizedEmail(email: string | null | undefined, surface: Aut
     return false
   }
 
-  const policy = getPolicy(surface)
   const allowedEmails = new Set(policy.emails.map(normalizeValue))
   const allowedDomains = new Set(policy.domains.map(normalizeValue))
 
