@@ -14,6 +14,8 @@ function platformAuthDev(): Plugin {
       env = loadEnv(mode, process.cwd(), 'VITE_')
     },
     configureServer(server) {
+      if (!fs.existsSync(PLATFORM_PUBLIC)) return
+
       server.middlewares.use((req, res, next) => {
         if (req.url === '/__/firebase/init.json') {
           res.setHeader('Content-Type', 'application/json')
