@@ -16,7 +16,6 @@ This repository is the canonical template for a single app repository that is in
 - Use or update docs when behavior/contracts change:
   - `README.md`
   - `docs/architecture.md`
-  - `docs/learnings.md`
 - Preserve security/indexing defaults:
   - default `noindex` / `nofollow`
   - only allow indexing with explicit approval path documented

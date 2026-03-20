@@ -24,7 +24,6 @@ This repository is intentionally app-scoped. It owns app code, app CI, and artif
 - `.github/workflows/publish-artifact.yml` - main-branch artifact packaging and GCS upload.
 - `.github/workflows/nightly-checks.yml` - scheduled regression and production monitor suites.
 - `docs/architecture.md` - app boundaries, handoff contract, and template invariants.
-- `docs/learnings.md` - reusable implementation patterns.
 - `scripts/` - build, artifact packaging, and manifest generation.
 - `tests/e2e/` - Playwright suites tagged for smoke, regression, and prod-monitor runs.
 - `tasks/` - per-task markdown files managed by [taskmd](https://github.com/driangle/taskmd).
@@ -37,7 +36,6 @@ card/
 │       ├── branch-safety-reminder.mdc
 │       ├── pr-conventions.mdc
 │       ├── repo-hygiene.mdc
-│       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
 │   ├── pull_request_template.md
@@ -48,8 +46,7 @@ card/
 ├── design-tokens/
 │   └── colors.json
 ├── docs/
-│   ├── architecture.md
-│   └── learnings.md
+│   └── architecture.md
 ├── hosting/
 │   └── public/
 │       ├── assets/
@@ -180,9 +177,5 @@ This template aligns to the canonical release flow:
 7. Platform smoke checks (outside this repo)
 
 The integration boundary is the app artifact manifest consumed by platform.
-
-## Learnings
-
-Use `docs/learnings.md` for reusable insights discovered while building real apps from this template.
 
 See `docs/architecture.md` for canonical ownership boundaries and contracts.

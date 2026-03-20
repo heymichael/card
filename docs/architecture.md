@@ -16,7 +16,6 @@ card/
 │       ├── branch-safety-reminder.mdc
 │       ├── pr-conventions.mdc
 │       ├── repo-hygiene.mdc
-│       ├── template-learnings.mdc
 │       └── todo-conventions.mdc
 ├── .github/
 │   ├── pull_request_template.md
@@ -27,8 +26,7 @@ card/
 ├── design-tokens/
 │   └── colors.json
 ├── docs/
-│   ├── architecture.md
-│   └── learnings.md
+│   └── architecture.md
 ├── hosting/
 │   └── public/
 │       ├── assets/
