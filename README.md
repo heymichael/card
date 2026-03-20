@@ -125,7 +125,9 @@ npm run test:e2e:app:smoke
 firebase serve --port 5001
 ```
 
-### Authentication configuration (phase 1)
+### Authentication (platform sign-in + RBAC)
+
+Authentication is centralized at the platform level. This app does not handle sign-in directly — it redirects unauthenticated users to the platform landing page at `haderach.ai/`. After sign-in, user roles are checked from the Firestore `users/{email}` collection.
 
 Create local auth config from `.env.example`:
 
@@ -145,6 +147,8 @@ Optional values:
 - `VITE_FIREBASE_STORAGE_BUCKET`
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
 - `VITE_FIREBASE_MEASUREMENT_ID`
+
+With Firebase config populated and `VITE_AUTH_BYPASS=false`, the Vite dev server serves the platform landing page at `/` (via a dev-only plugin), enabling the full sign-in + RBAC flow locally.
 
 Local bypass:
 
