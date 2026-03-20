@@ -177,17 +177,23 @@ Default indexing policy is deny-by-default:
 - Hosting adds `X-Robots-Tag: noindex, nofollow, noarchive`.
 - Any indexing allowlist should be explicit and documented.
 
-## Authentication Contract (Phase 1)
+## Authentication Contract (Phase 2 — Platform Auth + RBAC)
 
-Authentication for this phase is client-side and fail-closed.
+Authentication is centralized at the platform level. This app does not handle
+sign-in directly.
 
-- Auth provider: Firebase Authentication with Google provider only.
-- Shared session scope: this app only (no cross-app SSO).
-- Authorization policy: domain and user allowlists.
-- Matching rules: case-insensitive exact email and exact domain checks.
-- Unauthorized behavior: stay signed in, show blocked screen with generic
-  contact-administrator guidance, and allow sign-out.
-- Session policy: Firebase default local persistence.
+- Auth provider: Firebase Authentication with Google provider, handled by the
+  platform landing page at `haderach.ai/`.
+- Session scope: shared across all apps on `haderach.ai` (same-origin Firebase
+  Auth persistence via IndexedDB).
+- Authorization policy: role-based access control (RBAC). User roles are stored
+  in Firestore `users/{email}` documents. Access is granted if the user holds
+  any role in `APP_GRANTING_ROLES['card']` (`admin`, `member`, `card_member`).
+- Unauthenticated behavior: redirect to `/?returnTo=/card/` for platform sign-in.
+- Unauthorized behavior: show access-denied screen with sign-out option.
+- Session policy: Firebase `browserLocalPersistence`.
+- Fail-closed: if Firestore is unreachable, roles resolve to an empty array and
+  access is denied.
 
 ### Runtime Config Inputs
 

@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-test("app shows login gate when auth is required @smoke @card-app", async ({ page }) => {
+test("app shows auth gate when config is missing @smoke @card-app", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: "Sign in required" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Unavailable" })).toBeVisible();
   await expect(page.getByText("Please contact your administrator")).toBeVisible();
 });
 
