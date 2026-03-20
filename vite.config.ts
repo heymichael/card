@@ -1,9 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
-
-const PLATFORM_PUBLIC = path.resolve(__dirname, '../haderach-platform/hosting/public')
+import tailwindcss from '@tailwindcss/vite'
 
 function platformAuthDev(): Plugin {
   let env: Record<string, string> = {}
@@ -14,8 +12,6 @@ function platformAuthDev(): Plugin {
       env = loadEnv(mode, process.cwd(), 'VITE_')
     },
     configureServer(server) {
-      if (!fs.existsSync(PLATFORM_PUBLIC)) return
-
       server.middlewares.use((req, res, next) => {
         if (req.url === '/__/firebase/init.json') {
           res.setHeader('Content-Type', 'application/json')
@@ -33,28 +29,20 @@ function platformAuthDev(): Plugin {
           return
         }
 
-        if (req.url?.startsWith('/assets/')) {
-          const filePath = path.join(PLATFORM_PUBLIC, req.url)
-          if (fs.existsSync(filePath)) {
-            const ext = path.extname(filePath)
-            const mimeTypes: Record<string, string> = {
-              '.svg': 'image/svg+xml',
-              '.png': 'image/png',
-              '.jpg': 'image/jpeg',
-              '.ico': 'image/x-icon',
-              '.css': 'text/css',
-              '.js': 'application/javascript',
-            }
-            if (mimeTypes[ext]) res.setHeader('Content-Type', mimeTypes[ext])
-            res.end(fs.readFileSync(filePath))
-            return
-          }
+        const urlPath = req.url?.split('?')[0]
+
+        if (urlPath?.startsWith('/assets/')) {
+          const homePort = env.VITE_HOME_DEV_PORT || '5173'
+          res.writeHead(302, { Location: `http://localhost:${homePort}${req.url}` })
+          res.end()
+          return
         }
 
-        const urlPath = req.url?.split('?')[0]
         if (urlPath === '/' || urlPath === '') {
-          res.setHeader('Content-Type', 'text/html')
-          res.end(fs.readFileSync(path.join(PLATFORM_PUBLIC, 'index.html'), 'utf-8'))
+          const homePort = env.VITE_HOME_DEV_PORT || '5173'
+          const query = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''
+          res.writeHead(302, { Location: `http://localhost:${homePort}${query}` })
+          res.end()
           return
         }
 
@@ -68,5 +56,16 @@ function platformAuthDev(): Plugin {
 export default defineConfig({
   base: '/card/',
   build: { outDir: 'dist/card' },
-  plugins: [platformAuthDev(), react()],
+  plugins: [platformAuthDev(), tailwindcss(), react()],
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  server: {
+    fs: {
+      allow: ['.', '../haderach-home'],
+    },
+  },
 })

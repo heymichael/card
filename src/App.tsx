@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { GlobalNav } from '@haderach/shared-ui';
 import ControlsPanel from './ControlsPanel';
 import CardCanvas from './CardCanvas';
+import { useAuthUser } from './auth/AuthUserContext';
 import type { CardCanvasHandle } from './CardCanvas';
 import type { TextBlock, ActiveBlock, ActiveElement, PhotoState } from './types';
 import { CARD_WIDTH, CARD_HEIGHT } from './constants';
@@ -289,8 +291,24 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeElement, handleRemovePhoto]);
 
+  const authUser = useAuthUser();
+
   return (
-    <div className="app">
+    <div className="app-shell">
+      <GlobalNav
+        apps={authUser.accessibleApps}
+        activeAppId="card"
+        userEmail={authUser.email}
+        onSignOut={authUser.signOut}
+        logo={
+          <img
+            className="h-12 w-auto"
+            src="/assets/landing/logo.svg"
+            alt="Haderach"
+          />
+        }
+      />
+      <div className="app">
       <ControlsPanel
         blocks={blocks}
         activeBlock={activeBlock}
@@ -328,6 +346,7 @@ function App() {
         onResizePhoto={resizePhoto}
         bgColor={bgColor}
       />
+      </div>
     </div>
   );
 }

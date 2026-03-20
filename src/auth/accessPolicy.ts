@@ -30,3 +30,18 @@ export function hasAppAccess(userRoles: string[], appId: string = APP_ID): boole
   const grantingRoles = APP_GRANTING_ROLES[appId] ?? []
   return userRoles.some((role) => grantingRoles.includes(role))
 }
+
+export interface AccessibleApp {
+  id: string
+  label: string
+  path: string
+}
+
+export const APP_CATALOG: AccessibleApp[] = [
+  { id: 'card', label: 'Card', path: '/card/' },
+  { id: 'stocks', label: 'Stocks', path: '/stocks/' },
+]
+
+export function getAccessibleApps(userRoles: string[]): AccessibleApp[] {
+  return APP_CATALOG.filter((app) => hasAppAccess(userRoles, app.id))
+}
