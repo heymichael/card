@@ -110,6 +110,10 @@ export function AuthGate({ children }: AuthGateProps) {
     return <>{children}</>
   }
 
+  if (status === 'loading' || status === 'redirecting') {
+    return null
+  }
+
   return (
     <main className="auth-gate-shell">
       <section className="auth-gate-card" aria-live="polite">
@@ -121,7 +125,7 @@ export function AuthGate({ children }: AuthGateProps) {
               your administrator.
             </p>
           </>
-        ) : status === 'unauthorized' ? (
+        ) : (
           <>
             <h1>Access denied</h1>
             <p>
@@ -134,16 +138,6 @@ export function AuthGate({ children }: AuthGateProps) {
                 Sign out
               </button>
             </div>
-          </>
-        ) : status === 'redirecting' ? (
-          <>
-            <h1>Redirecting</h1>
-            <p>Redirecting to sign in&hellip;</p>
-          </>
-        ) : (
-          <>
-            <h1>Loading</h1>
-            <p>Checking access&hellip;</p>
           </>
         )}
       </section>
