@@ -10,7 +10,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { useEffect } from 'react'
-import { fetchUserRoles, hasAppAccess, getAccessibleApps, APP_CATALOG } from './accessPolicy'
+import { fetchUserDoc, buildDisplayName, hasAppAccess, getAccessibleApps, APP_CATALOG } from './accessPolicy'
 import { getAuthRuntimeConfig } from './runtimeConfig'
 import { AuthUserContext } from './AuthUserContext'
 import {
@@ -47,6 +47,7 @@ export function AuthGate({ children }: AuthGateProps) {
   const runtimeConfig = useMemo(() => getAuthRuntimeConfig(), [])
   const [user, setUser] = useState<User | null>(null)
   const [roles, setRoles] = useState<string[]>([])
+  const [displayName, setDisplayName] = useState<string | undefined>()
   const [status, setStatus] = useState<AuthStatus>(() => {
     if (runtimeConfig.bypassAuth) {
       return 'authorized'
@@ -78,8 +79,10 @@ export function AuthGate({ children }: AuthGateProps) {
         return
       }
       setStatus('loading')
-      fetchUserRoles(app, nextUser.email ?? '').then((fetchedRoles) => {
+      fetchUserDoc(app, nextUser.email ?? '').then((userDoc) => {
+        const fetchedRoles = userDoc.roles
         setRoles(fetchedRoles)
+        setDisplayName(buildDisplayName(userDoc.firstName, userDoc.lastName))
         if (hasAppAccess(fetchedRoles)) {
           setStatus('authorized')
           trackSignInSucceeded()
@@ -115,6 +118,8 @@ export function AuthGate({ children }: AuthGateProps) {
       <AuthUserContext.Provider
         value={{
           email: user?.email ?? (runtimeConfig.bypassAuth ? 'dev@haderach.ai' : ''),
+          photoURL: user?.photoURL ?? undefined,
+          displayName: runtimeConfig.bypassAuth ? 'Dev User' : displayName,
           accessibleApps,
           signOut: signOutCurrentUser,
         }}
