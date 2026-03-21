@@ -12,12 +12,15 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 card/
 ├── .cursor/
 │   ├── mcp.json
-│   └── rules/
-│       ├── architecture-pointer.mdc
-│       ├── branch-safety-reminder.mdc
-│       ├── pr-conventions.mdc
-│       ├── repo-hygiene.mdc
-│       └── todo-conventions.mdc
+│   ├── rules/
+│   │   ├── architecture-pointer.mdc
+│   │   ├── branch-safety-reminder.mdc
+│   │   ├── pr-conventions.mdc
+│   │   ├── repo-hygiene.mdc
+│   │   └── todo-conventions.mdc
+│   └── skills/
+│       └── brand-guidelines/
+│           └── SKILL.md         # AI brand/token governance
 ├── .github/
 │   ├── pull_request_template.md
 │   └── workflows/
@@ -58,8 +61,7 @@ card/
 │   ├── index.css
 │   ├── main.tsx
 │   ├── theme/
-│   │   ├── colors.css
-│   │   └── colors.ts
+│   │   └── colors.ts        # Konva canvas color constants (JS only)
 │   ├── types.ts
 │   └── vite-env.d.ts
 ├── tests/
