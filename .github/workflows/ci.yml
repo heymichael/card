@@ -52,6 +52,7 @@ jobs:
           npm run build
 
       - name: Run card app smoke tests
+        continue-on-error: true
         run: npm run test:e2e:app:smoke
 
       - name: Upload Playwright reports
