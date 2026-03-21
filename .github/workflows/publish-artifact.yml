@@ -20,6 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout shared-ui (haderach-home)
+        uses: actions/checkout@v4
+        with:
+          repository: heymichael/haderach-home
+          path: ../haderach-home
+          token: ${{ secrets.CROSS_REPO_PAT }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
