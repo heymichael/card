@@ -3,6 +3,8 @@ import type { NavApp } from '@haderach/shared-ui'
 
 export interface AuthUser {
   email: string
+  photoURL?: string
+  displayName?: string
   accessibleApps: NavApp[]
   signOut: () => void
 }

@@ -299,6 +299,8 @@ function App() {
         apps={authUser.accessibleApps}
         activeAppId="card"
         userEmail={authUser.email}
+        userPhotoURL={authUser.photoURL}
+        userDisplayName={authUser.displayName}
         onSignOut={authUser.signOut}
         logo={
           <img
