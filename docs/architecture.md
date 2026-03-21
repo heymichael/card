@@ -11,6 +11,7 @@ It does not own platform promotion, platform deployment, or cross-app orchestrat
 ```text
 card/
 ├── .cursor/
+│   ├── mcp.json
 │   └── rules/
 │       ├── architecture-pointer.mdc
 │       ├── branch-safety-reminder.mdc
@@ -38,8 +39,6 @@ card/
 │   └── _redirects
 ├── scripts/
 │   ├── build_card.sh
-│   ├── checks/
-│   │   └── artifact-check.mjs
 │   ├── generate-manifest.mjs
 │   ├── init_app.sh
 │   └── package-artifacts.sh
@@ -53,6 +52,7 @@ card/
 │   ├── auth/
 │   │   ├── accessPolicy.ts
 │   │   ├── AuthGate.tsx
+│   │   ├── AuthUserContext.ts
 │   │   └── runtimeConfig.ts
 │   ├── constants.ts
 │   ├── index.css
@@ -66,12 +66,9 @@ card/
 │   └── e2e/
 │       └── card-app/
 │           └── card-app.spec.ts
-├── tasks/
-│   └── *.md (one file per task, managed by taskmd)
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
-├── .taskmd.yaml
 ├── check-color-tokens.mjs
 ├── eslint.config.js
 ├── firebase.json
