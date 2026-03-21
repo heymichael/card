@@ -14,6 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Clone haderach-home for shared-ui
+        run: git clone --depth 1 https://x-access-token:${{ secrets.CROSS_REPO_PAT }}@github.com/heymichael/haderach-home.git ../haderach-home
+
+      - name: Install shared-ui dependencies
+        run: npm install --prefix ../haderach-home/packages/shared-ui
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -46,6 +52,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Clone haderach-home for shared-ui
+        run: git clone --depth 1 https://x-access-token:${{ secrets.CROSS_REPO_PAT }}@github.com/heymichael/haderach-home.git ../haderach-home
+
+      - name: Install shared-ui dependencies
+        run: npm install --prefix ../haderach-home/packages/shared-ui
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
