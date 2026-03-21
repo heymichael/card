@@ -1,5 +1,5 @@
 :root {
-  --color-surface-app-bg: #f7f4f0;
+  --color-surface-app-bg: #ffffff;
   --color-text-app-default: #696864;
   --color-surface-panel-bg: #ffffff;
   --color-border-panel-default: #deddd5;
@@ -22,7 +22,7 @@
   --color-button-primary-bg-active: #696864;
   --color-border-hint: #deddd5;
   --color-text-hint: #9d9d9d;
-  --color-surface-canvas-stage-area: #f7f4f0;
+  --color-surface-canvas-stage-area: #ffffff;
   --color-shadow-canvas-stage: rgba(15, 15, 15, 0.15);
   --color-auth-card-bg: #ffffff;
   --color-auth-card-border: #deddd5;
