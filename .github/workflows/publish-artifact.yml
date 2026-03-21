@@ -20,12 +20,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout shared-ui (haderach-home)
-        uses: actions/checkout@v4
-        with:
-          repository: heymichael/haderach-home
-          path: ../haderach-home
-          token: ${{ secrets.CROSS_REPO_PAT }}
+      - name: Clone haderach-home for shared-ui
+        run: git clone --depth 1 https://x-access-token:${{ secrets.CROSS_REPO_PAT }}@github.com/heymichael/haderach-home.git ../haderach-home
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
