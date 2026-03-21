@@ -23,8 +23,8 @@ jobs:
       - name: Clone haderach-home for shared-ui
         run: git clone --depth 1 https://x-access-token:${{ secrets.CROSS_REPO_PAT }}@github.com/heymichael/haderach-home.git ../haderach-home
 
-      - name: Install shared-ui dependencies
-        run: npm install --prefix ../haderach-home/packages/shared-ui
+      - name: Install haderach-home dependencies
+        run: npm install --prefix ../haderach-home
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
