@@ -7,7 +7,7 @@ const TARGET_FILES = [];
 const SCAN_EXTENSIONS = new Set(['.css', '.ts', '.tsx', '.html']);
 const IGNORE_FILES = new Set([
   path.normalize('src/theme/colors.ts'),
-  path.normalize('src/theme/colors.css'),
+  path.normalize('src/index.css'),
 ]);
 
 const COLOR_LITERAL_PATTERN = /#[0-9a-fA-F]{3,8}\b|rgba?\(\s*[^)]+\)/g;
