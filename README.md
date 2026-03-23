@@ -25,18 +25,21 @@ This repository is intentionally app-scoped. It owns app code, app CI, and artif
 - `.github/workflows/nightly-checks.yml` - scheduled regression and production monitor suites.
 - `docs/architecture.md` - app boundaries, handoff contract, and template invariants.
 - `scripts/` - build, artifact packaging, and manifest generation.
-- `tests/e2e/` - Playwright suites tagged for smoke, regression, and prod-monitor runs.
-- `tasks/` - per-task markdown files managed by [taskmd](https://github.com/driangle/taskmd).
+- `tests/e2e/` - Playwright suites tagged for smoke and regression runs.
 
 ```text
 card/
 ├── .cursor/
-│   └── rules/
-│       ├── architecture-pointer.mdc
-│       ├── branch-safety-reminder.mdc
-│       ├── pr-conventions.mdc
-│       ├── repo-hygiene.mdc
-│       └── todo-conventions.mdc
+│   ├── mcp.json
+│   ├── rules/
+│   │   ├── architecture-pointer.mdc
+│   │   ├── branch-safety-reminder.mdc
+│   │   ├── pr-conventions.mdc
+│   │   ├── repo-hygiene.mdc
+│   │   └── todo-conventions.mdc
+│   └── skills/
+│       └── brand-guidelines/
+│           └── SKILL.md
 ├── .github/
 │   ├── pull_request_template.md
 │   └── workflows/
@@ -71,12 +74,12 @@ card/
 │   ├── auth/
 │   │   ├── accessPolicy.ts
 │   │   ├── AuthGate.tsx
+│   │   ├── AuthUserContext.ts
 │   │   └── runtimeConfig.ts
 │   ├── constants.ts
 │   ├── index.css
 │   ├── main.tsx
 │   ├── theme/
-│   │   ├── colors.css
 │   │   └── colors.ts
 │   ├── types.ts
 │   └── vite-env.d.ts
@@ -84,12 +87,9 @@ card/
 │   └── e2e/
 │       └── card-app/
 │           └── card-app.spec.ts
-├── tasks/
-│   └── *.md (one file per task, managed by taskmd)
 ├── .env.example
 ├── .firebaserc
 ├── .gitignore
-├── .taskmd.yaml
 ├── check-color-tokens.mjs
 ├── eslint.config.js
 ├── firebase.json

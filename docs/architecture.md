@@ -163,8 +163,8 @@ Repository variables (not secrets — these are non-sensitive identifiers):
 
 ## Testing
 
-- Playwright suites live in `tests/e2e/` with tags for smoke, regression, and prod monitor.
-- CI workflows map those tags to PR (`pr-checks`), nightly regression, and prod monitor suites.
+- Playwright suites live in `tests/e2e/` with tags for smoke and regression.
+- CI workflows map those tags to PR (`pr-checks`) and nightly regression suites.
 - Smoke checks default to Chromium-only for speed; regression jobs set `PLAYWRIGHT_ALL_BROWSERS=1` to run Chromium, Firefox, and WebKit.
 
 ## Security and Indexing Defaults
