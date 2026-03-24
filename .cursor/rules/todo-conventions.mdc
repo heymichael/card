@@ -11,13 +11,13 @@ All tasks are managed centrally in the **haderach-platform** repo at `../haderac
 
 Write the task file to `../haderach-platform/tasks/` with `group: card` and `phase: card` in the frontmatter. Follow the taskmd format and conventions defined in `haderach-platform/.cursor/rules/todo-conventions.mdc`.
 
-Use sequential IDs zero-padded to 3 digits. Check existing files in `../haderach-platform/tasks/` to determine the next available ID.
+Use plain integer IDs with no leading zeros (e.g., `"7"` not `"007"`). Check existing files in `../haderach-platform/tasks/` to determine the next available ID.
 
 If the task is ambiguous about which app it belongs to (e.g., cross-cutting infra work), prompt the user to specify the `group` value (`card`, `stocks`, or `platform`).
 
 ## Reading tasks
 
-When the user references a task by number (e.g., "task 29", "task #029"), look it up in `../haderach-platform/tasks/` by matching the `id` field or filename prefix (e.g., `029-*.md`). All tasks across all apps live there — the referenced task may belong to any group, not just `card`.
+When the user references a task by number (e.g., "task 29"), look it up in `../haderach-platform/tasks/` by matching the `id` field or filename prefix (e.g., `29-*.md`). All tasks across all apps live there — the referenced task may belong to any group, not just `card`.
 
 To see tasks for this app, read files in `../haderach-platform/tasks/` where the `group` frontmatter field is `card`. Only read tasks where `status` is `pending` or `in-progress` unless specifically asked about others.
 
