@@ -186,6 +186,9 @@ sign-in directly.
 - Authorization policy: role-based access control (RBAC). User roles are stored
   in Firestore `users/{email}` documents. Access is granted if the user holds
   any role in `APP_GRANTING_ROLES['card']` (`admin`, `member`, `card_member`).
+- App catalog and RBAC role mappings (`APP_CATALOG`, `APP_GRANTING_ROLES`,
+  `hasAppAccess`, `getAccessibleApps`) are imported from `@haderach/shared-ui`
+  — this app does not maintain local copies.
 - Unauthenticated behavior: redirect to `/?returnTo=/card/` for platform sign-in.
 - Unauthorized behavior: show access-denied screen with sign-out option.
 - Session policy: Firebase `browserLocalPersistence`.
