@@ -6,6 +6,7 @@ export interface AuthUser {
   photoURL?: string
   displayName?: string
   accessibleApps: NavApp[]
+  accessibleAdminApps: NavApp[]
   signOut: () => void
 }
 
