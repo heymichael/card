@@ -1,7 +1,15 @@
 import { doc, getDoc, getFirestore } from 'firebase/firestore'
 import type { FirebaseApp } from 'firebase/app'
 
-export { APP_CATALOG, APP_GRANTING_ROLES, hasAppAccess, getAccessibleApps } from '@haderach/shared-ui'
+export {
+  APP_CATALOG,
+  APP_GRANTING_ROLES,
+  ADMIN_CATALOG,
+  ADMIN_GRANTING_ROLES,
+  hasAppAccess,
+  getAccessibleApps,
+  getAccessibleAdminApps,
+} from '@haderach/shared-ui'
 export type { NavApp as AccessibleApp } from '@haderach/shared-ui'
 
 export const APP_ID = 'card'

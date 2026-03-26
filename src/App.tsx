@@ -297,6 +297,7 @@ function App() {
     <div className="app-shell">
       <GlobalNav
         apps={authUser.accessibleApps}
+        adminApps={authUser.accessibleAdminApps}
         activeAppId="card"
         userEmail={authUser.email}
         userPhotoURL={authUser.photoURL}
