@@ -1,14 +1,7 @@
 import { createContext, useContext } from 'react'
-import type { NavApp } from '@haderach/shared-ui'
+import type { BaseAuthUser } from '@haderach/shared-ui'
 
-export interface AuthUser {
-  email: string
-  photoURL?: string
-  displayName?: string
-  accessibleApps: NavApp[]
-  accessibleAdminApps: NavApp[]
-  signOut: () => void
-}
+export type AuthUser = BaseAuthUser
 
 export const AuthUserContext = createContext<AuthUser | null>(null)
 
