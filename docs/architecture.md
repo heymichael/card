@@ -184,15 +184,19 @@ sign-in directly.
 - Session scope: shared across all apps on `haderach.ai` (same-origin Firebase
   Auth persistence via IndexedDB).
 - Authorization policy: role-based access control (RBAC). User roles are stored
-  in Firestore `users/{email}` documents. Access is granted if the user holds
-  any role in `APP_GRANTING_ROLES['card']` (`admin`, `member`, `card_member`).
-- App catalog and RBAC role mappings (`APP_CATALOG`, `APP_GRANTING_ROLES`,
-  `hasAppAccess`, `getAccessibleApps`) are imported from `@haderach/shared-ui`
-  — this app does not maintain local copies.
-- Unauthenticated behavior: redirect to `/?returnTo=/card/` for platform sign-in.
+  in Firestore `users/{email}` documents and resolved at runtime via
+  `fetchUserDoc` (from `@haderach/shared-ui`), which calls `GET /agent/api/me`.
+  Access is granted if the user holds any role in `APP_GRANTING_ROLES['card']`.
+- Auth primitives (`BaseAuthUser`, `fetchUserDoc`, `buildDisplayName`) and RBAC
+  helpers (`APP_CATALOG`, `APP_GRANTING_ROLES`, `hasAppAccess`, `getAccessibleApps`)
+  are imported from `@haderach/shared-ui` — this app does not maintain local copies.
+  `AuthUser` re-exports `BaseAuthUser` directly (no app-specific extensions).
+- Unauthenticated (production): redirect to `/?returnTo=/card/` for platform sign-in.
+- Unauthenticated (local dev): when `import.meta.env.DEV` is true, shows a dev-only
+  "Sign in with Google" button instead of redirecting.
 - Unauthorized behavior: show access-denied screen with sign-out option.
 - Session policy: Firebase `browserLocalPersistence`.
-- Fail-closed: if Firestore is unreachable, roles resolve to an empty array and
+- Fail-closed: if the agent API is unreachable, roles resolve to an empty array and
   access is denied.
 
 ### Runtime Config Inputs
