@@ -4,8 +4,10 @@ import { initializeApp, getApp, getApps, type FirebaseApp } from 'firebase/app'
 import {
   browserLocalPersistence,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   setPersistence,
+  signInWithPopup,
   signOut,
   type User,
 } from 'firebase/auth'
@@ -13,6 +15,7 @@ import { useEffect } from 'react'
 import { fetchUserDoc, buildDisplayName, hasAppAccess, getAccessibleApps, getAccessibleAdminApps, APP_CATALOG, APP_ID } from './accessPolicy'
 import { getAuthRuntimeConfig } from './runtimeConfig'
 import { AuthUserContext } from './AuthUserContext'
+import { Button } from '@haderach/shared-ui'
 import {
   initAnalytics,
   setAnalyticsUser,
@@ -41,7 +44,7 @@ function getFirebaseAppInstance(): FirebaseApp | null {
   return app
 }
 
-type AuthStatus = 'loading' | 'redirecting' | 'authorized' | 'unauthorized' | 'config_error'
+type AuthStatus = 'loading' | 'redirecting' | 'sign_in' | 'authorized' | 'unauthorized' | 'config_error'
 
 export function AuthGate({ children }: AuthGateProps) {
   const runtimeConfig = useMemo(() => getAuthRuntimeConfig(), [])
@@ -72,10 +75,14 @@ export function AuthGate({ children }: AuthGateProps) {
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
       setUser(nextUser)
       if (!nextUser) {
-        setStatus('redirecting')
-        window.location.replace(
-          `${PLATFORM_SIGN_IN_URL}?returnTo=${encodeURIComponent(APP_PATH)}`,
-        )
+        if (import.meta.env.DEV) {
+          setStatus('sign_in')
+        } else {
+          setStatus('redirecting')
+          window.location.replace(
+            `${PLATFORM_SIGN_IN_URL}?returnTo=${encodeURIComponent(APP_PATH)}`,
+          )
+        }
         return
       }
       setStatus('loading')
@@ -135,6 +142,32 @@ export function AuthGate({ children }: AuthGateProps) {
     return null
   }
 
+  if (status === 'sign_in') {
+    const handleDevSignIn = async () => {
+      const app = getFirebaseAppInstance()
+      if (!app) return
+      setAuthBusy(true)
+      try {
+        await signInWithPopup(getAuth(app), new GoogleAuthProvider())
+      } catch {
+        setAuthBusy(false)
+      }
+    }
+    return (
+      <main className="auth-gate-shell">
+        <section className="auth-gate-card" aria-live="polite">
+          <h1>Local Development Sign-in</h1>
+          <p>Sign in with your Google account to test with real auth.</p>
+          <div className="auth-gate-actions">
+            <Button onClick={handleDevSignIn} disabled={authBusy}>
+              Sign in with Google
+            </Button>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
   return (
     <main className="auth-gate-shell">
       <section className="auth-gate-card" aria-live="polite">
@@ -155,9 +188,9 @@ export function AuthGate({ children }: AuthGateProps) {
             </p>
             <p>Please contact your administrator to be granted access.</p>
             <div className="auth-gate-actions">
-              <button onClick={signOutCurrentUser} disabled={authBusy}>
+              <Button onClick={signOutCurrentUser} disabled={authBusy}>
                 Sign out
-              </button>
+              </Button>
             </div>
           </>
         )}
