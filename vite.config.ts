@@ -67,5 +67,11 @@ export default defineConfig({
     fs: {
       allow: ['.', '../haderach-home'],
     },
+    proxy: {
+      '/agent/api': {
+        target: 'http://localhost:8080',
+        rewrite: (path) => path.replace(/^\/agent\/api/, ''),
+      },
+    },
   },
 })
