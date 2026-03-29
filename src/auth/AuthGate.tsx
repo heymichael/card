@@ -128,6 +128,7 @@ export function AuthGate({ children }: AuthGateProps) {
           photoURL: user?.photoURL ?? undefined,
           displayName: runtimeConfig.bypassAuth ? 'Dev User' : displayName,
           accessibleApps,
+          accessibleAdminApps: getAccessibleAdminApps(roles),
           signOut: signOutCurrentUser,
           getIdToken: () => user?.getIdToken() ?? Promise.reject(new Error('No user')),
         }}
