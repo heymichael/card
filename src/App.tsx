@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { GlobalNav } from '@haderach/shared-ui';
+import { AppRail, useRailExpanded } from '@haderach/shared-ui';
 import ControlsPanel from './ControlsPanel';
 import CardCanvas from './CardCanvas';
 import { useAuthUser } from './auth/AuthUserContext';
@@ -292,23 +292,19 @@ function App() {
   }, [activeElement, handleRemovePhoto]);
 
   const authUser = useAuthUser();
+  const [railExpanded, toggleRail] = useRailExpanded();
 
   return (
     <div className="app-shell">
-      <GlobalNav
+      <AppRail
         apps={authUser.accessibleApps}
         activeAppId="card"
+        expanded={railExpanded}
+        onToggle={toggleRail}
         userEmail={authUser.email}
         userPhotoURL={authUser.photoURL}
         userDisplayName={authUser.displayName}
         onSignOut={authUser.signOut}
-        logo={
-          <img
-            className="h-12 w-auto"
-            src="/assets/landing/logo.svg"
-            alt="Haderach"
-          />
-        }
       />
       <div className="app">
       <ControlsPanel
