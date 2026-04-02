@@ -305,6 +305,7 @@ function App() {
         userPhotoURL={authUser.photoURL}
         userDisplayName={authUser.displayName}
         onSignOut={authUser.signOut}
+        getIdToken={authUser.getIdToken}
       />
       <div className="app">
       <ControlsPanel
